@@ -10,6 +10,8 @@
     "debug": "~2.6.9",
     "express": "~4.16.1",
     "express-http-proxy": "^1.6.0",
-    "morgan": "~1.9.1"
+    "fs-extra": "^8.1.0",
+    "morgan": "~1.9.1",
+    "requests": "^0.3.0"
   }
 }

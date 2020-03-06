@@ -23,13 +23,18 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // ocfl-express endpoint 
 
-app.use('/ocfl', async (req, res) => {
-	const file = await ocfl(req, res, config['ocfl']);
-	res.sendFile(file);
+app.get('/ocfl/:repo/:oidv?/:content?', async (req, res) => {
+	console.log(`request params: ${JSON.stringify(req.params)}`);
+	const file = await ocfl(req, res, config);
+	if( file ) {
+		res.send(`<p>ocfl: ${file}`);
+	} else {
+		res.status(404).send("Not found");
+	}
 
 });
 
-// solr proxy
+// solr proxy - FIXME
 
 app.use('/solr', proxy(config['solr'], {
   filter: function(req, res) {

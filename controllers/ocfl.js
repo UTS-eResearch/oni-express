@@ -1,6 +1,7 @@
 // ocfl utilities
 
-//var fs = require('fs');
+var fs = require('fs-extra');
+var path = require('path');
 
 var DEFAULT_PAGE_SIZE = 10;
 
@@ -10,21 +11,16 @@ var DEFAULT_PAGE_SIZE = 10;
 // returns either a resource or an index page (if the config permits)
 
 async function ocfl(req, res, config) {
-  return '/Users/mike/working/oni-express/test.txt';
-}
-  
 
-function orig_ocfl(req) {
-
-  var repo_path = req.variables.ocfl_path;
-  var ocfl_repo = req.variables.ocfl_repo;
-  var ocfl_solr = req.variables.ocfl_solr;
-  var ocfl_resolver = req.variables.ocfl_resolver;
-  var index_file = req.variables.ocfl_index_file || '';
-  var allow_autoindex = req.variables.ocfl_autoindex || '';
-  var ocfl_versions = req.variables.ocfl_versions;
-  var ocfl_allow = req.variables.ocfl_allow || '';
-  var ocfl_referrer =  req.variables.ocfl_referrer || '';
+  var repo_path = config.ocfl.path;
+  var ocfl_repo = config.ocfl.repository;
+  var ocfl_solr = config.solr;
+  var ocfl_resolver = config.ocfl.resolver;
+  var index_file = config.ocfl.index_file || '';
+  var allow_autoindex = config.ocfl.autoindex || '';
+  var ocfl_versions = config.ocfl.versions;
+  var ocfl_allow = config.ocfl.allow || '';
+  var ocfl_referrer =  config.ocfl.referrer || '';
 
   if( ocfl_referrer ) {
     req.error("Checking referrer against " + ocfl_referrer);
@@ -37,44 +33,65 @@ function orig_ocfl(req) {
     }
   }
 
-  var parts = parse_uri(repo_path, req.uri);
+  // return "foo";
+
+  // var parts = parse_uri(req.params.path);
 
   // uri doesn't match repo_path
 
-  if( !parts ) {
-    not_found(req, "URI doesn't match " + repo_path + " - check config");
-    return;
-  }
+  // if( !parts ) {
+  //   not_found(req, "URI doesn't match " + repo_path + " - check config");
+  //   return;
+  // }
 
   // if there's no oid, return the repo index if config allows it
 
-  if( !parts['oid'] ) {
-    if( ocfl_solr && allow_autoindex ) {
-      solr_index(req);
-      return;
-    } else {
-      not_found(req, "OID missing");
-      return;
-    }
-  }
+  // if( !parts['oid'] ) {
+  //   if( ocfl_solr && allow_autoindex ) {
+  //     solr_index(req);
+  //     return;
+  //   } else {
+  //     not_found(req, "OID missing");
+  //     return;
+  //   }
+  // }
 
-  var oid = parts['oid'];
-  var v = parts['version'];
-  var content = parts['content'] || index_file;
+
+  var oidparts = req.params.oidv.split('.v');
+  var oid = oidparts[0];
+  var v = ( oidparts.length === 2 ) ? 'v' + oidparts[1] : '';
+
+  var content = req.params['content'] || index_file;
 
   if( !allow_path(ocfl_allow, content) ) {
     not_found(req, "Content path doesn't match ocfl_allow");
     return;
   }
 
-  resolve_oid(req, oid, (opath) => {
-    if( opath ) {
-      if( opath.substr(-1) !== '/') {
-        opath += '/';
-      }
-      serve_path(req, oid, ocfl_repo + '/' + opath, v, content);
-    }
-  });
+  const opath = resolve_oid(config, oid);
+
+  const inv_file = path.join(ocfl_repo, opath, 'inventory.json');
+
+  try {
+
+    const inv = await fs.readJson(inv_file);
+
+
+    return JSON.stringify(inv, null, 2);
+  } catch(e) {
+    console.log(e);
+    return '';
+  }
+  // const 
+
+  // resolve_oid(req, oid, (opath) => {
+  //   if( opath ) {
+  //     if( opath.substr(-1) !== '/') {
+  //       opath += '/';
+  //     }
+  //     serve_path(req, oid, ocfl_repo + '/' + opath, v, content);
+  //   }
+  // });
 
 }
 
@@ -85,15 +102,15 @@ function orig_ocfl(req) {
 // (because oid resolution might be async if it's a solr lookup])
 
 
-function serve_path(req, oid, opath, v, content) {
+function serve_path(config, oid, opath, v, content) {
 
-  var ocfl_files = req.variables.ocfl_files;
-  var index_file = req.variables.ocfl_index_file || '';
-  var allow_autoindex = req.variables.ocfl_autoindex || '';
-  var ocfl_versions = req.variables.ocfl_versions;
-  var ocfl_allow = req.variables.ocfl_allow || '';
+  var ocfl_files = config.ocfl.repository;
+  var index_file = config.ocfl.index_file || '';
+  var allow_autoindex = config.ocfl.autoindex || '';
+  var ocfl_versions = config.ocfl.versions;
+  var ocfl_allow = config.ocfl.allow || '';
 
-  var show_hist = req.args['history'];
+  //var show_hist = req.args['history'];
 
   if( ocfl_versions !== "on" ) {
     v = undefined
@@ -125,12 +142,12 @@ function serve_path(req, oid, opath, v, content) {
     return;
   }
   if( allow_autoindex === 'on' && ( content === '' || content.slice(-1) === '/' ) ) {
-    var index = path_autoindex(inv, v, content, ocfl_allow);
-    if( index ) {
-      send_html(req, page_html(oid + '.' + v + '/' + content, index, null));
-    } else {
-      not_found(req, "No match found for path " + opath);
-    }
+    // var index = path_autoindex(inv, v, content, ocfl_allow);
+    // if( index ) {
+    //   send_html(req, page_html(oid + '.' + v + '/' + content, index, null));
+    // } else {
+    //   not_found(req, "No match found for path " + opath);
+    // }
   } else {
     var vpath = find_version(inv, v, content);
     if( vpath ) {
@@ -140,34 +157,21 @@ function serve_path(req, oid, opath, v, content) {
         // from keeping a copy
         req.headersOut['Cache-Control'] = 'no-store';
       }
-      req.internalRedirect(newroute);
+      //req.internalRedirect(newroute);
+      return newroute
     } else {
       not_found(req, "Couldn't find content " + content + " in " + oid + "." + v);
+      return '';
     }
   }
 }
 
 
-// parse_uri(repo_path, uri)
-//
-// parses an incoming uri.
-//
-// if the first part of the uri doesn't match repo_path, returns null
-//
-// if it does, tries to split the rest of the uri into
-//
-// /REPO_PATH/OID.VERSION/CONTENT
-//
-// and returns an object with members oid, version content, any of which
-// may be empty. 
 
-function parse_uri(repo_path, uri) {
+function parse_uri(uri) {
 
-  if ( uri.substr(1, repo_path.length) !== repo_path ) {
-    return null;
-  }
 
-  var parts = uri.substr(repo_path.length + 2).split('/');
+  var parts = uri.split('/');
 
   var components = {};
 
@@ -194,11 +198,12 @@ function parse_uri(repo_path, uri) {
 // with an error message
 
 function resolve_oid(req, oid, success) {
-  if( req.variables.ocfl_resolver === 'solr' ) {
-    resolve_solr(req, oid, success);
-  } else {
-    success(resolve_pairtree(oid));
-  }
+  return resolve_pairtree(oid);
+  // if( req.variables.ocfl_resolver === 'solr' ) {
+  //   resolve_solr(req, oid, success);
+  // } else {
+  //   success(resolve_pairtree(oid));
+  // }
 }
 
 // allow_path(ocfl_allow, path)
@@ -217,28 +222,23 @@ function allow_path(ocfl_allow, path) {
 
 
 
-function resolve_solr(req, oid, success) {
-  req.error("resolve_solr");
-  var ocfl_solr = req.variables.ocfl_solr;
-  var ocfl_repo = req.variables.ocfl_repo;
+// async function resolve_solr(solr, oid) {
 
-  var esc_oid = oid.replace(' ', '\\ ');
+//   var esc_oid = oid.replace(' ', '\\ ');
 
-  var query = solr_query({ q: "uri_id:" + esc_oid, fl: [ 'path' ] });
-  req.error("oid: '" + oid + "'");
-  req.error("esc_oid: '" + esc_oid + "'");
-  req.error("Solr lookup query: '" + query + "'");
-  req.subrequest(ocfl_solr + '/select', { args: query }, ( res ) => {
-    var solrJson = JSON.parse(res.responseBody);
-    if( solrJson['response']['docs'].length === 1 ) {
-      var opath = String(solrJson['response']['docs'][0]['path']);
-      success(opath);
-    } else {
-      not_found(req, "Solr lookup failed for for " + oid);
-    }
+//   var query = solr_query({ q: "uri_id:" + esc_oid, fl: [ 'path' ] });
   
-  });
-}
+//   var resp = awat req.subrequest(solr + '/select', { args: query }, ( res ) => {
+//     var solrJson = JSON.parse(res.responseBody);
+//     if( solrJson['response']['docs'].length === 1 ) {
+//       var opath = String(solrJson['response']['docs'][0]['path']);
+//       success(opath);
+//     } else {
+//       not_found(req, "Solr lookup failed for for " + oid);
+//     }
+  
+//   });
+// }
 
 
 
@@ -498,8 +498,9 @@ function version_url(repo, oid, v, path) {
 // the 404-not-found page
 
 function not_found(req, message) {
-  req.error(message);
-  req.internalRedirect(req.variables.ocfl_err_not_found);
+  console.error(message);
+
+  //req.internalRedirect(req.variables.ocfl_err_not_found);
 }
 
 // pending(req, message)
