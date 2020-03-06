@@ -76,8 +76,19 @@ async function ocfl(req, res, config) {
 
     const inv = await fs.readJson(inv_file);
 
+    if( !v ) {
+      v = inv.head;
+    } else {
+      v = v.slice(1)
+    }
 
-    return JSON.stringify(inv, null, 2);
+    var vpath = find_version(inv, v, content);
+    if( vpath ) {
+      return path.join(ocfl_repo, opath, vpath[0]);
+    } else {
+      console.log(`content ${content} not found in inventory`);
+      return '';
+    } 
   } catch(e) {
     console.log(e);
     return '';

@@ -27,7 +27,7 @@ app.get('/ocfl/:repo/:oidv?/:content?', async (req, res) => {
 	console.log(`request params: ${JSON.stringify(req.params)}`);
 	const file = await ocfl(req, res, config);
 	if( file ) {
-		res.send(`<p>ocfl: ${file}`);
+		res.sendFile(file);
 	} else {
 		res.status(404).send("Not found");
 	}
