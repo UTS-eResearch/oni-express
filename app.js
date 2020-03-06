@@ -36,10 +36,13 @@ app.get('/ocfl/:repo/:oidv?/:content?', async (req, res) => {
 
 // solr proxy - FIXME
 
-app.use('/solr', proxy(config['solr'], {
-  filter: function(req, res) {
+app.use('/solr/*', proxy(config['solr'], {
+  filter: (req, res) => {
      return req.method == 'GET';
-  }
+  },
+  proxyReqPathResolver: (req) => {
+  	return req.originalUrl;
+  } 
 }));
 
 
