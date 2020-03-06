@@ -1,6 +1,6 @@
 // ocfl utilities
 
-var fs = require('fs');
+//var fs = require('fs');
 
 var DEFAULT_PAGE_SIZE = 10;
 
@@ -9,7 +9,12 @@ var DEFAULT_PAGE_SIZE = 10;
 // entry point for ocfl requests. Tries to parse the incoming URI and 
 // returns either a resource or an index page (if the config permits)
 
-function ocfl(req) {
+async function ocfl(req, res, config) {
+  return '/Users/mike/working/oni-express/test.txt';
+}
+  
+
+function orig_ocfl(req) {
 
   var repo_path = req.variables.ocfl_path;
   var ocfl_repo = req.variables.ocfl_repo;
@@ -660,4 +665,5 @@ function send_json(req, json) {
 
 
 
+module.exports = ocfl;
 
