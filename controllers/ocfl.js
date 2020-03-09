@@ -94,7 +94,7 @@ async function resolve_solr(solr, oid) {
 
   var esc_oid = oid; // oid.replace(' ', '\\ ');
 
-  var query = solr_query({ q: "uri_id:" + esc_oid, fl: [ 'path' ] });
+  var query = { q: "uri_id:" + esc_oid, fl: [ 'path' ]};
   
   try {
     var resp = await axios.get(solr + '/select', { params: query });
@@ -171,7 +171,7 @@ async function solr_index(config, repo, args) {
     }
   } 
   
-  var query = solr_query({ start: start, rows: page_size, q: "*:*", fl: fields });
+  var query = { start: start, rows: page_size, q: "*:*", fl: fields };
 
   try {
     const resp = await axios.get(config.solr + '/select', { params: query });
@@ -186,7 +186,7 @@ async function solr_index(config, repo, args) {
         var nav = solr_pagination(repo, numFound, start, page_size);
         var index = docs.map((d) => {
           return {
-            href: '/' + repo + '/' + d['uri_id'] + '/',
+            href: '/ocfl/' + repo + '/' + d['uri_id'] + '/',
             text: d['name'][0]
           }
         });
@@ -251,7 +251,7 @@ function solr_query(options) {
 
 function solr_pagination(repo, numFound, start, rows) {
   var html = '';
-  var url = '/' + repo + '/'
+  var url = '/ocfl/' + repo + '/'
   var last = start + rows - 1;
   var next = undefined;
   if( last > numFound - 1 ) {
@@ -288,7 +288,7 @@ function solr_pagination(repo, numFound, start, rows) {
 
 function page_html(title, links, nav) {
 
-  var html = '<html><head><link rel="stylesheet" type="text/css" href="/assets/ocfl.css"></head>\n' +
+  var html = '<html><head><link rel="stylesheet" type="text/css" href="/stylesheets/ocfl.css"></head>\n' +
     '<body>\n' +
     '<div id="header">\n' +
     '<div id="title">' + title + '</div>\n';
