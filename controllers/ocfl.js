@@ -59,7 +59,8 @@ async function index(config, repo, args, oid, version, content) {
       } else {
         version = version.slice(1)
       }
-      return path_autoindex(inv, version, content || '', config.ocfl[repo].allow);
+      const index = path_autoindex(inv, version, content || '', config.ocfl[repo].allow);
+      return page_html(oid + '.' + version + '/' + content, index, null);
     } catch(e) {
       console.log(e);
       return '';
@@ -92,15 +93,15 @@ async function resolve_oid(config, oid) {
 
 async function resolve_solr(solr, oid) {
 
-  var esc_oid = oid; // oid.replace(' ', '\\ ');
+  var esc_oid = oid.replace(' ', '\\ ');
 
-  var query = { q: "uri_id:" + esc_oid, fl: [ 'path' ]};
+  var query = { q: "uri_id:" + esc_oid, fl: 'path' };
   
   try {
     var resp = await axios.get(solr + '/select', { params: query });
     if( resp.status === 200 ) {
       if( resp.data['response']['docs'].length === 1 ) {
-        var opath = String(solrJson['response']['docs'][0]['path']);
+        var opath = String(resp.data['response']['docs'][0]['path']);
         return opath;
       } else {
         console.log(`OID ${oid} not found`);
@@ -171,7 +172,7 @@ async function solr_index(config, repo, args) {
     }
   } 
   
-  var query = { start: start, rows: page_size, q: "*:*", fl: fields };
+  var query = { start: start, rows: page_size, q: "*:*", fl: fields.join(',') };
 
   try {
     const resp = await axios.get(config.solr + '/select', { params: query });
@@ -190,7 +191,7 @@ async function solr_index(config, repo, args) {
             text: d['name'][0]
           }
         });
-        return page_html('Solr index', index, nav);
+        return page_html('OCFL index ' + repo, index, nav);
       }
     } else {
       return '';
