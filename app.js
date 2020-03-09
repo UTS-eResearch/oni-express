@@ -59,11 +59,16 @@ app.get('/ocfl/:repo/:oidv/:content?', async (req, res) => {
 				res.status(404).send("Not found");
 			}
 		} else {
-			const file = await ocfl.file(config, repo, oid, v, content);
-			if( file ) {
-				res.sendFile(file);
+			if( config.ocfl[repo].referrer && req.headers['referer'] !== config.ocfl[repo].referrer ) {
+				console.log(`Headers = ${JSON.stringify(req.headers)}`);
+				res.status(403).send("Forbidden");
 			} else {
-				res.status(404).send("Not found");
+				const file = await ocfl.file(config, repo, oid, v, content);
+				if( file ) {
+					res.sendFile(file);
+				} else {
+					res.status(404).send("Not found");
+				}
 			}
 		}
 	}
