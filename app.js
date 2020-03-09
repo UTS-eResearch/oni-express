@@ -25,10 +25,11 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('/ocfl/:repo/', async (req, res) => {
 
-	if( req.params.repo in config.ocfl && config.ocfl.autoindex ) {
-		const index = await ocfl.index(config, req.params.repo);
+	if( req.params.repo in config.ocfl && config.ocfl[req.params.repo].autoindex ) {
+		const index = await ocfl.index(config, req.params.repo, req.query);
 		res.send(index);
 	} else {
+		console.log("No autoindex");
 		res.status(404).send("Not found");
 	}
 });
@@ -46,11 +47,12 @@ app.get('/ocfl/:repo/:oidv/:content?', async (req, res) => {
 	if( repo in config.ocfl ) {
 		if( !req.params.content || req.params.content.slice(-1) === '/' ) {
 			if( config.ocfl[repo].autoindex ) {
-				const index = await ocfl.index(config, repo, oid, v, content);
-				res.send(index);
-			} else {
-				res.status(404).send("Not found");
+				const index = await ocfl.index(config, repo, req.query, oid, v, content);
+				if( index ) {
+					res.send(index);
+				}
 			}
+			res.status(404).send("Not found");
 		}
 	} else {
 		const file = await ocfl.file(config, repo, oid, v, content);

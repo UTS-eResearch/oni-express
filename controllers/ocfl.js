@@ -2,7 +2,7 @@
 
 var fs = require('fs-extra');
 var path = require('path');
-var requests = require('requests');
+var axios = require('axios');
 
 var DEFAULT_PAGE_SIZE = 10;
 
@@ -12,7 +12,10 @@ var DEFAULT_PAGE_SIZE = 10;
 
 async function file(config, repo, oid, version, content) {
 
-  const opath = await resolve_oid(config.ocfl[repo].resolver, oid);
+  const opath = await resolve_oid(config.ocfl[repo], oid);
+  if( !opath  ) {
+    return '';
+  }
   const ocfl_root = config.ocfl[repo].repository;
 
   try {
@@ -41,64 +44,78 @@ async function file(config, repo, oid, version, content) {
 // returns either the top-level repo index or the auto_index for the path within
 // an object
 
-async function index(config, repo, oid, version, content) {
+async function index(config, repo, args, oid, version, content) {
   if( oid ) {
-  const opath = await resolve_oid(config.ocfl[repo].resolver, oid);
-  const ocfl_root = config.ocfl[repo].repository;
-
-  try {
-    const inv = await load_inventory(ocfl_root, opath);
-    if( !version ) {
-      version = inv.head;
-    } else {
-      version = version.slice(1)
+    const opath = await resolve_oid(config.ocfl[repo], oid);
+    if( !opath  ) {
+      return '';
     }
-    return path_autoindex(inv, version, content || '', config.ocfl[repo].allow);
-  } catch(e) {
-    console.log(e);
-    return '';
-  }
+    const ocfl_root = config.ocfl[repo].repository;
 
+    try {
+      const inv = await load_inventory(ocfl_root, opath);
+      if( !version ) {
+        version = inv.head;
+      } else {
+        version = version.slice(1)
+      }
+      return path_autoindex(inv, version, content || '', config.ocfl[repo].allow);
+    } catch(e) {
+      console.log(e);
+      return '';
+    }
+  } else {
+    if( config.ocfl[repo].resolver === 'solr' ) {
+      return await solr_index(config.ocfl[repo], repo, args);
+    } else {
+      return '';
+    } 
   }
 }
 
 
 
-// resolve_oid(req, oid, success)
+// resolve_oid(config, oid)
 //
-// Pick an oid strategy and use it to resolve the oid to a path, then
-// call the success callback with the path if it works.
-// If resolution fails, the resolver function is expected to call not_found
-// with an error message
+// use the resolver strategy defined in the config to resolve an oid
+// into an ocfl object path
 
-async function resolve_oid(resolver, oid) {
-  return resolve_pairtree(oid);
-  // if( req.variables.ocfl_resolver === 'solr' ) {
-  //   resolve_solr(req, oid, success);
-  // } else {
-  //   success(resolve_pairtree(oid));
-  // }
+async function resolve_oid(config, oid) {
+  if( config.resolver === 'solr' ) {
+    return await resolve_solr(config.solr, oid);
+  } else {
+    return resolve_pairtree(oid);
+  }
 }
 
 
 
-// async function resolve_solr(solr, oid) {
+async function resolve_solr(solr, oid) {
 
-//   var esc_oid = oid.replace(' ', '\\ ');
+  var esc_oid = oid; // oid.replace(' ', '\\ ');
 
-//   var query = solr_query({ q: "uri_id:" + esc_oid, fl: [ 'path' ] });
+  var query = solr_query({ q: "uri_id:" + esc_oid, fl: [ 'path' ] });
   
-//   var resp = awat req.subrequest(solr + '/select', { args: query }, ( res ) => {
-//     var solrJson = JSON.parse(res.responseBody);
-//     if( solrJson['response']['docs'].length === 1 ) {
-//       var opath = String(solrJson['response']['docs'][0]['path']);
-//       success(opath);
-//     } else {
-//       not_found(req, "Solr lookup failed for for " + oid);
-//     }
+  try {
+    var resp = await axios.get(solr + '/select', { params: query });
+    if( resp.status === 200 ) {
+      if( resp.data['response']['docs'].length === 1 ) {
+        var opath = String(solrJson['response']['docs'][0]['path']);
+        return opath;
+      } else {
+        console.log(`OID ${oid} not found`);
+        return null;
+      }
+    } else {
+      console.log(`Solr request failed with status ${resp.status}`);
+      return null;
+    }
+  } catch(e) {
+    console.log(`OID lookup error ${e}`);
+    return null;
+  }
+}
   
-//   });
-// }
 
 
 
@@ -139,32 +156,33 @@ function find_version(inv, v, content) {
 // index and calls send_html to return it to the user
 
 
-function solr_index(req) {
-  var start = req.args['start'] || '0';
-  var format = req.args['format'] || 'html';
+async function solr_index(config, repo, args) {
+  var start = args['start'] || '0';
+  var format = args['format'] || 'html';
   var fields = [ 'id', 'name', 'path', 'uri_id' ];
-  if( format === 'json' && req.args['fields'] ) {
-    fields = req.args['fields'].split(',');
+  if( format === 'json' && args['fields'] ) {
+    fields = args['fields'].split(',');
   }
   var page_size = DEFAULT_PAGE_SIZE;
-  if( req.variables.ocfl_page_size ) {
-    page_size = Number(req.variables.ocfl_page_size);
+  if( config.page_size ) {
+    page_size = Number(config.ocfl_page_size);
     if( isNaN(page_size) ) {
       page_size = DEFAULT_PAGE_SIZE;
     }
   } 
-  var repo = req.variables.ocfl_path;
+  
   var query = solr_query({ start: start, rows: page_size, q: "*:*", fl: fields });
 
-  req.subrequest(req.variables.ocfl_solr + '/select', { args: query }, ( res ) => {
-    try {
-      var solrJson = JSON.parse(res.responseBody);
+  try {
+    const resp = await axios.get(config.solr + '/select', { params: query });
+
+    if( resp.status === 200 ) {
       if( format === 'json' ) {
-        send_json(req, solrJson);
+        return resp.data['response']['docs'];
       } else {
-        var docs = solrJson['response']['docs'];
-        var start = solrJson['response']['start'];
-        var numFound = solrJson['response']['numFound'];
+        var docs = resp.data['response']['docs'];
+        var start = resp.data['response']['start'];
+        var numFound = resp.data['response']['numFound'];
         var nav = solr_pagination(repo, numFound, start, page_size);
         var index = docs.map((d) => {
           return {
@@ -172,13 +190,35 @@ function solr_index(req) {
             text: d['name'][0]
           }
         });
-        send_html(req, page_html('Solr index', index, nav));
+        return page_html('Solr index', index, nav);
       }
-    } catch(e) {
-      not_found(req, "Error fetching or parsing solr index: " + e);
+    } else {
+      return '';
     }
-  });
+  } catch(e) {
+    console.log(`Solr error index ${e}`);
+    return '';
+  }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // solr_query(options)
 //
@@ -239,6 +279,72 @@ function solr_pagination(repo, numFound, start, rows) {
 
 
 
+// page_html(title, links, nav)
+//
+// Generates an HTML index page given a title, list of links and
+// nav (which is just arbitrary HTML)
+//
+// Links is an array of objects with values 'href' and 'text'
+
+function page_html(title, links, nav) {
+
+  var html = '<html><head><link rel="stylesheet" type="text/css" href="/assets/ocfl.css"></head>\n' +
+    '<body>\n' +
+    '<div id="header">\n' +
+    '<div id="title">' + title + '</div>\n';
+
+  if( nav ) {
+    html += '<div id="nav">' + nav + '</div>\n';
+  }
+
+  html += '</div>\n<div id="body">\n';
+
+  links.forEach((l) => {
+    html += '<div class="item"><a href="' + l['href'] + '">' + l['text'] + '</a></div>\n'
+  });
+
+  html += '</div>\n' +
+  '<div id="footer"><a href="https://github.com/UTS-eResearch/ocfl-nginx">ocfl-nginx bridge v1.0.3</a></div>\n' +
+  '</body>\n</html>\n';
+
+  return html;
+
+
+}
+
+
+// nav_links(repo, numFound, start, rows)
+//
+// Renders pagination links for the solr index
+
+
+function nav_links(repo, numFound, start, rows) {
+  var html = '';
+  var url = '/' + repo + '/'
+  var last = start + rows - 1;
+  var next = undefined;
+  if( last > numFound - 1 ) {
+    last = numFound - 1;
+  } else {
+    next = start + rows;
+  }
+  if( start > 0 ) {
+    var prev = start - rows;
+    if( prev < 0 ) {
+      prev = 0;
+    }
+    if( prev > 0 ) {
+      html += '<a href="' + url + '?start=' + String(prev) + '">&lt;--</a> ';
+    } else {
+      html += '<a href="' + url + '">&lt;--</a> '; 
+    }
+  }
+  html += String(start + 1) + '-' + String(last + 1) + ' of ' + String(numFound);
+  if( next ) {
+    html += ' <a href="' + url + '?start=' + String(next) + '">--&gt;</a>'
+  }
+  return html;
+}
 
 
 
@@ -411,4 +517,5 @@ module.exports = {
   file: file,
   index: index
 };
+
 
