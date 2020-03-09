@@ -1,0 +1,30 @@
+{
+	"development": {
+		"host": "0.0.0.0",
+		"port": "8080",
+		"auth": {
+			"secret": "???",
+			"authURL": "???",
+			"iss": "https://rapid.test.aaf.edu.au",
+			"aud": "http://localhost:8080/",
+			"success": "http://localhost:8089/",
+			"attributes": "https://aaf.edu.au/attributes"
+		},
+
+		"solr": "http://localhost:8983",
+
+		"ocfl": {
+			"grants": {
+				"repository": "/Users/mike/working/oni-indexer/working/grants_ocfl",
+				"allow": "\\.html",
+				"autoindex": true,
+				"versions": true,
+				"page_size": 20,
+				"solr": "http://localhost:3000/solr/grants",
+				"resolver": "solr",
+				"referrer": "http://localhost:3000"
+			} 
+		}
+	}
+
+}
