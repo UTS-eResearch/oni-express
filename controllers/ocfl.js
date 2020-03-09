@@ -1,90 +1,30 @@
-// ocfl utilities
+// Adapted from ocfl-nginx for the express version 
 
 var fs = require('fs-extra');
 var path = require('path');
+var requests = require('requests');
 
 var DEFAULT_PAGE_SIZE = 10;
 
-// ocfl(req)
+// file(config, repo, oid, version, content)
 //
-// entry point for ocfl requests. Tries to parse the incoming URI and 
-// returns either a resource or an index page (if the config permits)
+// Resolve a versioned oid and content path into a filename
 
-async function ocfl(req, res, config) {
+async function file(config, repo, oid, version, content) {
 
-  var repo_path = config.ocfl.path;
-  var ocfl_repo = config.ocfl.repository;
-  var ocfl_solr = config.solr;
-  var ocfl_resolver = config.ocfl.resolver;
-  var index_file = config.ocfl.index_file || '';
-  var allow_autoindex = config.ocfl.autoindex || '';
-  var ocfl_versions = config.ocfl.versions;
-  var ocfl_allow = config.ocfl.allow || '';
-  var ocfl_referrer =  config.ocfl.referrer || '';
-
-  if( ocfl_referrer ) {
-    req.error("Checking referrer against " + ocfl_referrer);
-    var referrer = req.headersIn['Referer'];
-    if( ! referrer || ! referrer.match(ocfl_referrer) ) {
-      not_found(req, "Wrong or missing referrer: " + referrer);
-      return;
-    } else {
-      req.error("ocfl_referrer matches " + referrer);
-    }
-  }
-
-  // return "foo";
-
-  // var parts = parse_uri(req.params.path);
-
-  // uri doesn't match repo_path
-
-  // if( !parts ) {
-  //   not_found(req, "URI doesn't match " + repo_path + " - check config");
-  //   return;
-  // }
-
-  // if there's no oid, return the repo index if config allows it
-
-  // if( !parts['oid'] ) {
-  //   if( ocfl_solr && allow_autoindex ) {
-  //     solr_index(req);
-  //     return;
-  //   } else {
-  //     not_found(req, "OID missing");
-  //     return;
-  //   }
-  // }
-
-
-  var oidparts = req.params.oidv.split('.v');
-  var oid = oidparts[0];
-  var v = ( oidparts.length === 2 ) ? 'v' + oidparts[1] : '';
-
-  var content = req.params['content'] || index_file;
-
-  if( !allow_path(ocfl_allow, content) ) {
-    not_found(req, "Content path doesn't match ocfl_allow");
-    return;
-  }
-
-  const opath = resolve_oid(config, oid);
-
-  const inv_file = path.join(ocfl_repo, opath, 'inventory.json');
+  const opath = await resolve_oid(config.ocfl[repo].resolver, oid);
+  const ocfl_root = config.ocfl[repo].repository;
 
   try {
-
-    const inv = await fs.readJson(inv_file);
-
-    if( !v ) {
-      v = inv.head;
+    const inv = await load_inventory(ocfl_root, opath);
+    if( !version ) {
+      version = inv.head;
     } else {
-      v = v.slice(1)
+      version = version.slice(1)
     }
-
-    var vpath = find_version(inv, v, content);
+    var vpath = find_version(inv, version, content);
     if( vpath ) {
-      return path.join(ocfl_repo, opath, vpath[0]);
+      return path.join(ocfl_root, opath, vpath[0]);
     } else {
       console.log(`content ${content} not found in inventory`);
       return '';
@@ -93,113 +33,36 @@ async function ocfl(req, res, config) {
     console.log(e);
     return '';
   }
-  // const 
-
-  // resolve_oid(req, oid, (opath) => {
-  //   if( opath ) {
-  //     if( opath.substr(-1) !== '/') {
-  //       opath += '/';
-  //     }
-  //     serve_path(req, oid, ocfl_repo + '/' + opath, v, content);
-  //   }
-  // });
 
 }
 
-
-// serve_path(req, oid, opath, v, content)
+// index(config, repo, oid, version, content)
 //
-// This is called after the oid has been resolved via a callback
-// (because oid resolution might be async if it's a solr lookup])
+// returns either the top-level repo index or the auto_index for the path within
+// an object
 
+async function index(config, repo, oid, version, content) {
+  if( oid ) {
+  const opath = await resolve_oid(config.ocfl[repo].resolver, oid);
+  const ocfl_root = config.ocfl[repo].repository;
 
-function serve_path(config, oid, opath, v, content) {
-
-  var ocfl_files = config.ocfl.repository;
-  var index_file = config.ocfl.index_file || '';
-  var allow_autoindex = config.ocfl.autoindex || '';
-  var ocfl_versions = config.ocfl.versions;
-  var ocfl_allow = config.ocfl.allow || '';
-
-  //var show_hist = req.args['history'];
-
-  if( ocfl_versions !== "on" ) {
-    v = undefined
-  }
-
-  if( index_file !== '' ) {
-    allow_autoindex = '';
-  }
-
-  var inv = load_inventory(req, ocfl_files + '/' + opath);
-
-  if( ! inv ) {
-    pending(req, "Couldn't load inventory for "+ oid);
-    return;
-  }
-
-  if( !v ) {
-    v = inv.head;
-  } else {
-    v = v.slice(1)
-  }
-
-  if( show_hist && ocfl_versions === "on" ) {
-    history(url_path, req, oid, inv, content);
-  }
-
-  if( ! inv.versions[v] ) {
-    not_found(req, "Couldn't find version " + v);
-    return;
-  }
-  if( allow_autoindex === 'on' && ( content === '' || content.slice(-1) === '/' ) ) {
-    // var index = path_autoindex(inv, v, content, ocfl_allow);
-    // if( index ) {
-    //   send_html(req, page_html(oid + '.' + v + '/' + content, index, null));
-    // } else {
-    //   not_found(req, "No match found for path " + opath);
-    // }
-  } else {
-    var vpath = find_version(inv, v, content);
-    if( vpath ) {
-      var newroute = '/' + opath + '/' + vpath;
-      if( req.variables.ocfl_referrer ) {
-        // If we're limiting using ocfl_referrer, prevent the browser
-        // from keeping a copy
-        req.headersOut['Cache-Control'] = 'no-store';
-      }
-      //req.internalRedirect(newroute);
-      return newroute
+  try {
+    const inv = await load_inventory(ocfl_root, opath);
+    if( !version ) {
+      version = inv.head;
     } else {
-      not_found(req, "Couldn't find content " + content + " in " + oid + "." + v);
-      return '';
+      version = version.slice(1)
     }
+    return path_autoindex(inv, version, content || '', config.ocfl[repo].allow);
+  } catch(e) {
+    console.log(e);
+    return '';
+  }
+
   }
 }
 
 
-
-function parse_uri(uri) {
-
-
-  var parts = uri.split('/');
-
-  var components = {};
-
-  if( parts.length < 1 ) {
-    return components;
-  }
-
-  var oidparts = parts[0].split('.v');
-  components['oid'] = oidparts[0];
-  if( oidparts.length === 2 ) {
-    components['version'] = 'v' + oidparts[1]
-  }
-  if( parts.length > 1 ) {
-    components['content'] = parts.slice(1).join('/');
-  }
-  return components;
-}
 
 // resolve_oid(req, oid, success)
 //
@@ -208,7 +71,7 @@ function parse_uri(uri) {
 // If resolution fails, the resolver function is expected to call not_found
 // with an error message
 
-function resolve_oid(req, oid, success) {
+async function resolve_oid(resolver, oid) {
   return resolve_pairtree(oid);
   // if( req.variables.ocfl_resolver === 'solr' ) {
   //   resolve_solr(req, oid, success);
@@ -216,20 +79,6 @@ function resolve_oid(req, oid, success) {
   //   success(resolve_pairtree(oid));
   // }
 }
-
-// allow_path(ocfl_allow, path)
-//
-// applies the ocfl_allow pattern match. Returns true if either ocfl_allow
-// or path are empty / falsy, otherwise returns the value of the match
-
-function allow_path(ocfl_allow, path) {
-  if( path ) {
-    return ( !ocfl_allow || path.match(ocfl_allow + '$'))
-  } else {
-    return true;
-  }
-}
-
 
 
 
@@ -253,23 +102,12 @@ function allow_path(ocfl_allow, path) {
 
 
 
-
-
-
-// load_inventory(req, object)
+// load_inventory(ocfl_root, opath)
 //
 // Attempts to load and parse the inventory.json file for an object.
 
-function load_inventory(req, object) {
-  var ifile = object + 'inventory.json';
-  try {
-    var contents = fs.readFileSync(ifile);
-    return JSON.parse(contents);
-  } catch(e) {
-    req.error("Error reading " + ifile);
-    req.error(e);
-    return null;
-  }
+async function load_inventory(ocfl_root, opath) {
+  return await fs.readJson(path.join(ocfl_root, opath, 'inventory.json'));
 }
 
 
@@ -405,13 +243,6 @@ function solr_pagination(repo, numFound, start, rows) {
 
 
 
-
-
-
-
-
-
-
 // path_autoindex(inv, v, path, ocfl_allow)
 //
 // for a given version of the OCFL object's inventory, finds all the paths
@@ -466,6 +297,21 @@ function path_autoindex(inv, v, path, ocfl_allow) {
   return null;
 }
 
+// allow_path(ocfl_allow, path)
+//
+// applies the ocfl_allow pattern match. Returns true if either ocfl_allow
+// or path are empty / falsy, otherwise returns the value of the match
+
+
+function allow_path(ocfl_allow, path) {
+  if( path ) {
+    return ( !ocfl_allow || path.match(ocfl_allow + '$'))
+  } else {
+    return true;
+  }
+}
+
+
 // history(repo_url, req, oid, inv, path) 
 //
 // returns an index page for every version of this path in the inventory.
@@ -503,26 +349,6 @@ function version_url(repo, oid, v, path) {
 }
 
 
-// not_found(req, message)
-//
-// utility function to send message to the error log and redirect to
-// the 404-not-found page
-
-function not_found(req, message) {
-  console.error(message);
-
-  //req.internalRedirect(req.variables.ocfl_err_not_found);
-}
-
-// pending(req, message)
-//
-// utility function to send message to the error log and redirect to
-// the object-pending page
-
-function pending(req, message) {
-  req.error(message);
-  req.internalRedirect(req.variables.ocfl_err_pending);  
-}
 
 
 // resolve_pairtree(id, separator)
@@ -579,103 +405,10 @@ function stringToUtf8ByteArray (str) {
 }
 
 
-// page_html(title, links, nav)
-//
-// Generates an HTML index page given a title, list of links and
-// nav (which is just arbitrary HTML)
-//
-// Links is an array of objects with values 'href' and 'text'
-
-function page_html(title, links, nav) {
-
-  var html = '<html><head><link rel="stylesheet" type="text/css" href="/assets/ocfl.css"></head>\n' +
-    '<body>\n' +
-    '<div id="header">\n' +
-    '<div id="title">' + title + '</div>\n';
-
-  if( nav ) {
-    html += '<div id="nav">' + nav + '</div>\n';
-  }
-
-  html += '</div>\n<div id="body">\n';
-
-  links.forEach((l) => {
-    html += '<div class="item"><a href="' + l['href'] + '">' + l['text'] + '</a></div>\n'
-  });
-
-  html += '</div>\n' +
-  '<div id="footer"><a href="https://github.com/UTS-eResearch/ocfl-nginx">ocfl-nginx bridge v1.0.3</a></div>\n' +
-  '</body>\n</html>\n';
-
-  return html;
 
 
-}
-
-
-// nav_links(repo, numFound, start, rows)
-//
-// Renders pagination links for the solr index
-
-
-function nav_links(repo, numFound, start, rows) {
-  var html = '';
-  var url = '/' + repo + '/'
-  var last = start + rows - 1;
-  var next = undefined;
-  if( last > numFound - 1 ) {
-    last = numFound - 1;
-  } else {
-    next = start + rows;
-  }
-  if( start > 0 ) {
-    var prev = start - rows;
-    if( prev < 0 ) {
-      prev = 0;
-    }
-    if( prev > 0 ) {
-      html += '<a href="' + url + '?start=' + String(prev) + '">&lt;--</a> ';
-    } else {
-      html += '<a href="' + url + '">&lt;--</a> '; 
-    }
-  }
-  html += String(start + 1) + '-' + String(last + 1) + ' of ' + String(numFound);
-  if( next ) {
-    html += ' <a href="' + url + '?start=' + String(next) + '">--&gt;</a>'
-  }
-  return html;
-}
-
-
-// send_html(req, html)
-//
-// Sends an HTML response, doing all of the headers properly.
-
-function send_html(req, html) {
-  req.status = 200;
-  req.headersOut['Content-Type'] = "text/html; charset=utf-8";
-  req.headersOut['Content-Length'] = html.length;
-  req.sendHeader();
-  req.send(html);
-  req.finish();
-}
-
-
-// send_json(req, html)
-//
-// Sends a JSON response, doing all of the headers properly.
-
-function send_json(req, json) {
-  req.status = 200;
-  var jsonS = JSON.stringify(json);
-  req.headersOut['Content-Type'] = "application/json; charset=utf-8";
-  req.headersOut['Content-Length'] = jsonS.length;
-  req.sendHeader();
-  req.send(jsonS);
-  req.finish();
-}
-
-
-
-module.exports = ocfl;
+module.exports = {
+  file: file,
+  index: index
+};
 
