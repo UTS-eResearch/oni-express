@@ -74,11 +74,14 @@ app.get('/ocfl/:repo/:oidv/:content?', async (req, res) => {
 	}
 });
 
-// solr proxy
+// solr proxy - only allows select queries 
 
-app.use('/solr/*', proxy(config['solr'], {
+app.use('/solr/:core/select*', proxy(config['solr'], {
   filter: (req, res) => {
-     return req.method == 'GET';
+  	if( req.method !== 'GET') {
+  		return false;
+  	}
+  	return req.params.core in config['ocfl'];
   },
   proxyReqPathResolver: (req) => {
   	return req.originalUrl;
