@@ -1,0 +1,31 @@
+version: '3.1'
+
+networks:
+  main:
+
+services:
+  oni-express:
+    build: .
+    ports:
+      - "8080:8080"
+    expose:
+      - "80"
+    networks:
+      - main
+    volumes:
+      - "../oni-indexer/working/:/etc/share/ocfl"
+
+  solr:
+    image: solr
+    ports:
+      - "8983:8983"
+    expose:
+      - "8983"
+    networks:
+      - main
+    volumes:
+      - "./test_solr/:/opt/solr/server/solr/grants"
+    command: solr-precreate grants
+
+    
+
