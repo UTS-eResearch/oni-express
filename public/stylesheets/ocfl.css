@@ -1,0 +1,51 @@
+/* ocfl bridge */ 
+
+body {
+	background-color: #eee;
+	padding: 0.5em;
+}
+
+#header {
+	font-size: 80%;
+	font-weight: bold;
+	background-color: #ccc;
+	padding: 1em;
+	height: 3em;
+} 
+
+#title {
+	float:left;
+	margin: 1em;
+}
+
+#nav {
+	float: right;
+	margin: 1em;
+} 
+
+
+#body {
+	background-color: #fff;
+	padding: 2em;
+}
+
+div.item {
+	padding: 0.25em;
+}
+
+div.item > a {
+	text-decoration: none;
+}
+
+div.item:nth-child(odd) {
+	background-color: #ddd;
+}
+
+
+#footer {
+	font-size: 80%;
+	font-weight: bold;
+	background-color: #ccc;
+	padding: 1em;
+}
+
