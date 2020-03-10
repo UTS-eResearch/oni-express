@@ -38,14 +38,12 @@ app.use(session({
 app.post('/jwt', (req, res) => {
 
 	const authjwt = jwt.decode(req.body['assertion'], config.auth.jwtSecret);
-	console.log(JSON.stringify(authjwt, null, 8))
 	if( check_jwt(config.auth, authjwt) ) {
 		console.log("AAF authentication was successful");
 		const atts = authjwt[config.auth.attributes];
 		req.session.uid = atts['mail'];
 		req.session.displayName = atts['displayname'];
 		req.session.affiliation = atts['edupersonscopedaffiliation'];
-		console.log(JSON.stringify(req.session));
 		res.redirect('/');
 	} else {
 		console.log("AAF authentication failed");
@@ -56,42 +54,14 @@ app.post('/jwt', (req, res) => {
 
 
 
-
-
-
-
-
-
-// data portal front page
-
-app.use('/', ( req, res, next ) => {
-	console.log("/ endpoint, session = " + JSON.stringify(req.session));
-	if( req.session.uid ) {
-		console.log("/ endpoint found authenticated user " + req.session.uid);
-		next(); // express.static(path.join(__dirname, 'public'));
-	} else {
-		console.log("redirecting to " + config.auth.authURL);
-		res.redirect(303, config.auth.authURL);
-	}
-});
-
-
-app.use('/', express.static(path.join(__dirname, 'public')));
-
-
-
-
-
-
-
 // anything past this point just gives a 403 if there's no uid in the session
 
 // ocfl-express endpoints
 
 app.get('/ocfl/:repo/', async (req, res) => {
 	if( !req.session.uid ) {
-		res.status(403).send("Forbidden");
-		return;
+	 	res.status(403).send("Forbidden");
+	 	return;
 	}
 	if( req.params.repo in config.ocfl && config.ocfl[req.params.repo].autoindex ) {
 		const index = await ocfl.index(config, req.params.repo, req.query);
@@ -107,8 +77,8 @@ app.get('/ocfl/:repo/', async (req, res) => {
 app.get('/ocfl/:repo/:oidv/:content?', async (req, res) => {
 
 	if( !req.session.uid ) {
-		res.status(403).send("Forbidden");
-		return;
+	 	res.status(403).send("Forbidden");
+	 	return;
 	}
 
 	var repo = req.params.repo;
@@ -150,9 +120,9 @@ app.get('/ocfl/:repo/:oidv/:content?', async (req, res) => {
 
 app.use('/solr/:core/select*', proxy(config['solr'], {
   filter: (req, res) => {
-  	if( ! req.session.uid ) {
-  		return false;
-  	}
+  	// if( ! req.session.uid ) {
+  	// 	return false;
+  	// }
   	if( req.method !== 'GET') {
   		return false;
   	}
@@ -164,6 +134,19 @@ app.use('/solr/:core/select*', proxy(config['solr'], {
 }));
 
 
+
+// data portal front page
+
+app.use('/', ( req, res, next ) => {
+	if( req.session.uid ) {
+		next();
+	} else {
+		res.redirect(303, config.auth.authURL);
+	}
+});
+
+
+app.use('/', express.static(path.join(__dirname, 'public')));
 
 
 
