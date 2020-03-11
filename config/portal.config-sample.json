@@ -1,0 +1,33 @@
+{
+	"header":{
+    	"title": "My Oni Application",
+    	"URL": "/",
+    	"logo": "images/logo.svg",
+    	"help": "Help",
+    	"helpURL": "/help",
+   		"menu": [
+      		{
+      			"id": "back", "name": "Back"
+      		}
+    	]
+   	},
+	"ocfl": "/ocfl/repo",
+	"solr": "/solr/core",
+	"pages": [
+		{
+			"slug": "help",
+			"title": "Help",
+			"text": "How to use this app"
+		},
+		{
+			"slug": "oni",
+			"title": "Oni",
+			"text": "This app was build with Oni 👹"
+		},
+		{
+			"slug": "privacy",
+			"title": "Privacy",
+			"text": "Don't do bad things with this app"
+		}
+	]
+}
