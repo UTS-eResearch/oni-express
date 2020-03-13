@@ -27,5 +27,13 @@ services:
       - "./test_solr/:/opt/solr/server/solr/grants"
     command: solr-precreate grants
 
+  memcached:
+    image: memcached
+    ports:
+      - "11211:11211"
+    expose:
+      - "11211"
+    networks:
+      - main
     
 

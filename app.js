@@ -4,11 +4,14 @@ var path = require('path');
 var proxy = require('express-http-proxy');
 var logger = require('morgan');
 var bodyParser = require('body-parser');
+var cors = require('cors');
 
 const jwt = require('jwt-simple');
 
 var ocfl = require('./controllers/ocfl');
 var check_jwt = require('./controllers/check_jwt');
+
+var MemcachedStore = require("connect-memcached")(session);
 
 var app = express();
 
@@ -27,8 +30,20 @@ app.set('trust proxy', 1);
 app.use(session({
 	secret: config.session.secret,
 	resave: false,
-	saveUninitialized: true
+	saveUninitialized: false,
+	proxy: true,
+	store: new MemcachedStore({
+		hosts: [ config.session.server ]
+	}),
+	cookie: {
+		maxAge: config.session.expiry * 60 * 60 * 1000
+	}
+
 }));
+
+if( config['cors'] ) {
+	app.use(cors());
+}
 
 
 
@@ -59,7 +74,9 @@ app.post('/jwt', (req, res) => {
 // ocfl-express endpoints
 
 app.get('/ocfl/:repo/', async (req, res) => {
+	console.log(`/ocfl/:repo/ Session id: ${req.session.id}`);
 	if( !req.session.uid ) {
+		console.log("/ocfl/repo endpoint: no uid in session");
 	 	res.status(403).send("Forbidden");
 	 	return;
 	}
@@ -75,8 +92,10 @@ app.get('/ocfl/:repo/', async (req, res) => {
 // fixme: make cache-control no-store
 
 app.get('/ocfl/:repo/:oidv/:content?', async (req, res) => {
-
+	console.log(`/ocfl/:repo/:oid Session id: ${req.session.id}`);
+	console.log(`ocfl: session = ${req.session.uid}`);
 	if( !req.session.uid ) {
+		console.log("/ocfl/repo/oid: no uid found in session");
 	 	res.status(403).send("Forbidden");
 	 	return;
 	}
@@ -99,10 +118,12 @@ app.get('/ocfl/:repo/:oidv/:content?', async (req, res) => {
 					res.status(404).send("Not found");
 				}
 			} else {
+				console.log("/ocfl/repo/oid: Autoindex is switched off");
 				res.status(403).send("Forbidden");
 			}
 		} else {
 			if( config.ocfl[repo].referrer && req.headers['referer'] !== config.ocfl[repo].referrer ) {
+				console.log(`Request referrer ${req.headers['referer']} does not match ${config.ocfl[repo].referrer}`);
 				res.status(403).send("Forbidden");
 			} else {
 				const file = await ocfl.file(config, repo, oid, v, content);
@@ -120,9 +141,13 @@ app.get('/ocfl/:repo/:oidv/:content?', async (req, res) => {
 
 app.use('/solr/:core/select*', proxy(config['solr'], {
   filter: (req, res) => {
-  	// if( ! req.session.uid ) {
-  	// 	return false;
-  	// }
+	console.log(`/solr/:core/ Session id: ${req.session.id}`);
+	console.log(`solr: session = ${req.session.uid}`);
+
+  	if( ! req.session.uid ) {
+		console.log("/solr/:core/ No iud found in session");
+  		return false;
+  	}
   	if( req.method !== 'GET') {
   		return false;
   	}
@@ -138,9 +163,12 @@ app.use('/solr/:core/select*', proxy(config['solr'], {
 // data portal front page
 
 app.use('/', ( req, res, next ) => {
+	console.log(`/: session id = ${req.session.id}`);
+	console.log(`/: session = ${req.session.uid}`);
 	if( req.session.uid ) {
 		next();
 	} else {
+		console.log("/: no iud found in session");
 		res.redirect(303, config.auth.authURL);
 	}
 });
