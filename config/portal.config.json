@@ -1,0 +1,150 @@
+{
+   	"apis": {
+		"ocfl": "/ocfl/grants",
+		"solr": "/solr/grants"
+	},
+	"header":{
+    	"title": "Library of Successful Grants",
+    	"URL": "/",
+    	"logo": "images/logo.svg",
+    	"help": "Help",
+    	"helpURL": "/help",
+   		"menu": [
+      		{
+      			"id": "back", "name": "Back"
+      		}
+    	]
+   	},
+
+  	"footer": {
+    	"text": "© 2020 University of Technology Sydney"
+  	},
+
+
+  	"search": {
+    	"error": "Search Error",
+    	"invalidSearch": "Invalid Search",
+    	"searchText": "Search",
+    	"mainSearch": "main_search"
+  	},
+  
+
+  	"pages": [
+    	{
+      		"slug": "help",
+      		"title": "Help",
+      		"text": "How to use this app"
+   	 	},
+    	{
+      		"slug": "oni",
+      		"title": "Oni",
+      		"text": "This app was build with Oni 👹"
+    	},
+    	{
+      		"slug": "privacy",
+      		"title": "Privacy",
+      		"text": "Don't do bad things with this app"
+    	}
+  	],
+
+
+  	"facets": {
+  		"Dataset_funder_facetmulti": {
+  			"label": "Funding scheme",
+  			"field": "funder"
+  		},
+  		"Dataset_dateCreated_facetmulti": {
+  			"label": "Year",
+  			"field": "dateCreated"
+  		},
+  		"Dataset_affiliation_facetmulti": {
+  			"label": "School/Dept",
+  			"field": "affiliation",
+  			"limit": 5
+  		},
+  		"Dataset_author_facet": {
+  			"label": "Author",
+  			"field": "author",
+  			"limit": 5
+  		},
+  		"Dataset_keywords_facetmulti": {
+  			"label": "Keywords",
+  			"field": "keywords",
+  			"limit": 5
+  		},
+  		"Dataset_FOR_facetmulti": {
+  			"label": "FORs",
+  			"JSON": true,
+  			"search": "@id",
+  			"display": "name",
+  			"component": "FacetFOR",
+  			"field": "FOR_id",
+  			"limit": 5
+  		}
+  	},
+
+  	"results": {
+
+  		"searchFacets": [
+  			"Dataset_funder_facetmulti",
+  			"Dataset_dateCreated_facetmulti",
+  			"Dataset_affiliation_facetmulti",
+  			"Dataset_author_facet",
+  			"Dataset_keywords_facetmulti",
+  			"Dataset_FOR_facetmulti"
+  		],
+  		"resultFacets": [
+  			"Dataset_funder_facetmulti",
+  			"Dataset_dateCreated_facetmulti",
+  			"Dataset_author_facet",
+  			"Dataset_affiliation_facetmulti"
+  		],
+  		"summaryFields": [
+  			{
+  				"field": "funder",
+  				"facet": "Dataset_funder_facetmulti"
+  			},
+  			{ 
+  				"field": "dateCreated",
+  				"facet": "Dataset_dateCreated_facetmulti"
+  			},
+  			{
+  				"field": "author",
+  				"facet": "Dataset_author_facet"
+  			},
+  			{
+  				"field": "affiliation",
+  				"facet": "Dataset_affiliation_facetmulti"
+  			},
+  			{
+  				"field": "description"
+  			},
+  			{
+  				"field": "FOR",
+  				"facet": "Dataset_FOR_facetmulti"
+  			}
+  		],
+  		"viewFields": [
+  			{
+  				"display": "SubDocIframe",
+  				"field": "html",
+  				"fieldName": "",
+  				"width": "800",
+  				"height": "11300"
+  			}
+  		],
+  		"viewLinks": false
+  	},
+
+
+  
+  "dev": {
+    "proxy": {
+      "/solr": {
+        "target": "http://localhost:8089/",
+        "secure": false
+      }
+    }
+  }
+}
+
