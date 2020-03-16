@@ -46,6 +46,45 @@ if( config['cors'] ) {
 }
 
 
+// checkSession: middleware which checks that the user is logged in and has
+// values in their session which match what's expected in config.auth.allow.
+//
+// if the route is /jwt, let it through without checking (because this is the
+// return URL from AAF)
+// if the route is /, redirect to AAF if there's no session or uid
+
+function checkSession(req, res, next) {
+	console.log(`checkSession: ${req.url}`);
+	if( req.url === '/jwt/' ) {
+		next();
+	}
+	const allow = config['auth']['allow'];
+	if( ! req.session ||  ! req.session.uid ) {
+		if( req.url === '/' ) {
+			res.redirect(303, config.auth.authURL);
+		} else {
+			res.status(403).send("Forbidden");
+		}
+	} else {		
+		var ok = true;
+		for( field in allow ) {
+			if( !(field in req.session) || ! req.session[field].match(allow[field]) ) {
+				ok = false;
+				console.log(`session check failed for ${field} ${req.session[field]}`);
+			}
+		}
+		if( ok ) {
+			next();
+		} else {
+			req.status(403).send("Forbidden");
+		}
+	} 
+}
+
+
+app.use(checkSession);
+
+
 
 // authentication endpoint
 
@@ -65,7 +104,15 @@ app.post('/jwt', (req, res) => {
 		res.sendStatus(403);
 	}
 
-})
+});
+
+
+
+
+
+
+app.post("/auth", (req, res) => {
+});
 
 
 
@@ -73,13 +120,14 @@ app.post('/jwt', (req, res) => {
 
 // ocfl-express endpoints
 
+
 app.get('/ocfl/:repo/', async (req, res) => {
 	console.log(`/ocfl/:repo/ Session id: ${req.session.id}`);
-	if( !req.session.uid ) {
-		console.log("/ocfl/repo endpoint: no uid in session");
-	 	res.status(403).send("Forbidden");
-	 	return;
-	}
+	// if( !req.session.uid ) {
+	// 	console.log("/ocfl/repo endpoint: no uid in session");
+	//  	res.status(403).send("Forbidden");
+	//  	return;
+	// }
 	if( req.params.repo in config.ocfl && config.ocfl[req.params.repo].autoindex ) {
 		const index = await ocfl.index(config, req.params.repo, req.query);
 		res.send(index);
@@ -94,11 +142,11 @@ app.get('/ocfl/:repo/', async (req, res) => {
 app.get('/ocfl/:repo/:oidv/:content?', async (req, res) => {
 	console.log(`/ocfl/:repo/:oid Session id: ${req.session.id}`);
 	console.log(`ocfl: session = ${req.session.uid}`);
-	if( !req.session.uid ) {
-		console.log("/ocfl/repo/oid: no uid found in session");
-	 	res.status(403).send("Forbidden");
-	 	return;
-	}
+	// if( !req.session.uid ) {
+	// 	console.log("/ocfl/repo/oid: no uid found in session");
+	//  	res.status(403).send("Forbidden");
+	//  	return;
+	// }
 
 	var repo = req.params.repo;
 	var content = req.params.content;
@@ -139,15 +187,16 @@ app.get('/ocfl/:repo/:oidv/:content?', async (req, res) => {
 
 // solr proxy - only allows select queries 
 
+
 app.use('/solr/:core/select*', proxy(config['solr'], {
   filter: (req, res) => {
-	console.log(`/solr/:core/ Session id: ${req.session.id}`);
-	console.log(`solr: session = ${req.session.uid}`);
+	// console.log(`/solr/:core/ Session id: ${req.session.id}`);
+	// console.log(`solr: session = ${req.session.uid}`);
 
-  	if( ! req.session.uid ) {
-		console.log("/solr/:core/ No iud found in session");
-  		return false;
-  	}
+ //  	if( ! req.session.uid ) {
+	// 	console.log("/solr/:core/ No iud found in session");
+ //  		return false;
+ //  	}
   	if( req.method !== 'GET') {
   		return false;
   	}
@@ -162,16 +211,18 @@ app.use('/solr/:core/select*', proxy(config['solr'], {
 
 // data portal front page
 
-app.use('/', ( req, res, next ) => {
-	console.log(`/: session id = ${req.session.id}`);
-	console.log(`/: session = ${req.session.uid}`);
-	if( req.session.uid ) {
-		next();
-	} else {
-		console.log("/: no iud found in session");
-		res.redirect(303, config.auth.authURL);
-	}
-});
+
+// app.use('/', ( req, res, next ) => {
+// 	console.log(`/: session id = ${req.session.id}`);
+// 	console.log(`/: session = ${req.session.uid}`);
+// 	console.log(`/: affiliation = ${req.session.affiliation}`);
+// 	if( req.session.uid ) {
+// 		next();
+// 	} else {
+// 		console.log("/: no iud found in session");
+// 		res.redirect(303, config.auth.authURL);
+// 	}
+// });
 
 
 app.use('/', express.static(path.join(__dirname, 'portal')));
