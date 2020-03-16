@@ -55,7 +55,7 @@ if( config['cors'] ) {
 
 function checkSession(req, res, next) {
 	console.log(`checkSession: ${req.url}`);
-	if( req.url.match('^/jwt/?') ) {
+	if( req.url === '/jwt/' || req.url === '/jwt' ) {
 		next();
 	}
 	const allow = config['auth']['allow'];
