@@ -55,29 +55,33 @@ if( config['cors'] ) {
 
 function checkSession(req, res, next) {
 	console.log(`checkSession: ${req.url}`);
-	if( req.url === '/jwt/' || req.url === '/jwt' ) {
+	if( req.url === '/jwt/' || req.url === '/jwt' || config['auth']['UNSAFE_MODE'] ) {
 		next();
-	}
-	const allow = config['auth']['allow'];
-	if( ! req.session ||  ! req.session.uid ) {
-		if( req.url === '/' ) {
-			res.redirect(303, config.auth.authURL);
-		} else {
-			res.status(403).send("Forbidden");
-		}
-	} else {		
-		var ok = true;
-		for( field in allow ) {
-			if( !(field in req.session) || ! req.session[field].match(allow[field]) ) {
-				ok = false;
-				console.log(`session check failed for ${field} ${req.session[field]}`);
+	} else {
+	// if( config['auth']['UNSAFE_MODE'] ) {
+	// 	next();
+	// }
+		const allow = config['auth']['allow'];
+		if( ! req.session ||  ! req.session.uid ) {
+			if( req.url === '/' ) {
+				res.redirect(303, config.auth.authURL);
+			} else {
+				res.status(403).send("Forbidden");
 			}
-		}
-		if( ok ) {
-			next();
-		} else {
-			req.status(403).send("Forbidden");
-		}
+		} else {		
+			var ok = true;
+			for( field in allow ) {
+				if( !(field in req.session) || ! req.session[field].match(allow[field]) ) {
+					ok = false;
+					console.log(`session check failed for ${field} ${req.session[field]}`);
+				}
+			}
+			if( ok ) {
+				next();
+			} else {
+				req.status(403).send("Forbidden");
+			}
+		}	
 	} 
 }
 
