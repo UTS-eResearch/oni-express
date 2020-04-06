@@ -1,4 +1,6 @@
 var express = require('express');
+var passport = require('passport');
+var OIDCStrategy = require('passport-azure-ad').OIDCStrategy;
 var session = require('express-session');
 var path = require('path');
 var proxy = require('express-http-proxy');
@@ -6,10 +8,10 @@ var logger = require('morgan');
 var bodyParser = require('body-parser');
 var cors = require('cors');
 
-const jwt = require('jwt-simple');
+//const jwt = require('jwt-simple');
+//var check_jwt = require('./controllers/check_jwt');
 
 var ocfl = require('./controllers/ocfl');
-var check_jwt = require('./controllers/check_jwt');
 
 var MemcachedStore = require("connect-memcached")(session);
 
@@ -26,7 +28,6 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.set('trust proxy', 1);
 
-
 app.use(session({
 	secret: config.session.secret,
 	resave: false,
@@ -41,9 +42,26 @@ app.use(session({
 
 }));
 
+
 if( config['cors'] ) {
 	app.use(cors());
 }
+
+// Set up Azure-AD
+
+passport.use(new OIDCStrategy({
+	identityMetadata: config.azuread.identityMetadata,
+	clientID: config.azuread.clientID,
+	responseType: 'id_token',
+	responseMode: 'form_post',
+	redirectURL: config.azuread.redirectURL,
+	passReqToCallback: true,
+	issuer: config.azuread.issuer
+}, function(req, iss, sub, profile, accessToken, refreshToken, done) {
+	
+}
+
+));
 
 
 // checkSession: middleware which checks that the user is logged in and has
