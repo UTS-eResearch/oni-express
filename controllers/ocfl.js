@@ -59,8 +59,9 @@ async function index(config, repo, args, oid, version, content) {
       } else {
         version = version.slice(1)
       }
-      const index = path_autoindex(inv, version, content || '', config.ocfl[repo].allow);
-      return page_html(oid + '.' + version + '/' + content, index, null);
+      const cpath = content || '';
+      const index = path_autoindex(inv, version, cpath, config.ocfl[repo].allow);
+      return page_html(oid + '.' + version + '/' + cpath, index, null);
     } catch(e) {
       console.log(e);
       return '';
@@ -293,7 +294,7 @@ function solr_pagination(repo, numFound, start, rows) {
 
 function page_html(title, links, nav) {
 
-  var html = '<html><head><link rel="stylesheet" type="text/css" href="/stylesheets/ocfl.css"></head>\n' +
+  var html = '<html><head><link rel="stylesheet" type="text/css" href="/public/stylesheets/ocfl.css"></head>\n' +
     '<body>\n' +
     '<div id="header">\n' +
     '<div id="title">' + title + '</div>\n';
@@ -383,7 +384,9 @@ function path_autoindex(inv, v, path, ocfl_allow) {
   Object.keys(state).forEach((hash) => {
     state[hash].forEach((p) => {
       if( p.startsWith(path) ) {
+        console.log(`Matched ${path} -> ${p}`);
         var rest = p.substring(l).split('/');
+        console.log(`rest (${l}) ${JSON.stringify(rest)}`);
         if( rest.length === 1 ) {   // it's a file
           index[rest[0]] = 1;
         } else {                    // it's a subdirectory
@@ -395,6 +398,7 @@ function path_autoindex(inv, v, path, ocfl_allow) {
 
   var paths = Object.keys(index);
   paths.sort();
+  console.log(`Paths: ${paths}`);
 
   if( paths.length > 0 ) {
     var links = paths.filter((p) => allow_path(ocfl_allow, p)).map((p) => {
