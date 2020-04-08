@@ -162,8 +162,19 @@ app.get('/ocfl/:repo/:oidv/*', async (req, res) => {
 	if( ! (repo in config.ocfl) ) {
 		res.status(404).send("Not found");
 	} else {
-		console.log("content = " + content);
-		if( content ) {
+		if( !content || content.slice(-1) === '/' ) {
+			if( config.ocfl[repo].autoindex ) {
+				const index = await ocfl.index(config, repo, req.query, oid, v, content);
+				if( index ) {
+					res.send(index);
+				} else {
+					res.status(404).send("Not found");
+				}
+			} else {
+				console.log("/ocfl/repo/oid: Autoindex is switched off");
+				res.status(403).send("Forbidden");
+			}
+		} else {
 			if( config.ocfl[repo].referrer && req.headers['referer'] !== config.ocfl[repo].referrer ) {
 				console.log(`Request referrer ${req.headers['referer']} does not match ${config.ocfl[repo].referrer}`);
 				res.status(403).send("Forbidden");
@@ -171,23 +182,41 @@ app.get('/ocfl/:repo/:oidv/*', async (req, res) => {
 				const file = await ocfl.file(config, repo, oid, v, content);
 				if( file ) {
 					res.sendFile(file);
+				} else {
+					res.status(404).send("Not found");
 				}
 			}
 		}
-		if( config.ocfl[repo].autoindex ) {
-			if( content ) {
-				content += '/';
-			}
-			const index = await ocfl.index(config, repo, req.query, oid, v, content);
-			if( index ) {
-				res.send(index);
-			} else {
-				res.status(404).send("Not found");
-			}
-		} else {
-			console.log("/ocfl/repo/oid: Autoindex is switched off");
-			res.status(403).send("Forbidden");
-		}
+
+
+
+
+		// console.log("content = " + content);
+		// if( content ) {
+		// 	if( config.ocfl[repo].referrer && req.headers['referer'] !== config.ocfl[repo].referrer ) {
+		// 		console.log(`Request referrer ${req.headers['referer']} does not match ${config.ocfl[repo].referrer}`);
+		// 		res.status(403).send("Forbidden");
+		// 	} else {
+		// 		const file = await ocfl.file(config, repo, oid, v, content);
+		// 		if( file ) {
+		// 			res.sendFile(file);
+		// 		}
+		// 	}
+		// }
+		// if( config.ocfl[repo].autoindex ) {
+		// 	if( content ) {
+		// 		content += '/';
+		// 	}
+		// 	const index = await ocfl.index(config, repo, req.query, oid, v, content);
+		// 	if( index ) {
+		// 		res.send(index);
+		// 	} else {
+		// 		res.status(404).send("Not found");
+		// 	}
+		// } else {
+		// 	console.log("/ocfl/repo/oid: Autoindex is switched off");
+		// 	res.status(403).send("Forbidden");
+		// }
 	}
 });
 
