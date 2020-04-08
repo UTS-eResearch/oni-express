@@ -174,6 +174,10 @@ async function solr_index(config, repo, args) {
   
   var query = { start: start, rows: page_size, q: "*:*", fl: fields.join(',') };
 
+  if( config.type ) {
+    query['fq'] = 'record_type_s:' + config.type;
+  }
+
   try {
     const resp = await axios.get(config.solr + '/select', { params: query });
 
@@ -305,7 +309,7 @@ function page_html(title, links, nav) {
   });
 
   html += '</div>\n' +
-  '<div id="footer"><a href="https://github.com/UTS-eResearch/ocfl-nginx">ocfl-nginx bridge v1.0.3</a></div>\n' +
+  '<div id="footer"><a href="https://github.com/UTS-eResearch/oni-express">ocfl-express bridge v1.0.3</a></div>\n' +
   '</body>\n</html>\n';
 
   return html;
