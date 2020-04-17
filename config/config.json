@@ -1,0 +1,27 @@
+{
+	"development": {
+		"session": {
+			"secret": "keyboard cat",
+			"name": "session",
+			"expiry": 24,
+			"server": "memcached:11211"
+		},
+
+		"cors": true,
+
+		"solr": "http://solr:8983",
+
+		"ocfl": {
+			"public_ocfl": {
+				"repository": "/etc/share/ocfl/public_ocfl",
+				"autoindex": true,
+				"versions": true,
+				"type": "Dataset",
+				"page_size": 20,
+				"solr": "http://solr:8983/solr/public_ocfl",
+				"resolver": "solr"
+			} 
+		}
+	}
+
+}

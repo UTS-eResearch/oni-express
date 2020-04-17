@@ -3,7 +3,7 @@ FROM node:10
 # Build the frontend
 
 WORKDIR /usr/src/build
-RUN git clone -b feature-ocfl-demo https://github.com/UTS-eResearch/oni-portal.git
+RUN git clone -b release-1.0.0 https://github.com/UTS-eResearch/oni-portal.git
 WORKDIR /usr/src/build/oni-portal
 COPY ./config/portal.config.json ./config.json
 RUN npm install
