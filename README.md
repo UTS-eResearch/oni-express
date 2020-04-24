@@ -23,7 +23,27 @@ This repository contains the core component, **oni-express** - a Node web app  w
 
 ## Deploying Oni
 
-The easiest way to deploy Oni is with the Dockerfile and docker-compose.yml in this repository. Put an OCFL repository in a directory called `sample_ocfl` in the repository directory, or, alternately, edit the `volumes` line in the oni-express section of the docker-compose.yml file so that it maps your OCFL repository to `/etc/share/ocfl`  
+The easiest way to deploy Oni is with the Dockerfile and `docker-compose.yml` in this repository. Put your OCFL repository in the directory called `sample_ocfl` in this distribution, or, alternately, follow the steps in the section OCFL and Solr below to configure a link to an OCFL repository somewhere else on your system.
+
+Then start Docker with:
+
+    > docker-compose up
+
+The data portal should be available on https://localhost:8080/
+
+## Configuring and indexing
+
+### OCFL and Solr
+
+The `docker-compose.yml` file maps a directory on the host system to `/etc/share/ocfl` on the Docker container where the oni-express app can serve it.
+
+This directory should be the directory which contains your OCFL repository, not the OCFL repository itself. The root directory of the OCFL repository will also need to be configured in the `config.json` file for oni-express.
+
+As an example, say that the root of your OCFL repository on the host system is: 
+
+    /opt/share/ocfl/repository
+
+Then the `docker-compose.yml` should be configured as follows:
 
     services:
       oni-express:
@@ -35,17 +55,38 @@ The easiest way to deploy Oni is with the Dockerfile and docker-compose.yml in t
         networks:
           - main
         volumes:
-          - "./sample_ocfl:/etc/share/ocfl"
+          - "/opt/share/ocfl:/etc/share/ocfl"
 
-Then start Docker with:
+The `ocfl` section of `config.json` should be configured as follows (note that this is the path to the OCFL repository on the Docker container, not the host):
 
-    > docker-compose up
+    "ocfl": {
+      "sample_ocfl": {
+        "repository": "/etc/share/ocfl/repository",
+    
+        [...]
 
-The data portal should be available on https://localhost:8080/
+The `apis` section of `portal.config.json` needs to be configured to match the name of the OCFL repository in the `config.json` file:
 
-## Configuring and indexing
+    "apis": {
+        "ocfl": "/ocfl/repository",
+        "solr": "/solr/ocfl"
+    },
 
-### Volumes
+Finally, the `config.json` file for oni-indexer needs to be configured to point to your OCLF repository on the host system:
+ 
+    {
+      "ocfl": "/opt/share/ocfl/repository",
+      "identifierNamespace": "ocfl",
+      "uriIds": "identifiers",
+      "updateSchema": true,
+    
+      [...]
+ 
+
+### Indexing
+
+
+
 
 
 ### Web server
@@ -98,7 +139,7 @@ Address of the Solr server on the Docker network. You shouldn't have to change t
 
 Configures at least one OCFL repository, as follows:
 
-* repository - directory of the repository on the Docker container - see the section on Volumes for more details
+* repository - directory of the repository on the Docker container - see the section on OCFL and Solr above for details
 * autoindex - allow auto-indexes for the top level and inside OCFL objects
 * versions - allow URLS to return versions other than HEAD
 * type - filter objects by their type in the Solr index
@@ -109,11 +150,6 @@ Configures at least one OCFL repository, as follows:
 ### Portal
 
 The data portal is configured with `/config/portal.config.json`, which is copied to the oni-express Docker container when rebuilding.
-
-
-
-
-### Indexing
 
 
 ## Limitations

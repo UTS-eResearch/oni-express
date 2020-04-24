@@ -24,8 +24,8 @@ services:
     networks:
       - main
     volumes:
-      - "./test_solr/:/opt/solr/server/solr/public_ocfl"
-    command: solr-precreate public_ocfl
+      - "./test_solr/:/opt/solr/server/solr/ocfl"
+    command: solr-precreate ocfl
 
   memcached:
     image: memcached
