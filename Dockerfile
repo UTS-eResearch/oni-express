@@ -3,7 +3,7 @@ FROM node:10
 # Build the frontend
 
 WORKDIR /usr/src/build
-RUN git clone https://github.com/UTS-eResearch/oni-portal.git
+RUN git clone --branch release-1.0.1 https://github.com/UTS-eResearch/oni-portal.git
 WORKDIR /usr/src/build/oni-portal
 COPY ./config/portal.config.json ./config.json
 RUN npm install
