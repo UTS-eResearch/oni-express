@@ -13,7 +13,7 @@ services:
     networks:
       - main
     volumes:
-      - "./sample_ocfl:/etc/share/ocfl"
+      - "../oclf-cm/ocfl:/etc/share/ocfl"
 
   solr:
     image: solr
