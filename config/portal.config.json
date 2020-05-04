@@ -67,7 +67,7 @@
   			"limit": 5
   		},
   		"Dataset_FOR_facetmulti": {
-  			"label": "FORs",
+  			"label": "Field of Research",
   			"JSON": true,
   			"search": "@id",
   			"display": "name",
@@ -91,7 +91,8 @@
   			"Dataset_funder_facetmulti",
   			"Dataset_dateCreated_facetmulti",
   			"Dataset_author_facet",
-  			"Dataset_affiliation_facetmulti"
+  			"Dataset_affiliation_facetmulti",
+        "Dataset_FOR_facetmulti"
   		],
   		"summaryFields": [
   			{
