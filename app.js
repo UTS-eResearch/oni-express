@@ -8,8 +8,10 @@ var logger = require('morgan');
 var bodyParser = require('body-parser');
 var cors = require('cors');
 
-//const jwt = require('jwt-simple');
-//var check_jwt = require('./controllers/check_jwt');
+// Azure-AD stuff cribbed from
+
+// https://github.com/AzureADQuickStarts/AppModelv2-WebApp-OpenIDConnect-nodejs/blob/master/app.js
+
 
 var ocfl = require('./controllers/ocfl');
 
@@ -47,94 +49,68 @@ if( config['cors'] ) {
 	app.use(cors());
 }
 
-// Set up Azure-AD
+// TODO: a nice design for making authentication pluggable
+
+console.log(`Azure-ad config: ${JSON.stringify(config.auth.azuread)}`);
 
 passport.use(new OIDCStrategy({
-	identityMetadata: config.azuread.identityMetadata,
-	clientID: config.azuread.clientID,
+	identityMetadata: config.auth.azuread.identityMetadata,
+	clientID: config.auth.azuread.clientID,
 	responseType: 'id_token',
 	responseMode: 'form_post',
-	redirectURL: config.azuread.redirectURL,
+	redirectURL: config.auth.azuread.redirectUrl,
 	passReqToCallback: true,
-	issuer: config.azuread.issuer
+	issuer: config.auth.azuread.issuer
 }, function(req, iss, sub, profile, accessToken, refreshToken, done) {
-	
-}
-
-));
-
-
-// checkSession: middleware which checks that the user is logged in and has
-// values in their session which match what's expected in config.auth.allow.
-//
-// if the route is /jwt, let it through without checking (because this is the
-// return URL from AAF)
-// if the route is /, redirect to AAF if there's no session or uid
-
-function checkSession(req, res, next) {
-	console.log(`checkSession: ${req.url}`);
-	if( req.url === '/jwt/' || req.url === '/jwt' || config['auth']['UNSAFE_MODE'] ) {
-		next();
+	if( !profile.oid ) {
+		return done(new Error("Authenication failed"));
 	} else {
-	// if( config['auth']['UNSAFE_MODE'] ) {
-	// 	next();
-	// }
-		const allow = config['auth']['allow'];
-		if( ! req.session ||  ! req.session.uid ) {
-			if( req.url === '/' ) {
-				res.redirect(303, config.auth.authURL);
-			} else {
-				res.status(403).send("Forbidden");
-			}
-		} else {		
-			var ok = true;
-			for( field in allow ) {
-				if( !(field in req.session) || ! req.session[field].match(allow[field]) ) {
-					ok = false;
-					console.log(`session check failed for ${field} ${req.session[field]}`);
-				}
-			}
-			if( ok ) {
-				next();
-			} else {
-				req.status(403).send("Forbidden");
-			}
-		}	
-	} 
-}
+		return done(null, profile);
+	}
+}));
 
 
-app.use(checkSession);
+
+app.use(bodyParser.urlencoded({extended: true}));
+
+app.use(passport.initialize());
+app.use(passport.session());
 
 
 
 // authentication endpoint
 
+app.get('/auth/',
+  function(req, res, next) {
+    passport.authenticate('azuread-openidconnect', 
+      { 
+        response: res, 
+        failureRedirect: '/'  
+      }
+    )(req, res, next);
+  },
+  function(req, res) {
+    //log.info('We received a return from AzureAD.');
+    res.redirect('/');
+  });
 
-app.post('/jwt', (req, res) => {
-
-	const authjwt = jwt.decode(req.body['assertion'], config.auth.jwtSecret);
-	if( check_jwt(config.auth, authjwt) ) {
-		console.log("AAF authentication was successful");
-		const atts = authjwt[config.auth.attributes];
-		req.session.uid = atts['mail'];
-		req.session.displayName = atts['displayname'];
-		req.session.affiliation = atts['edupersonscopedaffiliation'];
-		res.redirect('/');
-	} else {
-		console.log("AAF authentication failed");
-		res.sendStatus(403);
-	}
-
-});
-
-
-
-
-
-
-app.post("/auth", (req, res) => {
-});
+// 'POST returnURL'
+// `passport.authenticate` will try to authenticate the content returned in
+// body (such as authorization code). If authentication fails, user will be
+// redirected to '/' (home page); otherwise, it passes to the next middleware.
+app.post('/auth',
+  function(req, res, next) {
+    passport.authenticate('azuread-openidconnect', 
+      { 
+        response: res,                      // required
+        failureRedirect: '/'  
+      }
+    )(req, res, next);
+  },
+  function(req, res) {
+    //log.info('We received a return from AzureAD.');
+    res.redirect('/');
+  });
 
 
 
@@ -145,11 +121,6 @@ app.post("/auth", (req, res) => {
 
 app.get('/ocfl/:repo/', async (req, res) => {
 	console.log(`/ocfl/:repo/ Session id: ${req.session.id}`);
-	// if( !req.session.uid ) {
-	// 	console.log("/ocfl/repo endpoint: no uid in session");
-	//  	res.status(403).send("Forbidden");
-	//  	return;
-	// }
 	if( req.params.repo in config.ocfl && config.ocfl[req.params.repo].autoindex ) {
 		const index = await ocfl.index(config, req.params.repo, req.query);
 		res.send(index);
@@ -164,11 +135,6 @@ app.get('/ocfl/:repo/', async (req, res) => {
 app.get('/ocfl/:repo/:oidv/:content?', async (req, res) => {
 	console.log(`/ocfl/:repo/:oid Session id: ${req.session.id}`);
 	console.log(`ocfl: session = ${req.session.uid}`);
-	// if( !req.session.uid ) {
-	// 	console.log("/ocfl/repo/oid: no uid found in session");
-	//  	res.status(403).send("Forbidden");
-	//  	return;
-	// }
 
 	var repo = req.params.repo;
 	var content = req.params.content;
@@ -212,13 +178,6 @@ app.get('/ocfl/:repo/:oidv/:content?', async (req, res) => {
 
 app.use('/solr/:core/select*', proxy(config['solr'], {
   filter: (req, res) => {
-	// console.log(`/solr/:core/ Session id: ${req.session.id}`);
-	// console.log(`solr: session = ${req.session.uid}`);
-
- //  	if( ! req.session.uid ) {
-	// 	console.log("/solr/:core/ No iud found in session");
- //  		return false;
- //  	}
   	if( req.method !== 'GET') {
   		return false;
   	}
@@ -230,32 +189,6 @@ app.use('/solr/:core/select*', proxy(config['solr'], {
 }));
 
 
-
-// data portal front page
-
-
-// app.use('/', ( req, res, next ) => {
-// 	console.log(`/: session id = ${req.session.id}`);
-// 	console.log(`/: session = ${req.session.uid}`);
-// 	console.log(`/: affiliation = ${req.session.affiliation}`);
-// 	if( req.session.uid ) {
-// 		next();
-// 	} else {
-// 		console.log("/: no iud found in session");
-// 		res.redirect(303, config.auth.authURL);
-// 	}
-// });
-
-
 app.use('/', express.static(path.join(__dirname, 'portal')));
-
-
-
-
-
-
-
-
-
 
 module.exports = app;
