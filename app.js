@@ -53,17 +53,20 @@ if( config['cors'] ) {
 
 console.log(`Azure-ad config: ${JSON.stringify(config.auth.azuread)}`);
 
+console.log(`config.auth.azuread.redirectUrl: ${config.auth.azuread.redirectUrl}`);
+
+
 passport.use(new OIDCStrategy({
 	identityMetadata: config.auth.azuread.identityMetadata,
 	clientID: config.auth.azuread.clientID,
 	responseType: 'id_token',
 	responseMode: 'form_post',
-	redirectURL: config.auth.azuread.redirectUrl,
+	redirectUrl: config.auth.azuread.redirectUrl,
 	passReqToCallback: true,
 	issuer: config.auth.azuread.issuer
 }, function(req, iss, sub, profile, accessToken, refreshToken, done) {
 	if( !profile.oid ) {
-		return done(new Error("Authenication failed"));
+		return done(new Error("Authentication failed"));
 	} else {
 		return done(null, profile);
 	}
