@@ -51,10 +51,6 @@ if( config['cors'] ) {
 
 // TODO: a nice design for making authentication pluggable
 
-console.log(`Azure-ad config: ${JSON.stringify(config.auth.azuread)}`);
-
-console.log(`config.auth.azuread.redirectUrl: ${config.auth.azuread.redirectUrl}`);
-
 
 passport.use(new OIDCStrategy({
 	identityMetadata: config.auth.azuread.identityMetadata,
