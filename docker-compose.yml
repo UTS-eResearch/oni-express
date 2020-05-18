@@ -26,6 +26,8 @@ services:
     volumes:
       - "./test_solr/:/opt/solr/server/solr/grants"
     command: solr-precreate grants
+    logging:
+      driver: none
 
   memcached:
     image: memcached
@@ -35,5 +37,7 @@ services:
       - "11211"
     networks:
       - main
+    logging:
+      driver: none
     
 

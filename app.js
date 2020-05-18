@@ -1,6 +1,6 @@
 var express = require('express');
 var passport = require('passport');
-var OIDCStrategy = require('passport-azure-ad').OIDCStrategy;
+var wsfedsaml2 = require('passport-wsfed-saml2').Strategy;
 var session = require('express-session');
 var path = require('path');
 var proxy = require('express-http-proxy');
@@ -8,9 +8,6 @@ var logger = require('morgan');
 var bodyParser = require('body-parser');
 var cors = require('cors');
 
-// Azure-AD stuff cribbed from
-
-// https://github.com/AzureADQuickStarts/AppModelv2-WebApp-OpenIDConnect-nodejs/blob/master/app.js
 
 
 var ocfl = require('./controllers/ocfl');
@@ -49,18 +46,15 @@ if( config['cors'] ) {
 	app.use(cors());
 }
 
-// TODO: a nice design for making authentication pluggable
 
 
-passport.use(new OIDCStrategy({
-	identityMetadata: config.auth.azuread.identityMetadata,
-	clientID: config.auth.azuread.clientID,
-	responseType: 'id_token',
-	responseMode: 'form_post',
-	redirectUrl: config.auth.azuread.redirectUrl,
-	passReqToCallback: true,
-	issuer: config.auth.azuread.issuer
-}, function(req, iss, sub, profile, accessToken, refreshToken, done) {
+
+passport.use(new wsfedsaml2({
+	path: config.auth.azuread.redirectUrl,
+	thumbprint: config.auth.azuread.thumbprint,
+	appid: config.auth.azuread.clientID,
+	identityProviderUrl: config.auth.azuread.identityMetadata
+}, function(profile, done) {
 	if( !profile.oid ) {
 		return done(new Error("Authentication failed"));
 	} else {
@@ -81,10 +75,10 @@ app.use(passport.session());
 
 app.get('/auth/',
   function(req, res, next) {
-    passport.authenticate('azuread-openidconnect', 
+    passport.authenticate('wsfed-saml2', 
       { 
         response: res, 
-        failureRedirect: '/'  
+        failureRedirect: '/noauth'  
       }
     )(req, res, next);
   },
@@ -97,12 +91,13 @@ app.get('/auth/',
 // `passport.authenticate` will try to authenticate the content returned in
 // body (such as authorization code). If authentication fails, user will be
 // redirected to '/' (home page); otherwise, it passes to the next middleware.
+
 app.post('/auth',
   function(req, res, next) {
-    passport.authenticate('azuread-openidconnect', 
+    passport.authenticate('wsfed-saml2', 
       { 
         response: res,                      // required
-        failureRedirect: '/'  
+        failureRedirect: '/noauth'  
       }
     )(req, res, next);
   },
@@ -112,13 +107,19 @@ app.post('/auth',
   });
 
 
+// dummy noauth endpoint
 
-// anything past this point just gives a 403 if there's no uid in the session
+app.get('/noauth/', function (req, res, next) {
+	res.send("Authentication failed")
+})
+
 
 // ocfl-express endpoints
 
 
 app.get('/ocfl/:repo/', async (req, res) => {
+
+
 	console.log(`/ocfl/:repo/ Session id: ${req.session.id}`);
 	if( req.params.repo in config.ocfl && config.ocfl[req.params.repo].autoindex ) {
 		const index = await ocfl.index(config, req.params.repo, req.query);
@@ -131,7 +132,9 @@ app.get('/ocfl/:repo/', async (req, res) => {
 
 // fixme: make cache-control no-store
 
-app.get('/ocfl/:repo/:oidv/:content?', async (req, res) => {
+app.get('/ocfl/:repo/:oidv/:content?', 
+	passport.authenticate('wsfed-saml2', { failureRedirect: '/noauth' } ),
+	async (req, res) => {
 	console.log(`/ocfl/:repo/:oid Session id: ${req.session.id}`);
 	console.log(`ocfl: session = ${req.session.uid}`);
 
@@ -175,7 +178,8 @@ app.get('/ocfl/:repo/:oidv/:content?', async (req, res) => {
 // solr proxy - only allows select queries 
 
 
-app.use('/solr/:core/select*', proxy(config['solr'], {
+app.use('/solr/:core/select*', 
+	proxy(config['solr'], {
   filter: (req, res) => {
   	if( req.method !== 'GET') {
   		return false;
@@ -188,6 +192,12 @@ app.use('/solr/:core/select*', proxy(config['solr'], {
 }));
 
 
-app.use('/', express.static(path.join(__dirname, 'portal')));
+app.use(
+	'/', 
+	[
+		passport.authenticate('wsfed-saml2', { failureRedirect: '/noauth' } ),
+		express.static(path.join(__dirname, 'portal'))
+	]
+);
 
 module.exports = app;
