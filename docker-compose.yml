@@ -13,7 +13,7 @@ services:
     networks:
       - main
     volumes:
-      - "../oni-indexer/working/:/etc/share/ocfl"
+      - "../ocfl-cm/ocfl/:/etc/share/ocfl"
 
   solr:
     image: solr
@@ -24,8 +24,8 @@ services:
     networks:
       - main
     volumes:
-      - "./test_solr/:/opt/solr/server/solr/grants"
-    command: solr-precreate grants
+      - "./test_solr/:/opt/solr/server/solr/public"
+    command: solr-precreate public
 
   memcached:
     image: memcached
