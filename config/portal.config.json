@@ -35,24 +35,13 @@
     },
 
   	"facets": {
-  		"Dataset_funder_facetmulti": {
-  			"label": "Funding scheme",
-  			"field": "funder",
-        "sort": "index",
-        "limit": -1
-  		},
-  		"Dataset_dateCreated_facetmulti": {
+  		"Dataset_datePublished_facet": {
   			"label": "Year",
-  			"field": "dateCreated",
+  			"field": "datePublished",
         "sort": "index",
         "limit": -1
   		},
-  		"Dataset_affiliation_facetmulti": {
-  			"label": "School/Dept",
-  			"field": "affiliation",
-  			"limit": 5
-  		},
-  		"Dataset_author_facet": {
+  		"Dataset_author_facetmulti": {
   			"label": "Author",
   			"field": "author",
   			"limit": 5
@@ -76,36 +65,24 @@
   	"results": {
 
   		"searchFacets": [
-  			"Dataset_funder_facetmulti",
-  			"Dataset_dateCreated_facetmulti",
-  			"Dataset_affiliation_facetmulti",
-  			"Dataset_author_facet",
+  			"Dataset_datePublished_facet",
+  			"Dataset_author_facetmulti",
   			"Dataset_keywords_facetmulti",
   			"Dataset_FOR_facetmulti"
   		],
   		"resultFacets": [
-  			"Dataset_funder_facetmulti",
-  			"Dataset_dateCreated_facetmulti",
-  			"Dataset_author_facet",
-  			"Dataset_affiliation_facetmulti",
+  			"Dataset_datePublished_facet",
+  			"Dataset_author_facetmulti",
         "Dataset_FOR_facetmulti"
   		],
   		"summaryFields": [
-  			{
-  				"field": "funder",
-  				"facet": "Dataset_funder_facetmulti"
-  			},
   			{ 
-  				"field": "dateCreated",
-  				"facet": "Dataset_dateCreated_facetmulti"
+  				"field": "datePublished",
+  				"facet": "Dataset_datePublished_facet"
   			},
   			{
   				"field": "author",
-  				"facet": "Dataset_author_facet"
-  			},
-  			{
-  				"field": "affiliation",
-  				"facet": "Dataset_affiliation_facetmulti"
+  				"facet": "Dataset_author_facetmulti"
   			},
   			{
   				"field": "description"
@@ -124,7 +101,7 @@
   				"height": "1130"
   			}
   		],
-  		"viewLinks": false
+  		"viewLinks": true
   	},
 
 
