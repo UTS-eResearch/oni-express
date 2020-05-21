@@ -44,6 +44,9 @@
   		"Dataset_author_facetmulti": {
   			"label": "Author",
   			"field": "author",
+        "JSON": true,
+        "search": "@id",
+        "display": "name",
   			"limit": 5
   		},
   		"Dataset_keywords_facetmulti": {
