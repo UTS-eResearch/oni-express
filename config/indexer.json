@@ -11,6 +11,7 @@
   "solrBase": "http://solr:8983/solr/ocfl",
   "hashAlgorithm": "md5",
   "waitPeriod": 0,
+  "schemaBase": "/etc/share/config/schema_base.json",
   "log": {
     "filename": "./logs/oni-indexer.log",
     "level": "info"
@@ -18,6 +19,7 @@
 
 
   "fields": {
+    "main_search": [ "name", "description", "id", "author" ],
     "map_all": {
       "@id": [ "id", "id_orig" ],
       "@type": [ "record_type_s", "type_label" ]
