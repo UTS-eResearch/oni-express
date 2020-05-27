@@ -13,7 +13,20 @@ services:
     networks:
       - main
     volumes:
-      - "../ocfl-cm/ocfl/:/etc/share/ocfl"
+      - "./ocfl/:/etc/share/ocfl"
+
+  oni-indexer:
+    build: ../oni-indexer
+    ports:
+      - "8090:8090"
+    expose:
+      - "8090"
+    networks:
+      - main
+    volumes:
+      - "./ocfl/:/etc/share/ocfl"
+      - "./config/:/etc/share/config"
+      - "./logs/:/etc/share/logs"
 
   solr:
     image: solr
@@ -24,8 +37,9 @@ services:
     networks:
       - main
     volumes:
-      - "./test_solr/:/opt/solr/server/solr/public"
-    command: solr-precreate public
+      - "./test_solr/:/opt/solr/server/solr/ocfl"
+    command: solr-precreate ocfl
+
 
   memcached:
     image: memcached

@@ -1,0 +1,102 @@
+{
+  "ocfl": "/etc/share/ocfl",
+  "identifierNamespace": "public_ocfl",
+  "uriIds": "identifiers",
+  "retries": 10,
+  "retryInterval": 10,
+  "purge": true,
+  "updateSchema": true,
+  "dryRun": false,
+  "catalogFilename": "ro-crate-metadata.jsonld",
+  "solrBase": "http://solr:8983/solr/ocfl",
+  "hashAlgorithm": "md5",
+  "waitPeriod": 0,
+  "log": {
+    "filename": "./logs/oni-indexer.log",
+    "level": "info"
+  },
+
+
+  "fields": {
+    "map_all": {
+      "@id": [ "id", "id_orig" ],
+      "@type": [ "record_type_s", "type_label" ]
+    },
+
+    "licenses": {
+      "__default__": "public"
+    },
+
+    "types": {
+
+      "Dataset": {
+    
+        "@id": { 
+          "name": "public_ocfl",
+          "filter": { "is_root": true }
+        },
+        "@reverse": { "skip": true },
+ 
+        "hasPart": { "skip": true },
+
+        "hasFile": { "skip": true },
+      
+        "temporalCoverage": { "skip": true },
+
+        "license": {
+          "multi": true,
+          "facet": true
+        },
+
+        "licenseOriginal": {
+          "multi": true
+        },
+
+        "author": {
+          "resolve": "multi",
+          "facet": true
+        },
+
+        "keywords": {
+          "facet": {
+            "tokenize": { "delim": "[,;]\\s*" }
+          }
+        },
+
+        "about": [
+          {
+            "match": { "@id": { "re": "anzsrc-for" } },
+            "index_as": "FOR",
+            "multi": true,
+            "resolve": "multi",
+            "facet": true
+          }
+        ],
+
+        "contactPoint" : {
+          "multi": "true",
+          "escapedJSON": true
+        },
+
+        "geo" : {
+          "multi": "true",
+          "escapedJSON": true
+        },
+
+        "datePublished": {
+          "facet": true,
+          "validate": {
+            "re": "^\\d\\d\\d\\d"
+          }
+        },
+      
+        "publisher": {
+          "resolve": "multi",
+          "facet": {
+            "field": "@id"
+          }
+        }
+      }
+    }
+  }
+}

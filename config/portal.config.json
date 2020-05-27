@@ -1,7 +1,7 @@
 {
    	"apis": {
-		"ocfl": "/ocfl/public",
-		"solr": "/solr/public"
+		"ocfl": "/ocfl",
+		"solr": "/solr/ocfl"
 	},
 	"header":{
     	"title": "UTS Data Portal",

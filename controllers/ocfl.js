@@ -6,17 +6,17 @@ var axios = require('axios');
 
 var DEFAULT_PAGE_SIZE = 10;
 
-// file(config, repo, oid, version, content)
+// file(config, oid, version, content)
 //
 // Resolve a versioned oid and content path into a filename
 
-async function file(config, repo, oid, version, content) {
+async function file(config, oid, version, content) {
 
-  const opath = await resolve_oid(config.ocfl[repo], oid);
+  const opath = await resolve_oid(config.ocfl, oid);
   if( !opath  ) {
     return '';
   }
-  const ocfl_root = config.ocfl[repo].repository;
+  const ocfl_root = config.ocfl.repository;
 
   try {
     const inv = await load_inventory(ocfl_root, opath);
@@ -39,18 +39,18 @@ async function file(config, repo, oid, version, content) {
 
 }
 
-// index(config, repo, oid, version, content)
+// index(config, oid, version, content)
 //
 // returns either the top-level repo index or the auto_index for the path within
 // an object
 
-async function index(config, repo, args, oid, version, content) {
+async function index(config, args, oid, version, content) {
   if( oid ) {
-    const opath = await resolve_oid(config.ocfl[repo], oid);
+    const opath = await resolve_oid(config.ocfl, oid);
     if( !opath  ) {
       return '';
     }
-    const ocfl_root = config.ocfl[repo].repository;
+    const ocfl_root = config.ocfl.repository;
 
     try {
       const inv = await load_inventory(ocfl_root, opath);
@@ -59,15 +59,15 @@ async function index(config, repo, args, oid, version, content) {
       } else {
         version = version.slice(1)
       }
-      const index = path_autoindex(inv, version, content || '', config.ocfl[repo].allow);
+      const index = path_autoindex(inv, version, content || '', config.ocfl.allow);
       return page_html(oid + '.' + version + '/' + content, index, null);
     } catch(e) {
       console.log(e);
       return '';
     }
   } else {
-    if( config.ocfl[repo].resolver === 'solr' ) {
-      return await solr_index(config.ocfl[repo], repo, args);
+    if( config.ocfl.resolver === 'solr' ) {
+      return await solr_index(config.ocfl, args);
     } else {
       return '';
     } 
@@ -157,7 +157,7 @@ function find_version(inv, v, content) {
 // index and calls send_html to return it to the user
 
 
-async function solr_index(config, repo, args) {
+async function solr_index(config, args) {
   var start = args['start'] || '0';
   var format = args['format'] || 'html';
   var fields = [ 'id', 'name', 'path', 'uri_id' ];
@@ -184,14 +184,14 @@ async function solr_index(config, repo, args) {
         var docs = resp.data['response']['docs'];
         var start = resp.data['response']['start'];
         var numFound = resp.data['response']['numFound'];
-        var nav = solr_pagination(repo, numFound, start, page_size);
+        var nav = solr_pagination(numFound, start, page_size);
         var index = docs.map((d) => {
           return {
-            href: '/ocfl/' + repo + '/' + d['uri_id'] + '/',
+            href: '/ocfl/' + d['uri_id'] + '/',
             text: d['name'][0]
           }
         });
-        return page_html('OCFL index ' + repo, index, nav);
+        return page_html('OCFL index', index, nav);
       }
     } else {
       return '';
@@ -246,13 +246,13 @@ function solr_query(options) {
 
 
 
-// solr_pagination(repo, numFound, start, rows)
+// solr_pagination(numFound, start, rows)
 //
 // Renders the pagination nav links for the solr index.
 
-function solr_pagination(repo, numFound, start, rows) {
+function solr_pagination(numFound, start, rows) {
   var html = '';
-  var url = '/ocfl/' + repo + '/'
+  var url = '/ocfl/'; 
   var last = start + rows - 1;
   var next = undefined;
   if( last > numFound - 1 ) {
@@ -314,14 +314,14 @@ function page_html(title, links, nav) {
 }
 
 
-// nav_links(repo, numFound, start, rows)
+// nav_links(numFound, start, rows)
 //
 // Renders pagination links for the solr index
 
 
-function nav_links(repo, numFound, start, rows) {
+function nav_links(numFound, start, rows) {
   var html = '';
-  var url = '/' + repo + '/'
+  var url = '/';
   var last = start + rows - 1;
   var next = undefined;
   if( last > numFound - 1 ) {
@@ -424,7 +424,7 @@ function allow_path(ocfl_allow, path) {
 // returns an index page for every version of this path in the inventory.
 // TODO: clean this up so that it doesn't call send_html but returns a list
 
-function history(repo_url, req, oid, inv, path) {
+function history(req, oid, inv, path) {
   var versions = {};
   Object.keys(inv.versions).forEach((v) => {
     var state = inv.versions[v]['state'];
@@ -439,7 +439,7 @@ function history(repo_url, req, oid, inv, path) {
   var links = Object.keys(versions).sort().map((v) => {
     return { 
       text: v + ' ' + versions[v],
-      href: version_url(repo_url, oid, v, path)
+      href: version_url(oid, v, path)
     }
   });
   send_html(req, page_html(oid + '/' + path + ' history', links, null));
@@ -451,8 +451,8 @@ function history(repo_url, req, oid, inv, path) {
 // utility to build a URL for a versioned path for the history index
 
 
-function version_url(repo, oid, v, path) {
-  return '/' + repo + '/' + oid + '.' + v + '/' + path;
+function version_url(oid, v, path) {
+  return '/' + oid + '.' + v + '/' + path;
 }
 
 
