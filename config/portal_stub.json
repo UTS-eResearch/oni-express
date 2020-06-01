@@ -1,0 +1,66 @@
+{
+   	"apis": {
+		"ocfl": "/ocfl",
+		"solr": "/solr/ocfl"
+	},
+	"header":{
+    	"title": "Welcome to Oni",
+    	"URL": "/",
+    	"logo": "images/oni.png",
+      "menu": [ "help", "about" ]
+   	},
+
+  	"footer": {
+    	"text": "© 2020 University of Technology Sydney"
+  	},
+
+
+  	"search": {
+    	"error": "Search Error",
+    	"invalidSearch": "Invalid Search",
+    	"searchText": "Search",
+    	"mainSearch": "main_search"
+  	},
+  
+
+    "pages": {
+      "about": {
+        "title": "About",
+        "text": "<p>This app was built with Oni 👹 v1.0.0 - a platform for managing, indexing and searching secure data repositories based on open standards for research object metadata - <a href=\"https://researchobject.github.io/ro-crate/\">RO-Crate</a> - and file-based repositories - <a href=\"https://ocfl.io/\">OCFL</a>.</p><p>If you'd like to use Oni to manage or publish your research data, please get in touch with us at <a href=\"mailto:eResearch-it@uts.edu.au\">eResearch-it@uts.edu.au</a>.</p>"
+      },
+      "help": {
+        "title": "Help",
+        "text": "<p>Help text about first-time Oni config</p>"
+      }
+    },
+
+  	"facets": {
+  	},
+
+  	"results": {
+
+  		"searchFacets": [
+  		],
+  		"resultFacets": [
+  		],
+  		"summaryFields": [
+        { "field": "name" },
+  			{ "field": "description" }
+  		],
+  		"viewFields": [
+  		],
+  		"viewLinks": true
+  	},
+
+
+  
+  "dev": {
+    "proxy": {
+      "/solr": {
+        "target": "http://localhost:8089/",
+        "secure": false
+      }
+    }
+  }
+}
+

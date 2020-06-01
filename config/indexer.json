@@ -12,10 +12,16 @@
   "hashAlgorithm": "md5",
   "waitPeriod": 0,
   "schemaBase": "/etc/share/config/schema_base.json",
-  "log": {
-    "filename": "./logs/oni-indexer.log",
-    "level": "info"
+  "logLevel": "info",
+
+  "portal": {
+    "base": "/etc/share/config/portal_base.json",
+    "config": "/etc/share/config/portal.json",
+    "facetDefaults": {
+      "limit": 5
+    }
   },
+
 
 
   "fields": {
