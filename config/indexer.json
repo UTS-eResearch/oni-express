@@ -66,6 +66,7 @@
         },
 
         "keywords": {
+          "multi": true,
           "facet": {
             "tokenize": { "delim": "[,;]\\s*" }
           }

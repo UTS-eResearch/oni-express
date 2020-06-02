@@ -6,7 +6,7 @@
 	"header":{
     	"title": "Welcome to Oni",
     	"URL": "/",
-    	"logo": "images/oni.png",
+    	"logo": "images/logo.svg",
       "menu": [ "help", "about" ]
    	},
 
@@ -30,7 +30,7 @@
       },
       "help": {
         "title": "Help",
-        "text": "<p>Help text about first-time Oni config</p>"
+        "text": "<p>The default content on this page will be some help on care and feeding of your new Oni:</p><ul><li>Tweaking the portal config<li><li>Adding more content</li><li>Re-indexing</li></ul>"
       }
     },
 
