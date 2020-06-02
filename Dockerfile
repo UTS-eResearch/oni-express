@@ -5,7 +5,7 @@ FROM node:10
 WORKDIR /usr/src/build
 RUN git clone -b feature-unified-facet-config https://github.com/UTS-eResearch/oni-portal.git
 WORKDIR /usr/src/build/oni-portal
-COPY ./config/portal.config.json ./config.json
+COPY ./config/portal.json ./config.json
 RUN npm install
 RUN npm run build
 RUN mkdir -p /usr/src/app
@@ -17,5 +17,6 @@ WORKDIR /usr/src/app
 COPY package*.json ./
 RUN npm install
 COPY . .
+RUN chmod 700 ./rebuild_portal.sh
 EXPOSE 8080
 CMD [ "npm", "start" ]
