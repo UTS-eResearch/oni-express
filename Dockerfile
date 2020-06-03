@@ -8,17 +8,19 @@ RUN npm install
 COPY . .
 EXPOSE 8080
 
-# Config integration
-
-RUN node /usr/src/app/build_portal_config.js -i ./config/indexer.json -b ./config/portal_base.json -p ./config/portal.json
-
-# Build the frontend
+# Fetch the frontend repo, oni-portal
 
 WORKDIR /usr/src/build
 RUN git clone -b feature-unified-facet-config https://github.com/UTS-eResearch/oni-portal.git
 
+# Build the portal config 
+
+WORKDIR /usr/src/app
+RUN node /usr/src/app/build_portal_config.js -i ./config/indexer.json -b ./config/portal_base.json -p /usr/src/build/oni-portal/config.json
+
+# Go back to oni-portal and build it 
+
 WORKDIR /usr/src/build/oni-portal
-COPY ./config/portal.json ./config.json
 RUN npm install
 RUN npm run build
 RUN mkdir -p /usr/src/app

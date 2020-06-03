@@ -56,20 +56,15 @@ async function main (argv) {
     logger.error("Exiting");
     process.exit(-1);
   }
-  logger.debug(`Trying to load portal config from ${indexcf['portal']['config']}`);
-	const portalcf = await readConf(indexcf['portal']['config']);
-  if( ! portalcf ) {
-    logger.debug(`No portal config found, will write a new one`);
-  }
 
 	const indexer = new oi.CatalogSolr(logger);
   indexer.setConfig(indexcf['fields']);
 
-	await makePortalFacets(indexcf, indexer.facets);
+	await makePortalFacets(argv.indexer, indexcf, indexer.facets);
 }
 
 
-async function makePortalFacets(cf, facets) {
+async function makePortalFacets(indexfile, cf, facets) {
   const portal = cf['portal'];
 
   const newFacets = {};
@@ -88,12 +83,28 @@ async function makePortalFacets(cf, facets) {
   }
 
   let portalcf = await readConf(portal['config']);
+  let portalbase = "portal config " + portal['config'];
 
   if( portalcf ) {
     logger.info(`Updating facets in existing portal config ${portal['config']}`);
   } else {
     logger.info(`Creating new portal config based on ${portal['base']}`);
-    portalcf = await fs.readJson(portal['base']);
+    portalcf = await readConf(portal['base']);
+    if( ! portalcf ) {
+      logger.error("Can't read either existing portal config or portal base: exit");
+      process.exit(-1)
+    }
+    portalbase = "portal base config "+ portal['base'];
+  }
+
+  const ts = new Date();
+
+  portalcf['meta'] = {
+    'timestamp': ts
+  };
+
+  if( portalcf['pages'] && portalcf['pages']['about'] ) {
+    portalcf['pages']['about']['text'] += `<hr/> <p>Built from ${indexfile} and ${portalbase} at ${ts.toLocaleString()}</p>`;
   }
 
   for( let oldFacet in portalcf['facets'] ) {

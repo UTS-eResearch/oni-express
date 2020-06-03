@@ -1,5 +1,5 @@
 {
-   	"apis": {
+  "apis": {
 		"ocfl": "/ocfl",
 		"solr": "/solr/ocfl"
 	},

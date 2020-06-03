@@ -12,7 +12,13 @@
   "hashAlgorithm": "md5",
   "waitPeriod": 0,
   "schemaBase": "/etc/share/config/schema_base.json",
-  "logLevel": "info",
+
+  "logLevel": "debug",
+  "log": {
+    "filename": "/etc/share/logs/indexer.log",
+    "level": "debug"
+  },
+
 
   "portal": {
     "base": "/etc/share/config/portal_base.json",
@@ -62,7 +68,11 @@
 
         "author": {
           "resolve": "multi",
-          "facet": true
+          "facet": {
+            "id": "@id",
+            "display": "name"
+          }
+
         },
 
         "keywords": {
