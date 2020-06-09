@@ -67,12 +67,12 @@
         },
 
         "author": {
-          "resolve": "multi",
-          "facet": {
-            "id": "@id",
+          "multi": true,
+          "resolve": {
+            "search": "@id",
             "display": "name"
-          }
-
+          },
+          "facet": true
         },
 
         "keywords": {
@@ -87,8 +87,11 @@
             "match": { "@id": { "re": "anzsrc-for" } },
             "index_as": "FOR",
             "multi": true,
-            "resolve": "multi",
-            "facet": true
+            "facet": true,
+            "resolve": {
+              "search": "@id", 
+              "display": "name"
+            }
           }
         ],
 
@@ -110,9 +113,11 @@
         },
       
         "publisher": {
-          "resolve": "multi",
-          "facet": {
-            "field": "@id"
+          "multi": true,
+          "facet": true,
+          "resolve": {
+            "search": "@id", 
+            "display": "name"
           }
         }
       }

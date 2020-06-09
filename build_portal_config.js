@@ -79,6 +79,9 @@ async function makePortalFacets(indexfile, cf, facets) {
       };
       newFacets[facetField]['field'] = field;
       newFacets[facetField]['label'] = field[0].toUpperCase() + field.substr(1);
+      if( facets[type][field]['JSON'] ) {
+        newFacets[facetfield]['JSON'] = true;
+      }
     }
   }
 
