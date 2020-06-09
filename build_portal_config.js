@@ -69,6 +69,8 @@ async function makePortalFacets(indexfile, cf, facets) {
 
   const newFacets = {};
 
+  console.log(`FACETS: ${JSON.stringify(facets, null, 2 )}`);
+
   for( let type in facets ) {
     for( let field in facets[type] ) {
       const facetField = facets[type][field]['facetField'];
@@ -80,7 +82,7 @@ async function makePortalFacets(indexfile, cf, facets) {
       newFacets[facetField]['field'] = field;
       newFacets[facetField]['label'] = field[0].toUpperCase() + field.substr(1);
       if( facets[type][field]['JSON'] ) {
-        newFacets[facetfield]['JSON'] = true;
+        newFacets[facetField]['JSON'] = true;
       }
     }
   }
