@@ -44,10 +44,10 @@
   		"resultFacets": [
   		],
   		"summaryFields": [
-        { "field": "name" },
-  			{ "field": "description" }
   		],
   		"viewFields": [
+        { "field": "name" },
+        { "field": "description" }
   		],
   		"viewLinks": true
   	},
