@@ -24,12 +24,15 @@ var argv = require('yargs')
     .describe('i', 'Indexer config file')
     .alias('i', 'indexer')
     .string('i')
+    .default('i', 'config/indexer.json')
     .describe('b', 'Base portal config file')
     .alias('b', 'base')
     .string('b')
+    .default('b', 'config/portal_base.json')
     .describe('p', 'Portal config file')
     .alias('p', 'portal')
     .string('p')
+    .default('p', 'config/portal.json')
     .help('h')
     .alias('h', 'help')
     .argv;
@@ -124,8 +127,9 @@ async function makePortalFacets(indexfile, cf, facets) {
     }
   }
 
-  // Add facets which weren't in the original facet lst.
-  // These always get added to the search and result facet list.
+  // Add facets which weren't in the original facet list.
+
+  // default behaviour is to add everything to all three facet lists
 
   for( let newFacet in newFacets ) {
     logger.info(`Adding facet ${newFacet}`);
