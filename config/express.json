@@ -1,0 +1,26 @@
+{
+	"development": {
+		"session": {
+			"secret": "change me to a real secret",
+			"name": "session",
+			"expiry": 24,
+			"server": "memcached:11211"
+		},
+
+		"cors": true,
+
+		"solr": "http://solr:8983",
+
+		"ocfl": {
+			"repository": "/etc/share/ocfl",
+			"allow": "\\.html",
+			"autoindex": true,
+			"index_file": "ro-crate-preview.html",
+			"versions": true,
+			"page_size": 20,
+			"solr": "http://solr:8983/solr/ocfl",
+			"resolver": "solr"
+		}
+	}
+
+}

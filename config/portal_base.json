@@ -30,7 +30,7 @@
       },
       "help": {
         "title": "Help",
-        "text": "<p>The default content on this page will be some help on care and feeding of your new Oni:</p><ul><li>Tweaking the portal config<li><li>Adding more content</li><li>Re-indexing</li></ul>"
+        "text": "<p>The default content on this page will be some help on care and feeding of your new Oni:</p><ul><li>Tweaking the portal config</li><li>Adding more content</li><li>Re-indexing</li></ul>"
       }
     },
 
