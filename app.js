@@ -125,19 +125,19 @@ app.post("/auth", (req, res) => {
 // ocfl-express endpoints
 
 
-app.get('/ocfl/:repo/', async (req, res) => {
-	console.log(`/ocfl/:repo/ Session id: ${req.session.id}`);
+app.get('/ocfl/', async (req, res) => {
+	console.log(`/ocfl/ Session id: ${req.session.id}`);
 	// if( !req.session.uid ) {
 	// 	console.log("/ocfl/repo endpoint: no uid in session");
 	//  	res.status(403).send("Forbidden");
 	//  	return;
 	// }
-	if( req.params.repo in config.ocfl && config.ocfl[req.params.repo].autoindex ) {
+	if( config.ocfl.autoindex ) {
 		const index = await ocfl.index(config, req.params.repo, req.query);
 		res.send(index);
 	} else {
-		console.log("No autoindex");
-		res.status(404).send("Not found");
+		console.log("Repository indexing is not configured");
+		res.status(404).send("Repository index is not configured");
 	}
 });
 
@@ -152,27 +152,38 @@ app.get('/ocfl/:oidv/:content?', async (req, res) => {
 	//  	return;
 	// }
 
-	var content = req.params.content;
-  	var oidparts = req.params.oidv.split('.v');
-  	var oid = oidparts[0];
-  	var v = ( oidparts.length === 2 ) ? 'v' + oidparts[1] : '';
-
-	if( !req.params.content || req.params.content.slice(-1) === '/' ) {
-		if( config.ocfl.autoindex ) {
-			const index = await ocfl.index(config, repo, req.query, oid, v, content);
-			if( index ) {
-				res.send(index);
-			} else {
-				res.status(404).send("Not found");
-			}
-		} else {
-			console.log("/ocfl/ Autoindex is switched off");
-			res.status(403).send("Forbidden");
-		}
+	if( config.ocfl.referrer && req.headers['referer'] !== config.ocfl.referrer ) {
+		console.log(`Request referrer ${req.headers['referer']} does not match ${config.ocfl.referrer}`);
+		res.status(403).send("Forbidden");
 	} else {
-		if( config.ocfl.referrer && req.headers['referer'] !== config.ocfl.referrer ) {
-			console.log(`Request referrer ${req.headers['referer']} does not match ${config.ocfl[repo].referrer}`);
-			res.status(403).send("Forbidden");
+
+		var content = req.params.content;
+  		var oidparts = req.params.oidv.split('.v');
+  		var oid = oidparts[0];
+  		var v = ( oidparts.length === 2 ) ? 'v' + oidparts[1] : '';
+		
+		if( !content || content.slice(-1) === '/' ) {
+			if( config.ocfl.index_file ) {
+				const index_file = content ? content + config.ocfl.index_file : config.ocfl.index_file;  
+				const file = await ocfl.file(config, oid, v, index_file);
+				if( file ) {
+					res.sendFile(file);
+					return;
+				} 
+				// if the index_file is not found, fall through to autoindex if
+				// it's configured
+			}
+			if( config.ocfl.autoindex ) {
+				const index = await ocfl.index(config, req.query, oid, v, content);
+				if( index ) {
+					res.send(index);
+				} else {
+					res.status(404).send("Not found");
+				}
+			} else {
+				console.log("Autoindex not available");
+				res.status(404).send("Autoindex is not available");
+			}
 		} else {
 			const file = await ocfl.file(config, oid, v, content);
 			if( file ) {

@@ -46,10 +46,24 @@
   		"summaryFields": [
   		],
   		"viewFields": [
-        { "field": "name" },
-        { "field": "description" }
+        { 
+          "field": "description"
+        },
+        {
+          "label": "Author/s",
+          "field": "author"
+        },
+        {
+          "label": "Licence",
+          "field": "license"
+        },
+        {
+          "label": "Date Published",
+          "field": "datePublished"
+        }
   		],
-  		"viewLinks": true
+  		"viewLinks": true,
+      "linkText": "Dataset"
   	},
 
 
@@ -57,7 +71,7 @@
   "dev": {
     "proxy": {
       "/solr": {
-        "target": "http://localhost:8089/",
+        "target": "http://localhost:8080/",
         "secure": false
       }
     }
