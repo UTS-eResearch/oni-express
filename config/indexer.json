@@ -14,6 +14,7 @@
   "schemaBase": "/etc/share/config/schema_base.json",
 
   "logLevel": "debug",
+
   "log": {
     "filename": "/etc/share/logs/indexer.log",
     "level": "debug"
