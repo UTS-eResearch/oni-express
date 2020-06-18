@@ -8,7 +8,7 @@
 		},
 
                 "auth": {
-                    "UNSAFE_MODE": "true":
+                    "UNSAFE_MODE": "true"
                 },
 
 		"cors": true,
