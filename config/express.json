@@ -7,6 +7,10 @@
 			"server": "memcached:11211"
 		},
 
+                "auth": {
+                    "UNSAFE_MODE": "true":
+                },
+
 		"cors": true,
 
 		"solr": "http://solr:8983",
