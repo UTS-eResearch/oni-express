@@ -17,7 +17,7 @@ services:
       - "./config/:/etc/share/config"
 
   oni-indexer:
-    build: ../oni-indexer
+    image: mikelynch/oni-indexer:v1.0.4
     ports:
       - "8090:8090"
     expose:
