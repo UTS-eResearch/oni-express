@@ -56,6 +56,7 @@ passport.use(new OIDCStrategy({
 	responseMode: 'form_post',
 	redirectURL: config.azuread.redirectURL,
 	passReqToCallback: true,
+	clientSecret: config.azuread.clientSecret,
 	issuer: config.azuread.issuer
 }, function(req, iss, sub, profile, accessToken, refreshToken, done) {
 	
