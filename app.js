@@ -55,6 +55,7 @@ console.log(`authentication conf ${JSON.stringify(config.auth, 2)}`);
 passport.use(new OIDCStrategy({
 	identityMetadata: config.auth.azuread.identityMetadata,
 	clientID: config.auth.azuread.clientID,
+	clientSecret: config.auth.azuread.clientSecret,
 	responseType: config.auth.azuread.responseType,
 	responseMode: 'form_post',
 	redirectUrl: config.auth.azuread.redirectUrl,
@@ -86,17 +87,43 @@ app.get('/auth',
     res.redirect('/');
   });
 
+// production
+
+// app.post('/auth',
+//   function(req, res, next) {
+//     passport.authenticate('azuread-openidconnect', 
+//       { 
+//         response: res,                      // required
+//         failureRedirect: '/noauth'  
+//       }
+//     )(req, res, next);
+//   },
+//   function(req, res) {
+//     log.info('We received a return from AzureAD.');
+//     res.redirect('/');
+//   });
+
+// Debug version
+
 app.post('/auth',
   function(req, res, next) {
-    passport.authenticate('azuread-openidconnect', 
-      { 
-        response: res,                      // required
-        failureRedirect: '/noauth'  
-      }
-    )(req, res, next);
+    passport.authenticate('azuread-openidconnect', ( error, user, info ) => {
+    	console.log("passport.authenticate callback");
+    	console.log(error);
+    	console.log(user);
+    	console.log(info);
+    	if( error ) {
+    		res.status(401).send(error);
+    	} else if( !user ) {
+    		res.status(401).send(info);
+    	} else {
+    		next();
+    	}
+	}
+    );
   },
   function(req, res) {
-    log.info('We received a return from AzureAD.');
+    console.log('We received a return from AzureAD.');
     res.redirect('/');
   });
 
