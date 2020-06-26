@@ -55,7 +55,7 @@ console.log(`authentication conf ${JSON.stringify(config.auth, 2)}`);
 passport.use(new OIDCStrategy({
 	identityMetadata: config.auth.azuread.identityMetadata,
 	clientID: config.auth.azuread.clientID,
-	responseType: 'id_token',
+	responseType: config.auth.azuread.responseType,
 	responseMode: 'form_post',
 	redirectUrl: config.auth.azuread.redirectUrl,
 	passReqToCallback: true,
@@ -214,7 +214,11 @@ app.get('/login', (req, res, next) => {
 // middleware to use for the rest of the endpoints
 
 function ensureAuthenticated(req, res, next) {
-  if (req.isAuthenticated()) { return next(); }
+  if (req.isAuthenticated()) {
+  	console.log("ensureAuthenticated - OK");
+  	return next();
+  }
+  console.log("ensureAuthenticated - redirecting to /login");
   res.redirect('/login');
 };
 
