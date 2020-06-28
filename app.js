@@ -124,6 +124,7 @@ app.post('/auth',
   },
   function(req, res) {
     console.log('We received a return from AzureAD.');
+    res.send("Authentication successful");
     res.redirect('/');
   });
 
@@ -132,7 +133,13 @@ app.post('/auth',
 
 app.get('/noauth', function (req, res, next) {
 	res.send("Authentication failed")
-})
+});
+
+// testing endpoint which isn't authenticated
+
+app.get('/test', function (req, res, next) {
+	res.send("Test endpoint with no authentication check")
+});
 
 
 // ocfl-express endpoints
@@ -250,7 +257,7 @@ function ensureAuthenticated(req, res, next) {
 };
 
 
-app.use('/', ensureAuthenticated);
+//app.use('/', ensureAuthenticated);
 
 
 app.use('/', express.static(path.join(__dirname, 'portal')));
