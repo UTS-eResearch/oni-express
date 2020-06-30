@@ -4,7 +4,7 @@
 		"solr": "/solr/ocfl"
 	},
 	"header":{
-    	"title": "Welcome to Oni",
+    	"title": "Research Data Portal",
     	"URL": "/",
     	"logo": "images/logo.svg",
       "menu": [ "help", "about" ]
@@ -26,16 +26,19 @@
     "pages": {
       "about": {
         "title": "About",
-        "text": "<p>This app was built with Oni 👹 v1.0.0 - a platform for managing, indexing and searching secure data repositories based on open standards for research object metadata - <a href=\"https://researchobject.github.io/ro-crate/\">RO-Crate</a> - and file-based repositories - <a href=\"https://ocfl.io/\">OCFL</a>.</p><p>If you'd like to use Oni to manage or publish your research data, please get in touch with us at <a href=\"mailto:eResearch-it@uts.edu.au\">eResearch-it@uts.edu.au</a>.</p>"
+        "text": "<p>This portal was built with Oni 👹 v1.0.0 - a platform for managing, indexing and searching secure data repositories based on open standards for research object metadata - <a href=\"https://researchobject.github.io/ro-crate/\">RO-Crate</a> - and file-based repositories - <a href=\"https://ocfl.io/\">OCFL</a>.</p><p>If you'd like to use Oni to manage or publish your research data, please get in touch with us at <a href=\"mailto:eResearch-it@uts.edu.au\">eResearch-it@uts.edu.au</a>.</p>"
       },
       "help": {
         "title": "Help",
-        "text": "<p>The default content on this page will be some help on care and feeding of your new Oni:</p><ul><li>Tweaking the portal config</li><li>Adding more content</li><li>Re-indexing</li></ul>"
+        "text": "<p>This portal is maintained by the UTS eResearch Support Group.</p>"
       }
     },
 
   	"facets": {
   	},
+
+    "fields": {
+    },
 
   	"results": {
 
@@ -51,7 +54,8 @@
         },
         {
           "label": "Author/s",
-          "field": "author"
+          "field": "author",
+          "JSON": true
         },
         {
           "label": "Licence",

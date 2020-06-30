@@ -63,11 +63,11 @@ async function main (argv) {
 	const indexer = new oi.CatalogSolr(logger);
   indexer.setConfig(indexcf['fields']);
 
-	await makePortalFacets(argv.indexer, indexcf, indexer.facets);
+	await makePortalConfig(argv.indexer, indexcf, indexer.facets);
 }
 
 
-async function makePortalFacets(indexfile, cf, facets) {
+async function makePortalConfig(indexfile, cf, facets) {
   const portal = cf['portal'];
 
   const newFacets = {};

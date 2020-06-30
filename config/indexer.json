@@ -88,7 +88,6 @@
             "match": { "@id": { "re": "anzsrc-for" } },
             "index_as": "FOR",
             "multi": true,
-            "facet": true,
             "resolve": {
               "search": "@id", 
               "display": "name"
@@ -115,7 +114,6 @@
       
         "publisher": {
           "multi": true,
-          "facet": true,
           "resolve": {
             "search": "@id", 
             "display": "name"
