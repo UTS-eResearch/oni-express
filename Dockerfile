@@ -16,7 +16,7 @@ RUN git clone -b release-1.0.1 https://github.com/UTS-eResearch/oni-portal.git
 # Build the portal config 
 
 WORKDIR /usr/src/app
-RUN node /usr/src/app/build_portal_config.js -i ./config/indexer.json -b ./config/portal_base.json -p /usr/src/build/oni-portal/config.json
+RUN node /usr/src/app/build_portal_config.js -i ./config/indexer.json -b ./config/portal.json -p /usr/src/build/oni-portal/config.json
 
 # Go back to oni-portal and build it 
 

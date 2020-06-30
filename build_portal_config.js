@@ -1,4 +1,4 @@
-#!/bin/env node
+#!/usr/bin/env node
 
 // Script which takes the facet configuration for oni-indexer and uses it to build the facets
 // section of the config for oni-portal.
@@ -28,11 +28,11 @@ var argv = require('yargs')
     .describe('b', 'Base portal config file')
     .alias('b', 'base')
     .string('b')
-    .default('b', 'config/portal_base.json')
+    .default('b', 'config/portal.json')
     .describe('p', 'Portal config file')
     .alias('p', 'portal')
     .string('p')
-    .default('p', 'config/portal.json')
+    .default('p', 'config/portal_out.json')
     .help('h')
     .alias('h', 'help')
     .argv;
@@ -129,7 +129,7 @@ async function makePortalConfig(indexfile, cf, facets) {
 
   // Add facets which weren't in the original facet list.
 
-  // default behaviour is to add everything to all three facet lists
+  // default behaviour is to add everything to the two facet lists
 
   for( let newFacet in newFacets ) {
     logger.info(`Adding facet ${newFacet}`);
@@ -138,6 +138,24 @@ async function makePortalConfig(indexfile, cf, facets) {
     portalcf['results']['resultFacets'].push(newFacet);
   }
 
+  // add facets to the single-item view summary and view fields
+
+  for( let type in portalcf['results']['view'] ) {
+    const typecf = portalcf['results']['view'][type];
+    for( let summary of typecf['summaryFields'] ) {
+      const field = summary['field'];
+      const f = `${type}_${field}_facet`;
+      const fm = `${type}_${field}_facetmulti`;
+      logger.info(`Looking for view facet ${f} ${fm}`);
+      if( portalcf['facets'][f] ) {
+        summary['facet'] = f;
+      } else if( portalcf['facets'][fm] ) {
+        summary['facet'] = fm;
+      } else {
+        logger.info(".. not found");
+      }
+    }
+  }
 
   await fs.writeJson(portal['config'], portalcf, { spaces:2 });
 
