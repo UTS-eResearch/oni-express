@@ -21,6 +21,10 @@ const logger = winston.createLogger({
 
 var argv = require('yargs')
     .usage('Usage: $0 [options]')
+    .describe('e', 'Express config file')
+    .alias('e', 'express')
+    .string('e')
+    .default('e', 'config/express.json')
     .describe('i', 'Indexer config file')
     .alias('i', 'indexer')
     .string('i')
@@ -40,12 +44,19 @@ var argv = require('yargs')
 main(argv);
 
 async function main (argv) {
-  logger.debug(`Loading indexing config from ${argv.indexer}`);
-  const indexcf = await readConf(argv.indexer);
-  if( !indexcf ) {
-    logger.error("Exiting");
-    process.exit(-1);
+
+  const expresscf = await readConf(argv.express);
+  if( !expresscf ) {
+    logger.error(`Couldn't read express config ${argv.express}`);
+    process.exit(-1)
   }
+  const indexcf = await readConf(argv.indexer);
+  if( !expresscf ) {
+    logger.error(`Couldn't read indexer config ${argv.indexer}`);
+    process.exit(-1)
+  }
+
+
   if( argv.base ) {
     indexcf['portal']['base'] = argv.base;
   }
@@ -53,17 +64,33 @@ async function main (argv) {
     indexcf['portal']['config'] = argv.portal;
   }
 
-  logger.debug(`Loading base portal config from ${indexcf['portal']['base']}`);
 	const basecf = await readConf(indexcf['portal']['base']);
   if( !basecf ) {
-    logger.error("Exiting");
-    process.exit(-1);
+    logger.error(`Couldn't read base portal cf ${indexcf['portal']['base']}`);
+    process.exit(-1)
   }
 
 	const indexer = new oi.CatalogSolr(logger);
   indexer.setConfig(indexcf['fields']);
 
-	await makePortalConfig(argv.indexer, indexcf, indexer.facets);
+	const portalcf = await makePortalConfig(argv.indexer, indexcf, indexer.facets);
+
+  // add ocfl api path
+
+  const env = process.env.NODE_ENV || 'development';
+
+  logger.debug(`Using node environment: ${env}`);
+
+  const url_path = expresscf[env]['ocfl']['url_path'];
+  if( url_path ) {
+    logger.debug(`Setting ocfl endpoint to ${url_path}`);
+    portalcf['apis']['ocfl'] = url_path;
+  }
+
+  await fs.writeJson(indexcf['portal']['config'], portalcf, { spaces:2 });
+
+  logger.info(`Wrote new portal config to ${indexcf['portal']['config']}`);
+
 }
 
 
@@ -157,20 +184,17 @@ async function makePortalConfig(indexfile, cf, facets) {
     }
   }
 
-  await fs.writeJson(portal['config'], portalcf, { spaces:2 });
-
-  logger.info(`Wrote new portal config to ${portal['config']}`);
-
+  return portalcf;
 }
 
 
 
-async function readConf(portalcf) {
+async function readConf(cfFile) {
+  logger.debug("Loading " + cfFile);
   try {
-    const conf = await fs.readJson(portalcf);
+    const conf = await fs.readJson(cfFile);
     return conf;
   } catch(e) {
-    logger.info(`Couldn't read JSON from ${portalcf}`);
     return null;
   }
 }

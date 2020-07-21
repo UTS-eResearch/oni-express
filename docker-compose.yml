@@ -5,6 +5,8 @@ networks:
 
 services:
   oni-express:
+    environment:
+      - NODE_ENV=development
     build: .
     ports:
       - "8080:8080"

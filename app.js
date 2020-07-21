@@ -18,6 +18,8 @@ var app = express();
 var env = app.get('env');
 var config = require('./config/express.json')[env];
 
+const ocfl_path = config.ocfl.url_path || 'ocfl';
+
 app.use(logger('dev'));
 
 app.use(express.json());
@@ -125,7 +127,7 @@ app.post("/auth", (req, res) => {
 // ocfl-express endpoints
 
 
-app.get('/ocfl/', async (req, res) => {
+app.get(`/${ocfl_path}/`, async (req, res) => {
 	console.log(`/ocfl/ Session id: ${req.session.id}`);
 	// if( !req.session.uid ) {
 	// 	console.log("/ocfl/repo endpoint: no uid in session");
@@ -143,7 +145,7 @@ app.get('/ocfl/', async (req, res) => {
 
 // fixme: make cache-control no-store
 
-app.get('/ocfl/:oidv/:content?', async (req, res) => {
+app.get(`/${ocfl_path}/:oidv/:content?`, async (req, res) => {
 	console.log(`/ocfl/ Session id: ${req.session.id}`);
 	console.log(`ocfl: session = ${req.session.uid}`);
 	// if( !req.session.uid ) {
