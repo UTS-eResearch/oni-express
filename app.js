@@ -225,6 +225,10 @@ app.use('/solr/ocfl/select*', proxy(config['solr'], {
   } 
 }));
 
+// data portal config 
+
+app.use('/portalcf', express.static(path.join(__dirname, 'portalcf')));
+
 
 
 // data portal front page
