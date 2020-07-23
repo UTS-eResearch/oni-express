@@ -29,7 +29,7 @@ async function file(config, oid, version, content) {
     if( vpath ) {
       return path.join(ocfl_root, opath, vpath[0]);
     } else {
-      console.log(`content ${content} not found in inventory`);
+      console.log(`content ${content} not found in inventory ${opath} ${version}`);
       return '';
     } 
   } catch(e) {

@@ -145,7 +145,7 @@ app.get(`/${ocfl_path}/`, async (req, res) => {
 
 // fixme: make cache-control no-store
 
-app.get(`/${ocfl_path}/:oidv/:content?`, async (req, res) => {
+app.get(`/${ocfl_path}/:oidv/:content*?`, async (req, res) => {
 	console.log(`/ocfl/ Session id: ${req.session.id}`);
 	console.log(`ocfl: session = ${req.session.uid}`);
 	// if( !req.session.uid ) {
@@ -158,11 +158,16 @@ app.get(`/${ocfl_path}/:oidv/:content?`, async (req, res) => {
 		console.log(`Request referrer ${req.headers['referer']} does not match ${config.ocfl.referrer}`);
 		res.status(403).send("Forbidden");
 	} else {
-
+		console.log(`ocfl get: ${JSON.stringify(req.params)}`);
 		var content = req.params.content;
+		if( req.params[0] ) {
+			content += req.params[0];
+		}
   		var oidparts = req.params.oidv.split('.v');
   		var oid = oidparts[0];
   		var v = ( oidparts.length === 2 ) ? 'v' + oidparts[1] : '';
+
+		console.log(`ocfl get: oid ${oid} v ${v} content ${content}`);
 		
 		if( !content || content.slice(-1) === '/' ) {
 			if( config.ocfl.index_file ) {

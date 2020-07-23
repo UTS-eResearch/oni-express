@@ -19,7 +19,7 @@ services:
       - "./config/:/etc/share/config"
 
   oni-indexer:
-    image: mikelynch/oni-indexer:v1.0.4
+    image: mikelynch/oni-indexer:v1.0.9
     ports:
       - "8090:8090"
     expose:

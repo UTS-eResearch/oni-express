@@ -7,17 +7,17 @@
   "purge": true,
   "updateSchema": true,
   "dryRun": false,
-  "catalogFilename": "ro-crate-metadata.jsonld",
+  "catalogFilename": [ "ro-crate-metadata.jsonld", "ro-crate-metadata.json" ],
   "solrBase": "http://solr:8983/solr/ocfl",
   "hashAlgorithm": "md5",
   "waitPeriod": 0,
   "schemaBase": "/etc/share/config/schema_base.json",
 
-  "logLevel": "debug",
+  "logLevel": "info",
 
   "log": {
     "filename": "/etc/share/logs/indexer.log",
-    "level": "debug"
+    "level": "info"
   },
 
 
