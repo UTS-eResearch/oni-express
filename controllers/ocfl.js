@@ -4,6 +4,9 @@ var fs = require('fs-extra');
 var path = require('path');
 var axios = require('axios');
 
+// FIXME - this should use ocfl-js - the inventory stuff is
+// roll-your-own because nginx javascript couldn't
+
 var DEFAULT_PAGE_SIZE = 10;
 
 // file(config, oid, version, content)

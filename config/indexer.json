@@ -83,6 +83,10 @@
           }
         },
 
+        "description": {
+          "link_rebase": "publication"
+        },
+
         "about": [
           {
             "match": { "@id": { "re": "anzsrc-for" } },
