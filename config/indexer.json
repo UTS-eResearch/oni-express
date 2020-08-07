@@ -1,6 +1,6 @@
 {
   "ocfl": "/etc/share/ocfl",
-  "identifierNamespace": "public_ocfl",
+  "identifierNamespace": "SuccessfulGrantsRepository",
   "uriIds": "identifiers",
   "retries": 10,
   "retryInterval": 10,
@@ -39,7 +39,7 @@
     },
 
     "licenses": {
-      "__default__": "public"
+      "__default__": "UTS Confidential"
     },
 
     "types": {
@@ -47,15 +47,24 @@
       "Dataset": {
     
         "@id": { 
-          "name": "public_ocfl",
+          "name": "SuccessfulGrantsRepository",
           "filter": { "is_root": true }
         },
         "@reverse": { "skip": true },
  
-        "hasPart": { "skip": true },
+        "hasPart": [
+          {
+            "index_as": "html",
+            "match": { "@id": { "re": "\\.html" } }
+          },
+          {
+            "index_as": "full_text",
+            "match": { "@id": { "re": "\\.txt$" } },
+            "load_file": true
+          }
+        ],
 
         "hasFile": { "skip": true },
-      
         "temporalCoverage": { "skip": true },
 
         "license": {
@@ -68,11 +77,6 @@
         },
 
         "author": {
-          "multi": true,
-          "resolve": {
-            "search": "@id",
-            "display": "name"
-          },
           "facet": true
         },
 
@@ -99,29 +103,8 @@
           }
         ],
 
-        "contactPoint" : {
-          "multi": "true",
-          "escapedJSON": true
-        },
-
-        "geo" : {
-          "multi": "true",
-          "escapedJSON": true
-        },
-
-        "datePublished": {
-          "facet": true,
-          "validate": {
-            "re": "^\\d\\d\\d\\d"
-          }
-        },
-      
-        "publisher": {
-          "multi": true,
-          "resolve": {
-            "search": "@id", 
-            "display": "name"
-          }
+        "dateCreated": {
+        "facet": true
         }
       }
     }
