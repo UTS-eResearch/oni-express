@@ -5,10 +5,10 @@
 	},
 	
   "header":{
-    "title": "Research Data Portal",
+    "title": "Library of Successful Grants",
     "URL": "/",
     "logo": "images/logo.svg",
-    "menu": [ "help", "about" ]
+    "menu": [ "help", "privacy", "about" ]
   },
 
   "footer": {
@@ -55,10 +55,6 @@
             {
               "label": "Author",
               "field": "author"
-            },
-            {
-              "label": "Licence",
-              "field": "license"
             },
             {
               "field": "keywords"

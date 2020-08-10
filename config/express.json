@@ -16,7 +16,7 @@
 		"solr": "http://solr:8983",
 
 		"ocfl": {
-			"url_path": "publication",
+			"url_path": "ocfl",
 			"repository": "/etc/share/ocfl",
 			"allow": "\\.html",
 			"autoindex": true,

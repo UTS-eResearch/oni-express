@@ -88,7 +88,7 @@
         },
 
         "description": {
-          "link_rebase": "publication"
+          "link_rebase": "ocfl"
         },
 
         "about": [
@@ -99,7 +99,8 @@
             "resolve": {
               "search": "@id", 
               "display": "name"
-            }
+            },
+            "facet": true
           }
         ],
 
