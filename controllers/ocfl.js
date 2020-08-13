@@ -100,8 +100,6 @@ async function resolve_solr(solr, oid) {
 
   var query = { q: "uri_id:" + esc_oid, fl: 'path' };
   
-  console.log(`resolve_solr query: ${JSON.stringify(query)}`);
-
   try {
     var resp = await axios.get(solr + '/select', { params: query });
     if( resp.status === 200 ) {
