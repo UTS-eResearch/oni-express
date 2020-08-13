@@ -43,7 +43,7 @@ services:
       - "./test_solr/:/opt/solr/server/solr/ocfl"
     command: solr-precreate ocfl
     logging:
-        driver: none
+      driver: none
 
   memcached:
     image: memcached

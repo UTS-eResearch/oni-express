@@ -40,13 +40,57 @@
   },
 
   "facets": {
+    "Dataset_funder_facet": {
+      "label": "Funding scheme",
+      "field": "funder",
+      "sort": "index",
+      "limit": -1
+    },
+    "Dataset_dateCreated_facet": {
+      "label": "Year",
+      "field": "dateCreated",
+      "sort": "index",
+      "limit": -1
+    },
+      "Dataset_affiliation_facet": {
+        "label": "School/Dept",
+        "field": "affiliation",
+        "limit": 5
+      },
+      "Dataset_author_facet": {
+        "label": "Author",
+        "field": "author",
+        "limit": 5
+      },
+      "Dataset_keywords_facetmulti": {
+        "label": "Keywords",
+        "field": "keywords",
+        "limit": 5
+      },
+      "Dataset_FOR_facetmulti": {
+        "label": "Field of Research",
+        "field": "FOR_id",
+        "JSON": true,
+        "limit": 5
+      }
   },
 
   "results": {
 
   	"searchFacets": [
+      "Dataset_funder_facet",
+      "Dataset_dateCreated_facet",
+      "Dataset_affiliation_facet",
+      "Dataset_author_facet",
+      "Dataset_keywords_facetmulti",
+      "Dataset_FOR_facetmulti"
   	],
   	"resultFacets": [
+      "Dataset_funder_facet",
+      "Dataset_dateCreated_facet",
+      "Dataset_author_facet",
+      "Dataset_affiliation_facet",
+      "Dataset_FOR_facetmulti"
   	],
 
     "view": {
@@ -55,6 +99,9 @@
             {
               "label": "Author",
               "field": "author"
+            },
+            {
+              "field": "funder"
             },
             {
               "field": "keywords"

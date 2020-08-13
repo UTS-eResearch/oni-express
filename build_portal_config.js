@@ -11,6 +11,14 @@ const fs = require('fs-extra');
 const oi = require('oni-indexer');
 const winston = require('winston');
 
+const MANDATORY_SOLR_FIELDS = [
+  "record_type_s",
+  "uri_id",
+  "id", 
+  "description",
+  "name"
+];
+
 const consoleLog = new winston.transports.Console();
 const logger = winston.createLogger({
   level: 'debug',
@@ -90,6 +98,15 @@ async function main (argv) {
   await fs.writeJson(indexcf['portal']['config'], portalcf, { spaces:2 });
 
   logger.info(`Wrote new portal config to ${indexcf['portal']['config']}`);
+
+  const solr_fl = getPortalFields(portalcf);
+
+  if( expresscf[env]['solr_fl'] ) {
+    expresscf[env]['solr_fl'] = solr_fl;
+    await fs.writeJson(argv.express, expresscf, { spaces:2 });
+    logger.info("Updated solr field list in express.json");
+
+  }
 
 }
 
@@ -185,6 +202,29 @@ async function makePortalConfig(indexfile, cf, facets) {
   }
 
   return portalcf;
+}
+
+function getPortalFields(portalcf) {
+  const fields = {};
+  for( let facet in portalcf['facets'] ) {
+    fields[facet] = 1;
+  }
+  for( let record_type in portalcf['results']['view'] ) {
+    const v = portalcf['results']['view'][record_type];
+    for( let sf of v['summaryFields'] ) {
+      fields[sf['field']] = 1;
+    }
+    for( let vf of v['viewFields'] ) {
+      fields[vf['field']] = 1;
+    }
+  }
+  const fieldlist = MANDATORY_SOLR_FIELDS;
+  for( let field in fields ) {
+    if( ! fieldlist.includes(field) ) {
+      fieldlist.push(field);
+    }
+  }
+  return fieldlist;
 }
 
 

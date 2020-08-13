@@ -32,7 +32,7 @@
 
 
   "fields": {
-    "main_search": [ "name", "description", "id", "author" ],
+    "main_search": [ "name", "description", "id", "author", "dateCreated", "FOR", "keywords", "funder", "full_text" ],
     "map_all": {
       "@id": [ "id", "id_orig" ],
       "@type": [ "record_type_s", "type_label" ]
@@ -80,6 +80,10 @@
           "facet": true
         },
 
+        "affiliation": {
+          "facet": true
+        },
+
         "keywords": {
           "multi": true,
           "facet": {
@@ -103,9 +107,13 @@
             "facet": true
           }
         ],
+    
+        "funder": {
+          "facet": true
+        },
 
         "dateCreated": {
-        "facet": true
+          "facet": true
         }
       }
     }
