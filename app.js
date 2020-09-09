@@ -6,6 +6,7 @@ var logger = require('morgan');
 var bodyParser = require('body-parser');
 var cors = require('cors');
 var nocache = require('nocache');
+var useragent = require('express-useragent');
 
 const jwt = require('jwt-simple');
 
@@ -24,7 +25,7 @@ const ocfl_path = config.ocfl.url_path || 'ocfl';
 app.use(logger('dev'));
 
 app.use(nocache());
-
+app.use(useragent.express());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -60,6 +61,16 @@ if( config['cors'] ) {
 
 function checkSession(req, res, next) {
 	console.log(`checkSession: ${req.url}`);
+	if( config['clientBlock'] ) {
+		const ua = req.useragent;
+		for( cond of config['clientBlock'] ) {
+			if( ua[cond] ) {
+				console.log(`client blocked ${cond}`);
+				res.status(403).send("Browser or client not supported");
+				return;
+			}
+		}
+	}
 	if( req.url === '/jwt/' || req.url === '/jwt' || config['auth']['UNSAFE_MODE'] ) {
 		next();
 	} else {
