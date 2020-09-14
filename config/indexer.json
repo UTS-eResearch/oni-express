@@ -7,17 +7,18 @@
   "purge": true,
   "updateSchema": true,
   "dryRun": false,
-  "catalogFilename": [ "ro-crate-metadata.jsonld", "ro-crate-metadata.json" ],
+  "catalogFilename": "ro-crate-metadata.json",
   "solrBase": "http://solr:8983/solr/ocfl",
   "hashAlgorithm": "md5",
-  "waitPeriod": 0,
   "schemaBase": "/etc/share/config/schema_base.json",
 
-  "logLevel": "info",
+  "logLevel": "warn",
+
+  "dump": "/etc/share/dump",
 
   "log": {
     "filename": "/etc/share/logs/indexer.log",
-    "level": "info"
+    "level": "debug"
   },
 
 
@@ -32,7 +33,7 @@
 
 
   "fields": {
-    "main_search": [ "name", "description", "id", "author" ],
+    "main_search": [ "name", "description", "id" ],
     "map_all": {
       "@id": [ "id", "id_orig" ],
       "@type": [ "record_type_s", "type_label" ]
@@ -45,11 +46,16 @@
     "types": {
 
       "Dataset": {
-    
-        "@id": { 
-          "name": "public_ocfl",
-          "filter": { "is_root": true }
-        },
+        "@reverse": { "skip": true },
+ 
+        "hasPart": { "skip": true },
+
+        "hasFile": { "skip": true }
+
+      },
+
+      "Person": {
+     
         "@reverse": { "skip": true },
  
         "hasPart": { "skip": true },
@@ -57,17 +63,22 @@
         "hasFile": { "skip": true },
       
         "temporalCoverage": { "skip": true },
-
-        "license": {
+        "birth" : {
+          "resolve": {
+            "search": "@id",
+            "display": "name"
+          }
+        },
+        "occupation_": {
           "multi": true,
+          "resolve": {
+            "via": [ "occupationType" ],
+            "search": "@id",
+            "display": "name"
+          },
           "facet": true
         },
-
-        "licenseOriginal": {
-          "multi": true
-        },
-
-        "author": {
+         "militaryService": {
           "multi": true,
           "resolve": {
             "search": "@id",
@@ -75,54 +86,16 @@
           },
           "facet": true
         },
-
-        "keywords": {
-          "multi": true,
-          "facet": {
-            "tokenize": { "delim": "[,;]\\s*" }
-          }
-        },
-
-        "description": {
-          "link_rebase": "publication"
-        },
-
-        "about": [
-          {
-            "match": { "@id": { "re": "anzsrc-for" } },
-            "index_as": "FOR",
-            "multi": true,
-            "resolve": {
-              "search": "@id", 
-              "display": "name"
-            }
-          }
-        ],
-
-        "contactPoint" : {
-          "multi": "true",
-          "escapedJSON": true
-        },
-
-        "geo" : {
-          "multi": "true",
-          "escapedJSON": true
-        },
-
-        "datePublished": {
-          "facet": true,
-          "validate": {
-            "re": "^\\d\\d\\d\\d"
-          }
-        },
-      
-        "publisher": {
+        "universityConnections": {
           "multi": true,
           "resolve": {
-            "search": "@id", 
+            "search": "@id",
             "display": "name"
-          }
+          },
+          "facet": true
         }
+
+        
       }
     }
   }

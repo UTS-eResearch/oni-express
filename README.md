@@ -1,13 +1,18 @@
-Oni Express
-===========
+Expert Nation
+=============
 
-Quick start:
+Feature branch of oni-express to support the Expert Nation dataset.
 
-1. Put your OCFL repository in ./ocfl in this directory
-2. Edit ./config/indexing.json to configure how your RO-crates will be indexed and faceted
-3. Run > docker-compose build
-4. Run > docker-compose up
-5. Wait for the indexing to finish - you should see something like "oni-express_oni-indexer_1 exited with code 0" in the logs
-6. Go to http://localhost:8080/
+This includes the config to index Expert Nation correctly at ./config/indexer.json
 
-There is documentation on the solr indexing at [the oni-indexer repo](https://github.com/UTS-eResearch/oni-indexer/blob/master/doc/Solr_config.md), but it's somewhat out of date.
+NOTE: this won't work with the current Docker image of the oni-indexer.
+
+The docker-compose.yml is set up to build oni-indexer locally, in a directory
+at the same level as this one ie
+
+    ./oni-express <- the directory containing this file
+    ./oni-indexer <- the right branch of oni-indexer
+
+Clone a copy of oni-indexer and switch to the branch bugfix-expert-nation-facets
+
+Then put the OCFL repo with the expert nation data in ./ocfl and do docker-compose build
