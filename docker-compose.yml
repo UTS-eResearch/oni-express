@@ -10,35 +10,29 @@ services:
     build: .
     ports:
       - "8080:8080"
-    expose:
-      - "80"
     networks:
       - main
     volumes:
-      - "./ocfl/:/etc/share/ocfl"
+      - "/Users/moises/source/github/uts-eresearch/heurist2ro-crate/en_ocfl/:/etc/share/ocfl"
       - "./config/:/etc/share/config"
 
-  oni-indexer:
-    # image: mikelynch/oni-indexer:v1.0.13
-    build: ../oni-indexer
-    ports:
-      - "8090:8090"
-    expose:
-      - "8090"
-    networks:
-      - main
-    volumes:
-      - "./dump/:/etc/share/dump"
-      - "./ocfl/:/etc/share/ocfl"
-      - "./config/:/etc/share/config"
-      - "./logs/:/etc/share/logs"
+#  oni-indexer:
+#    # image: mikelynch/oni-indexer:v1.0.13
+#    build: ../oni-indexer
+#    ports:
+#      - "8090:8090"
+#    networks:
+#      - main
+#    volumes:
+#      - "./dump/:/etc/share/dump"
+#      - "/Users/moises/source/github/uts-eresearch/heurist2ro-crate/en_ocfl/:/etc/share/ocfl"
+#      - "./config/:/etc/share/config"
+#      - "./logs/:/etc/share/logs"
 
   solr:
-    image: solr
+    image: solr:8
     ports:
       - "8983:8983"
-    expose:
-      - "8983"
     networks:
       - main
     volumes:
@@ -51,9 +45,6 @@ services:
     image: memcached
     ports:
       - "11211:11211"
-    expose:
-      - "11211"
     networks:
       - main
-    
 

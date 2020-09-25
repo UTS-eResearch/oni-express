@@ -1,5 +1,7 @@
 FROM node:10
 
+VOLUME ["/etc/share/ocfl","/etc/share/logs","/etc/share/config"]
+
 # Install the express app first
 
 WORKDIR /usr/src/app
@@ -11,7 +13,7 @@ EXPOSE 8080
 # Fetch the frontend repo, oni-portal
 
 WORKDIR /usr/src/build
-RUN git clone -b release-1.0.1 https://github.com/UTS-eResearch/oni-portal.git
+RUN git clone -b feature-expert-nation https://github.com/UTS-eResearch/oni-portal.git
 
 # Build the portal config 
 

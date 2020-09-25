@@ -8,11 +8,11 @@
   "updateSchema": true,
   "dryRun": false,
   "catalogFilename": "ro-crate-metadata.json",
-  "solrBase": "http://solr:8983/solr/ocfl",
+  "solrBase": "http://host.docker.internal:8983/solr/ocfl",
   "hashAlgorithm": "md5",
   "schemaBase": "/etc/share/config/schema_base.json",
 
-  "logLevel": "warn",
+  "logLevel": "debug",
 
   "dump": "/etc/share/dump",
 
@@ -69,21 +69,12 @@
             "display": "name"
           }
         },
-        "occupation_": {
+        "sectorName": {
           "multi": true,
-          "resolve": {
-            "via": [ "occupationType" ],
-            "search": "@id",
-            "display": "name"
-          },
           "facet": true
         },
-         "militaryService": {
+        "militaryServicePlace": {
           "multi": true,
-          "resolve": {
-            "search": "@id",
-            "display": "name"
-          },
           "facet": true
         },
         "universityConnections": {

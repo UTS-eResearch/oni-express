@@ -1,29 +1,26 @@
 {
   "apis": {
-		"ocfl": "/ocfl",
-		"solr": "/solr/ocfl"
-	},
-	
-  "header":{
-    "title": "Research Data Portal",
+    "ocfl": "/ocfl",
+    "solr": "/solr/ocfl"
+  },
+  "header": {
+    "title": "Expert Nation",
     "URL": "/",
     "logo": "images/logo.svg",
-    "menu": [ "help", "about" ]
+    "menu": [
+      "help",
+      "about"
+    ]
   },
-
   "footer": {
-   	"text": "© 2020 University of Technology Sydney"
+    "text": "© 2020 University of Technology Sydney"
   },
-
-
   "search": {
-   	"error": "Search Error",
-   	"invalidSearch": "Invalid Search",
-   	"searchText": "Search",
-   	"mainSearch": "main_search"
+    "error": "Search Error",
+    "invalidSearch": "Invalid Search",
+    "searchText": "Search",
+    "mainSearch": "main_search"
   },
-  
-
   "pages": {
     "about": {
       "title": "About",
@@ -34,17 +31,13 @@
       "text": "<p>This portal is maintained by the UTS eResearch Support Group.</p>"
     }
   },
-
   "facets": {
   },
-
   "results": {
-
-  	"searchFacets": [
-  	],
-  	"resultFacets": [
-  	],
-
+    "searchFacets": [
+    ],
+    "resultFacets": [
+    ],
     "view": {
       "Dataset": {
         "summaryFields": [
@@ -59,18 +52,46 @@
           {
             "field": "datePublished"
           }
-  		  ],
-  		  "viewFields": [
-          { 
+        ],
+        "viewFields": [
+          {
             "field": "description"
           }
         ],
-  		  "viewLinks": true,
+        "viewLinks": true,
         "linkText": "Dataset"
+      },
+      "Person": {
+        "summaryFields": [
+          {
+            "label": "sectorName",
+            "field": "sectorName"
+          }
+        ],
+        "viewFields": [
+          {
+            "field": "name"
+          },
+          {
+            "field": "educationNotes"
+          },
+          {
+            "field": "universityRole"
+          },
+          {
+            "field": "extendedDescription"
+          },
+          {
+            "field": "death"
+          },
+          {
+            "label": "sectorName",
+            "field": "sectorName"
+          }
+        ]
       }
     }
   },
-
   "dev": {
     "proxy": {
       "/solr": {

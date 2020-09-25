@@ -137,7 +137,7 @@ async function makePortalConfig(indexfile, cf, facets) {
   };
 
   if( portalcf['pages'] && portalcf['pages']['about'] ) {
-    portalcf['pages']['about']['text'] += `<hr/> <p>Built from ${indexfile} and ${portalbase} at ${ts.toLocaleString()}</p>`;
+    portalcf['pages']['about']['comments'] = `<p>Built from ${indexfile} and ${portalbase} at ${ts.toLocaleString()}</p>`;
   }
 
   for( let oldFacet in portalcf['facets'] ) {
