@@ -39,39 +39,18 @@
     "resultFacets": [
     ],
     "view": {
-      "Dataset": {
-        "summaryFields": [
-          {
-            "label": "Author/s",
-            "field": "author"
-          },
-          {
-            "label": "Licence",
-            "field": "license"
-          },
-          {
-            "field": "datePublished"
-          }
-        ],
-        "viewFields": [
-          {
-            "field": "description"
-          }
-        ],
-        "viewLinks": true,
-        "linkText": "Dataset"
-      },
       "Person": {
         "summaryFields": [
           {
-            "label": "sectorName",
+            "label": "Sector Name",
             "field": "sectorName"
+          },
+          {
+            "label": "University",
+            "field": "universityConnections"
           }
         ],
         "viewFields": [
-          {
-            "field": "name"
-          },
           {
             "field": "educationNotes"
           },
@@ -82,21 +61,13 @@
             "field": "extendedDescription"
           },
           {
-            "field": "death"
+            "label": "Sector Name",
+            "field": "sectorName"
           },
           {
-            "label": "sectorName",
-            "field": "sectorName"
+            "field": "death"
           }
         ]
-      }
-    }
-  },
-  "dev": {
-    "proxy": {
-      "/solr": {
-        "target": "http://localhost:8080/",
-        "secure": false
       }
     }
   }

@@ -128,17 +128,6 @@
   			}
   		],
   		"viewLinks": false
-  	},
-
-
-  
-  "dev": {
-    "proxy": {
-      "/solr": {
-        "target": "http://localhost:8089/",
-        "secure": false
-      }
-    }
-  }
+  	}
 }
 

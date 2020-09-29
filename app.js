@@ -19,6 +19,7 @@ var app = express();
 
 var env = app.get('env');
 var config = require('./config/express.json')[env];
+const {getPortalConfig} = require('./controllers/config');
 
 const ocfl_path = config.ocfl.url_path || 'ocfl';
 
@@ -134,6 +135,11 @@ app.post("/auth", (req, res) => {
 
 
 // anything past this point just gives a 403 if there's no uid in the session
+
+app.get('/config/portal', async (req,res) =>{
+	const portalConfig = await getPortalConfig({indexer: config['indexer'], express: config, base: config['portal']});
+	res.json(portalConfig);
+});
 
 // ocfl-express endpoints
 

@@ -27,7 +27,9 @@
 			"page_size": 20,
 			"solr": "http://host.docker.internal:8983/solr/ocfl",
 			"resolver": "solr"
-		}
+		},
+		"portal": "config/portal.json",
+		"indexer": "config/indexer.json"
 	}
 
 }
