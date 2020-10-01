@@ -76,6 +76,16 @@
           "facet": true
         },
 
+        "creator": {
+          "index_as": "author",
+          "multi": true,
+          "resolve": {
+            "search": "@id",
+            "display": "name"
+          },
+          "facet": true
+        },
+
         "keywords": {
           "multi": true,
           "facet": {
