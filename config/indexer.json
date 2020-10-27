@@ -77,6 +77,15 @@
           "multi": true,
           "facet": true
         },
+        "image": {
+          "resolve": {
+            "search": "@id",
+            "display": "name"
+          }
+        },
+        "pdf": {
+          "multi": true
+        },
         "universityConnections": {
           "multi": true,
           "resolve": {

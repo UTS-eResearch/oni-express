@@ -48,11 +48,28 @@
           {
             "label": "University",
             "field": "universityConnections"
+          },
+          {
+            "label": "Military Service Place",
+            "field": "militaryServicePlace"
           }
         ],
         "viewFields": [
           {
+            "label": "Initials",
+            "field": "initials"
+          },
+          {
+            "field": "sex"
+          },
+          {
             "field": "educationNotes"
+          },
+          {
+            "label": "University",
+            "field": "universityConnections",
+            "display": "SubDocJson",
+            "element": "display"
           },
           {
             "field": "universityRole"
@@ -61,11 +78,72 @@
             "field": "extendedDescription"
           },
           {
+            "label": "College",
+            "field": "uSydResidentialCollege"
+          },
+          {
+            "label": "Occupation",
+            "field": "occupation_"
+          },
+          {
             "label": "Sector Name",
             "field": "sectorName"
           },
           {
+            "label": "Event",
+            "field": "event_"
+          },
+          {
+            "label": "Military Service",
+            "field": "militaryService"
+          },
+          {
+            "label": "Birth",
+            "field": "birth",
+            "display": "SubDocJson",
+            "element": "display"
+          },
+          {
+            "label": "Death",
             "field": "death"
+          },
+          {
+            "label": "Australian War Memorial",
+            "field": "australianWarMemorial",
+            "display": "SubDocLink",
+            "text": "Open Link"
+          },
+          {
+            "label": "Other urls",
+            "field": "uRLs",
+            "display": "SubDocLink",
+            "text": "Open link"
+          },
+          {
+            "label": "Image",
+            "field": "image",
+            "display": "SubDocImage",
+            "prefix": "/ocfl/053ac64e-3d81-4363-b121-b02045e77251/"
+          },
+          {
+            "label": " ",
+            "field": "image",
+            "display": "SubDocLink",
+            "text": "Open Image",
+            "json": true,
+            "element": "@id",
+            "prefix": "/ocfl/053ac64e-3d81-4363-b121-b02045e77251/"
+          },
+          {
+            "label": "PDF",
+            "field": "pdf",
+            "display": "SubDocLink",
+            "text": "Open File",
+            "prefix": "/ocfl/053ac64e-3d81-4363-b121-b02045e77251/"
+          },
+          {
+            "label": "boR Entry OCR Text",
+            "field": "boREntryOCRText"
           }
         ]
       }

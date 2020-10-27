@@ -3,10 +3,17 @@
   "version": "1.0.1",
   "private": true,
   "scripts": {
+    "buildAndStart": "npm run p:gb && npx npm start",
     "start": "node ./bin/www",
+    "p:gb": "npm run portal:getbuild",
+    "portal:getbuild": "npm run portal:get && npm run portal:build",
+    "portal:get": "rm -rf oni-portal && git clone -b feature-expert-nation https://github.com/UTS-eResearch/oni-portal.git",
+    "portal:build": "cd oni-portal && npm install && npm run build && cp -r dist ../portal && cd ..",
+    "d:attach": "docker exec -it en-oni-express /bin/bash",
     "d:build": "source docker-build.sh",
-    "d:stop": "source docker-stop-all.sh",
-    "d:start": "source docker-run.sh"
+    "d:stopAll": "source docker-stop-all.sh",
+    "d:start": "source docker-run.sh",
+    "d:clearIndex": "docker volume rm en-solr_ocfl"
   },
   "dependencies": {
     "axios": "^0.19.2",

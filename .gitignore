@@ -3,3 +3,5 @@ node_modules
 solr
 dump
 logs/indexer.log
+oni-portal
+portal
