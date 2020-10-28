@@ -8,8 +8,14 @@
 			"iss": "https://rapid.test.aaf.edu.au",
 			"aud": "http://localhost:8080/",
 			"success": "http://localhost:8089/",
-			"attributes": "https://aaf.edu.au/attributes"
+			"attributes": "https://aaf.edu.au/attributes",
+			"allow": {
+				"uid": "uts.edu.au",
+				"affiliation": "^staff@uts.edu.au$"
+			}
 		},
+
+		"cors": false,
 
 		"solr": "http://localhost:8983",
 

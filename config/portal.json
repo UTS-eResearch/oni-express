@@ -1,0 +1,79 @@
+{
+  "apis": {
+		"ocfl": "/ocfl",
+		"solr": "/solr/ocfl"
+	},
+	
+  "header":{
+    "title": "Research Data Portal",
+    "URL": "/",
+    "logo": "images/logo.svg",
+    "menu": [ "help", "about" ]
+  },
+
+  "footer": {
+   	"text": "© 2020 University of Technology Sydney"
+  },
+
+
+  "search": {
+   	"error": "Search Error",
+   	"invalidSearch": "Invalid Search",
+   	"searchText": "Search",
+   	"mainSearch": "main_search"
+  },
+  
+
+  "pages": {
+    "about": {
+      "title": "About",
+      "text": "<p>This is the <a href=\"https://www.uts.edu.au/\">University of Technology Sydney</a> data publication portal. It is maintained by the <a href=\"https://eresearch.uts.edu.au/\">UTS eResearch Support Group.</a></p><p>If you are a UTS researcher and you would like to publish your data here, or use the Oni platform to index and manage your data, please get in touch with us at <a href=\"mailto:eResearch-it@uts.edu.au\">eResearch-it@uts.edu.au</a>.</p><p>The portal was built with Oni 👹 v1.0.1 - part of the <a href='http://arkisto-platform.github.io' target='_blank' nopoener noreferer>Arkisto Platform</a>, indexing and searching secure data repositories based on open standards for research object metadata - <a target='_blank' nopoener noreferer href=\"https://researchobject.github.io/ro-crate/\">RO-Crate</a> - and file-based repositories - <a target='_blank' nopoener noreferer href=\"https://ocfl.io/\">OCFL</a>.</p></p>"
+    }
+  },
+
+  "facets": {
+  },
+
+  "results": {
+
+  	"searchFacets": [
+  	],
+  	"resultFacets": [
+  	],
+
+    "view": {
+      "Dataset": {
+        "summaryFields": [
+          {
+            "label": "Author/s",
+            "field": "author"
+          },
+          {
+            "label": "Licence",
+            "field": "license"
+          },
+          {
+            "field": "datePublished"
+          }
+  		  ],
+  		  "viewFields": [
+          { 
+            "field": "description"
+          }
+        ],
+  		  "viewLinks": true,
+        "linkText": "Dataset"
+      }
+    }
+  },
+
+  "dev": {
+    "proxy": {
+      "/solr": {
+        "target": "http://localhost:8080/",
+        "secure": false
+      }
+    }
+  }
+}
+

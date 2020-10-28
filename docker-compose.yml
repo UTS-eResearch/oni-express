@@ -1,0 +1,57 @@
+version: '3.1'
+
+networks:
+  main:
+
+services:
+  oni-express:
+    environment:
+      - NODE_ENV=development
+    build: .
+    ports:
+      - "8080:8080"
+    expose:
+      - "80"
+    networks:
+      - main
+    volumes:
+      - "./ocfl/:/etc/share/ocfl"
+      - "./config/:/etc/share/config"
+
+  oni-indexer:
+    image: mikelynch/oni-indexer:v1.0.13
+    ports:
+      - "8090:8090"
+    expose:
+      - "8090"
+    networks:
+      - main
+    volumes:
+      - "./ocfl/:/etc/share/ocfl"
+      - "./config/:/etc/share/config"
+      - "./logs/:/etc/share/logs"
+
+  solr:
+    image: solr
+    ports:
+      - "8983:8983"
+    expose:
+      - "8983"
+    networks:
+      - main
+    volumes:
+      - "./test_solr/:/opt/solr/server/solr/ocfl"
+    command: solr-precreate ocfl
+    logging:
+        driver: none
+
+  memcached:
+    image: memcached
+    ports:
+      - "11211:11211"
+    expose:
+      - "11211"
+    networks:
+      - main
+    
+

@@ -1,0 +1,144 @@
+{
+   	"apis": {
+		"ocfl": "/ocfl/grants",
+		"solr": "/solr/grants"
+	},
+	"header":{
+    	"title": "Library of Successful Grants",
+    	"URL": "/",
+    	"logo": "images/logo.svg",
+      "menu": [ "help", "privacy", "about" ]
+   	},
+
+  	"footer": {
+    	"text": "© 2020 University of Technology Sydney"
+  	},
+
+
+  	"search": {
+    	"error": "Search Error",
+    	"invalidSearch": "Invalid Search",
+    	"searchText": "Search",
+    	"mainSearch": "main_search"
+  	},
+  
+
+    "pages": {
+      "about": {
+        "title": "About",
+        "text": "<p>This app was built by the UTS eResearch Support Group using Oni 👹 v1.0.0 - a platform for managing, indexing and searching secure data repositories based on open standards for research object metadata - <a href=\"https://researchobject.github.io/ro-crate/\">RO-Crate</a> - and file-based repositories - <a href=\"https://ocfl.io/\">OCFL</a>.</p><p>If you'd like to use Oni to manage or publish your research data, please get in touch with us at <a href=\"mailto:eResearch-it@uts.edu.au\">eResearch-it@uts.edu.au</a>.</p>"
+      },
+      "privacy": {
+        "title": "Privacy",
+        "text": "<h4>PURPOSE</h4><p>This document outlines the UTS approach to the secure storage and provision of access to the <em>UTS Library of Successful Grants</em>, as well as the responsibilities of UTS staff when accessing said library.</p><h4>OVERVIEW</h4><p>The Successful Grants Library contains external and some internal grant applications that were successfully funded at UTS. The <em>UTS Library of Successful Grants</em> is a resource used to assist UTS researchers in framing, structuring and developing their own grant applications.</p><h4>SCOPE</h4><p>The procedure applies to all UTS applicants who access the electronic <em>UTS Library of Successful Grants</em> and the researchers who consent for their grant to be included in the Library.</p><h4>PROCEDURE</h4><p>Successful ARC and NHMRC grant applications, and other selected funding applications will be made available within the electronic <em>Library of Successful Grants</em>.</p><h4>GRANT LIBRARY APPROVAL</h4><p>In giving approval for an application (whole or in part) to be included in the <em>UTS Library of Successful Grants</em>, the lead investigator is acting on behalf of all named participants on the application in question.</p><p>The lead investigator can request that particular sections of their grant application are not made available in the <em>Library of Successful Grants</em> by contacting the Strategic Grants Development Team.</p><p>The lead investigator can request the removal of their grant from the <em>UTS Library of Successful Grants</em> at any time by contacting the Strategic Grants Development Team.</p><h4>CONDITIONS OF ACCESSING SUCCESSFUL GRANTS LIBRARY</h4><p>Applications included in the <em>UTS Library of Successful Grants</em> have been contributed by researchers to provide examples of successful grants for reference by UTS researchers when developing their own grant applications. General notes may be taken to assist in the framing, development and layout of proposals.</p><p>In accessing the library, staff are agreeing not to copy or share the contents of the library in any way.</p><h4>ACCESSING SUCCESSFUL GRANTS LIBRARY</h4><p>The <em>UTS Library of Successful Grants</em> can be accessed electronically by UTS staff using their staff ID via Staff Connect.</p><h4>COMPLIANCE AND BREACHES</h4><p>RIO may suspend access to the <em>UTS Library of Successful Grants</em> if any person breaches this procedure.</p>"
+      },
+      "help": {
+        "title": "Help",
+        "text": "<p>Welcome to the <em>Library of Successful Grants</em>. Please see the <a href=\"/#page/privacy\">Privacy Statement</a> for important information about the conditions of use.</p><p>You can focus on a particular funding round, year, faculty/school/department, author, keyword or FOR code by clicking on one of the links to the left.</p><p>With the exception of Funder and Year, this column only shows the top five or ten results in a facet. To brows all of the values for a facet, click one of the following links (or the 'all...' link in any of the facet panes):</p><ul><li><a href=\"/#search/0/1/showFacet=Dataset_funder_facetmulti\">Funder</a></li><li><a href=\"/#search/0/1/showFacet=Dataset_dateCreated_facetmulti\">Year</a></li><li><a href=\"/#search/0/1/showFacet=Dataset_affiliation_facetmulti\">School/Dept</a></li><li><a href=\"/#search/0/1/showFacet=Dataset_author_facet\">Author</a></li><li><a href=\"/#search/0/1/showFacet=Dataset_keywords_facetmulti\">Keywords</a></li><li><a href=\"/#search/0/1/showFacet=Dataset_FOR_facetmulti\">FOR codes</a></li></ul><p>You can search the full text of grants by entering terms in the search box beneath the menu bar.</p><p>When you click on a facet value, it will appear as a search filter beneath the search box, and clicking multiple facet values will add to the filter list. The filter list will be applied to text search results. To remove a filter, click the 'x' which appears in the tag.</p><p>For technical support, contact <a href=\"mailto:eResearch-it@uts.edu.au\">eResearch Support Group</a>.</p>"
+      }
+    },
+
+  	"facets": {
+  		"Dataset_funder_facetmulti": {
+  			"label": "Funding scheme",
+  			"field": "funder",
+        "sort": "index",
+        "limit": -1
+  		},
+  		"Dataset_dateCreated_facetmulti": {
+  			"label": "Year",
+  			"field": "dateCreated",
+        "sort": "index",
+        "limit": -1
+  		},
+  		"Dataset_affiliation_facetmulti": {
+  			"label": "School/Dept",
+  			"field": "affiliation",
+  			"limit": 5
+  		},
+  		"Dataset_author_facet": {
+  			"label": "Author",
+  			"field": "author",
+  			"limit": 5
+  		},
+  		"Dataset_keywords_facetmulti": {
+  			"label": "Keywords",
+  			"field": "keywords",
+  			"limit": 5
+  		},
+  		"Dataset_FOR_facetmulti": {
+  			"label": "FORs",
+  			"JSON": true,
+  			"search": "@id",
+  			"display": "name",
+  			"component": "FacetFOR",
+  			"field": "FOR_id",
+  			"limit": 5
+  		}
+  	},
+
+  	"results": {
+
+  		"searchFacets": [
+  			"Dataset_funder_facetmulti",
+  			"Dataset_dateCreated_facetmulti",
+  			"Dataset_affiliation_facetmulti",
+  			"Dataset_author_facet",
+  			"Dataset_keywords_facetmulti",
+  			"Dataset_FOR_facetmulti"
+  		],
+  		"resultFacets": [
+  			"Dataset_funder_facetmulti",
+  			"Dataset_dateCreated_facetmulti",
+  			"Dataset_author_facet",
+  			"Dataset_affiliation_facetmulti"
+  		],
+  		"summaryFields": [
+  			{
+  				"field": "funder",
+  				"facet": "Dataset_funder_facetmulti"
+  			},
+  			{ 
+  				"field": "dateCreated",
+  				"facet": "Dataset_dateCreated_facetmulti"
+  			},
+  			{
+  				"field": "author",
+  				"facet": "Dataset_author_facet"
+  			},
+  			{
+  				"field": "affiliation",
+  				"facet": "Dataset_affiliation_facetmulti"
+  			},
+  			{
+  				"field": "description"
+  			},
+  			{
+  				"field": "FOR",
+  				"facet": "Dataset_FOR_facetmulti"
+  			}
+  		],
+  		"viewFields": [
+  			{
+  				"display": "SubDocIframe",
+  				"field": "html",
+  				"fieldName": "",
+  				"width": "800",
+  				"height": "1130"
+  			}
+  		],
+  		"viewLinks": false
+  	},
+
+
+  
+  "dev": {
+    "proxy": {
+      "/solr": {
+        "target": "http://localhost:8089/",
+        "secure": false
+      }
+    }
+  }
+}
+
