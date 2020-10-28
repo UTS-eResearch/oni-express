@@ -18,7 +18,11 @@ var MemcachedStore = require("connect-memcached")(session);
 var app = express();
 
 var env = app.get('env');
-var config = require('./config/express.json')[env];
+
+var configFile = process.argv[2] || './config/express.json';
+console.log('Using config file: ' + configFile);
+var config = require(configFile)[env];
+
 const {getPortalConfig} = require('./controllers/config');
 
 const ocfl_path = config.ocfl.url_path || 'ocfl';

@@ -3,10 +3,9 @@
   "version": "1.0.1",
   "private": true,
   "scripts": {
-    "buildAndStart": "npm run p:gb && npx npm start",
+    "build": "npm run portal:getAndBuild && npm install",
     "start": "node ./bin/www",
-    "p:gb": "npm run portal:getbuild",
-    "portal:getbuild": "npm run portal:get && npm run portal:build",
+    "portal:getAndBuild": "npm run portal:get && npm run portal:build",
     "portal:get": "rm -rf oni-portal && git clone -b feature-expert-nation https://github.com/UTS-eResearch/oni-portal.git",
     "portal:build": "cd oni-portal && npm install && npm run build && cp -r dist ../portal && cd ..",
     "d:attach": "docker exec -it en-oni-express /bin/bash",

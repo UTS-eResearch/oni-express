@@ -5,7 +5,6 @@
 
 DCK_PRE=en #DCK_PRE or docker prefix to identify docker group
 VOL_OCFL="/Users/moises/source/github/uts-eresearch/heurist2ro-crate/en_ocfl/"
-VOL_APP=$(pwd)
 VOL_CONFIG="$(pwd)/config/"
 
 PORT=8080
@@ -18,15 +17,6 @@ docker run --rm -p 127.0.0.1:11211:11211 \
 -d \
 --network ${NETWORK} \
 memcached
-
-docker run --rm -p 127.0.0.1:${PORT}:${PORT} \
--e NODE_ENV=development \
--v ${VOL_APP}:/usr/src/app \
--v ${VOL_CONFIG}:/etc/share/config  \
--v ${VOL_OCFL}:/etc/share/ocfl \
---name ${DCK_PRE}-oni-express \
---network ${NETWORK} \
-oni-express
 
 # For MacOS creating a docker volume that we can identify
 # For Linux this is not required and can use a bind mount
@@ -43,5 +33,14 @@ docker run --rm -p 127.0.0.1:8983:8983 \
 -d \
 solr:8 \
 solr-precreate ocfl
+
+docker run --rm -p 127.0.0.1:${PORT}:${PORT} \
+-e NODE_ENV=development \
+-v ${VOL_CONFIG}:/etc/share/config  \
+-v ${VOL_OCFL}:/etc/share/ocfl \
+--name ${DCK_PRE}-oni-express \
+--network ${NETWORK} \
+-d \
+oni-express
 
 echo "open http://localhost:${PORT}"
