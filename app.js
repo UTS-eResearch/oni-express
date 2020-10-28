@@ -18,7 +18,12 @@ var MemcachedStore = require("connect-memcached")(session);
 var app = express();
 
 var env = app.get('env');
-var config = require('./config/express.json')[env];
+
+var configFile = process.argv[2] || './config/express.json';
+console.log('Using config file: ' + configFile);
+var config = require(configFile)[env];
+
+const {getPortalConfig} = require('./controllers/config');
 
 const ocfl_path = config.ocfl.url_path || 'ocfl';
 
@@ -81,7 +86,7 @@ function checkSession(req, res, next) {
 			} else {
 				res.status(403).send("Forbidden");
 			}
-		} else {		
+		} else {
 			var ok = true;
 			for( field in allow ) {
 				if( !(field in req.session) || ! req.session[field].match(allow[field]) ) {
@@ -94,8 +99,8 @@ function checkSession(req, res, next) {
 			} else {
 				req.status(403).send("Forbidden (this is from checkSession)");
 			}
-		}	
-	} 
+		}
+	}
 }
 
 
@@ -134,6 +139,11 @@ app.post("/auth", (req, res) => {
 
 
 // anything past this point just gives a 403 if there's no uid in the session
+
+app.get('/config/portal', async (req,res) =>{
+	const portalConfig = await getPortalConfig({indexer: config['indexer'], express: config, base: config['portal']});
+	res.json(portalConfig);
+});
 
 // ocfl-express endpoints
 

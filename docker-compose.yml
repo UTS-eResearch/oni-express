@@ -32,7 +32,7 @@ services:
       - "./logs/:/etc/share/logs"
 
   solr:
-    image: solr
+    image: solr:8
     ports:
       - "8983:8983"
     expose:
@@ -53,5 +53,3 @@ services:
       - "11211"
     networks:
       - main
-    
-
