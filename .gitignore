@@ -1,0 +1,8 @@
+.idea
+node_modules
+solr
+dump
+ocfl
+logs/indexer.log
+oni-portal
+portal
