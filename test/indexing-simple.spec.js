@@ -4,13 +4,29 @@ const _ = require('lodash');
 const path = require('path');
 const fs = require('fs-extra');
 const dc = require('docker-compose');
+const Repository = require('ocfl').Repository;
 
 const RETRIES = 20;
 const SLEEP = 5000;
 
+const DOCKER_ROOT = path.join(process.cwd(), 'test-data', 'indexing');
+const OCFL = path.join(DOCKER_ROOT, 'ocfl');
+
 async function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
+
+
+async function make_repo() {
+  await fs.remove(OCFL);
+  await fs.mkdir(OCFL);
+  const repository = new Repository();
+  const init = await repository.create(OCFL);
+  return repository;
+}
+
+
+
 
 async function indexer_stopped() {
   let ps;
@@ -21,7 +37,7 @@ async function indexer_stopped() {
     await sleep(SLEEP);
     try {
       ps = await dc.ps({
-        cwd: path.join(__dirname),
+        cwd: DOCKER_ROOT,
         commandOptions: [
           [ "--filter", "status=running" ],
           [ "--services" ]
@@ -46,10 +62,13 @@ describe('basic indexing', function () {
   this.timeout(0);
 
   it('can start up an Oni using docker-compose', async function () {
-    await dc.upAll({ cwd: path.join(__dirname), log: true});
+    const repo = await make_repo();
+    // - add some items to the repo
+    console.log(`Starting docker-compose in ${DOCKER_ROOT} `);
+    await dc.upAll({ cwd: DOCKER_ROOT, log: true});
     const indexed = await indexer_stopped();
     expect(indexed).to.be.true;
-    await dc.stop({ cwd: path.join(__dirname), log: true});
+    await dc.stop({ cwd: DOCKER_ROOT, log: true});
   });
 
 
