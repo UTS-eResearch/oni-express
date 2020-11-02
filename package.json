@@ -22,5 +22,11 @@
     "nocache": "^2.1.0",
     "oni-indexer": "^1.0.4",
     "requests": "^0.3.0"
+  },
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "composefile": "^0.3.0",
+    "docker-compose": "^0.23.5",
+    "mocha": "^8.2.0"
   }
 }
