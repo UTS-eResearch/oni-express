@@ -28,6 +28,10 @@
     "chai": "^4.2.0",
     "composefile": "^0.3.0",
     "docker-compose": "^0.23.5",
-    "mocha": "^8.2.0"
+    "mocha": "^8.2.0",
+    "ocfl": "^1.0.9",
+    "random-word": "^2.0.0",
+    "ro-crate": "^1.5.3",
+    "uuid": "^8.3.1"
   }
 }
