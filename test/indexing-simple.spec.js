@@ -11,15 +11,19 @@ const ROCrate = require('ro-crate').ROCrate;
 const defaults = require('ro-crate').Defaults;
 const randomWord = require('random-word');
 
-const RETRIES = 20;
+const RETRIES = 200;
 const SLEEP = 5000;
 const HTTP_TIMEOUT = 60000;
+
+const BATCH_SIZE = 100;
+const MONOCRATE_SIZE = 100;
 
 const DOCKER_ROOT = path.join(process.cwd(), 'test-data', 'indexing');
 const OCFL = path.join(DOCKER_ROOT, 'ocfl');
 const WORKING = path.join(DOCKER_ROOT, 'working');
 
 const SOLR_URL = "http://localhost:8983/solr/ocfl/select?q=id%3A";
+const PROXY_URL = "http://localhost:8080/solr/ocfl/select?q=id%3A";
 
 // FIXME - portal isn't getting config refreshed, but I don't need to
 // solve that now
@@ -58,6 +62,17 @@ function random_words(min, max) {
 //   return sourcedata;
 // }
 
+function random_dataset(id, keywords) {
+  return {
+    '@type': 'Dataset',
+    '@id': id,
+    'name': random_words(1, 5).map(_.upperFirst).join(' '),
+    'description' : random_words(40, 100).join(' '),
+    'keywords': _.sampleSize(keywords, random_int(2, 8))
+  }
+}
+
+
 
 async function make_crates(ocfl, n) {
   await fs.remove(WORKING);
@@ -77,25 +92,20 @@ async function make_crates(ocfl, n) {
       '@context': defaults.context,
       '@graph': [
         defaults.metadataFileDescriptorTemplate,
-        {
-          '@type': 'Dataset',
-          '@id': './',
-          'name': random_words(1, 5).map(_.upperFirst).join(' '),
-          'description' : random_words(40, 100).join(' '),
-          'keywords': _.sampleSize(keywords, random_int(2, 8))
-        }
+        random_dataset('./', keywords)
       ]
     });
 
     await fs.writeJSON(path.join(workingDir, 'ro-crate-metadata.json'), crate.json_ld);
     await ocfl.importNewObjectDir(id, workingDir);
-    console.log(`Created OCFL object ${id}`);
     crates[id] = crate;
     crates[id].index();
   }
 
   return crates;
 }
+
+
 
 
 
@@ -129,7 +139,7 @@ async function indexer_stopped() {
 
 
 
-describe('basic indexing', function () {
+describe.skip('indexing many simple ro-crates', function () {
   this.timeout(0);
 
   let crates;
@@ -138,8 +148,7 @@ describe('basic indexing', function () {
 
     await dc.stop({ cwd: DOCKER_ROOT, log: true});
     const repo = await make_repo();
-    crates = await make_crates(repo, 20);
-    console.log(`Starting docker-compose in ${DOCKER_ROOT} `);
+    crates = await make_crates(repo, BATCH_SIZE);
 
     await dc.upAll({ cwd: DOCKER_ROOT, log: true});
     const indexed = await indexer_stopped();
@@ -150,9 +159,33 @@ describe('basic indexing', function () {
   it('can index simple ro-crates and retrieve them via solr', async function () {
 
     for( let id in crates ) {
-      console.log(`Fetching ${id} from Solr`);
       const resp = await axios({
         url: SOLR_URL + id,
+        method: 'get',
+        responseType: 'json',
+        timeout: HTTP_TIMEOUT,
+        headers: {
+          'Content-Type': 'application/json; charset=utf-8'
+        }
+      });
+      expect(resp).to.not.be.null;
+      expect(resp.status).to.equal(200);
+      const solrResp = resp.data;
+      expect(solrResp.response.numFound).to.equal(1);
+      const solrDoc = solrResp.response.docs[0];
+      const dataset = crates[id].getRootDataset();
+      expect(solrDoc.name[0]).to.equal(dataset.name);
+      expect(solrDoc.description).to.equal(dataset.description);
+      expect(solrDoc.keywords).to.deep.equal(dataset.keywords);
+    }
+
+  });
+
+  it('can retrieve simple ro-crates via the solr express proxy', async function () {
+
+    for( let id in crates ) {
+      const resp = await axios({
+        url: PROXY_URL + id,
         method: 'get',
         responseType: 'json',
         timeout: HTTP_TIMEOUT,
@@ -177,3 +210,137 @@ describe('basic indexing', function () {
 
 
 });
+
+
+
+async function make_monocrate(ocfl, n, idfn) {
+  const items = {};
+
+  await fs.remove(WORKING);
+  await fs.mkdir(WORKING);
+
+  const keywords = random_words(10, 20);
+
+  const crate = new ROCrate({
+    '@context': defaults.context,
+    '@graph': [
+      defaults.metadataFileDescriptorTemplate,
+      random_dataset('./', keywords)
+    ]
+  });
+
+  crate.index();
+
+
+  for( let i = 0; i < n; i++ ) {
+    const id = idfn();
+    const item = random_dataset(id, keywords);
+    items[id] = item;
+    console.log(JSON.stringify(item, null, 2));
+    crate.addItem(item);
+  }
+
+  const workingDir = path.join(WORKING, 'monocrater'); 
+  await fs.mkdir(workingDir);
+
+  await fs.writeJSON(path.join(workingDir, 'ro-crate-metadata.json'), crate.json_ld);
+  await ocfl.importNewObjectDir('monocrater', workingDir);
+
+  return items;
+}
+
+
+
+
+describe('indexing a single crate with lots of items', function () {
+  this.timeout(0);
+
+  let items;
+
+  before(async function () {
+
+    await dc.stop({ cwd: DOCKER_ROOT, log: true});
+    const repo = await make_repo();
+
+    items = await make_monocrate(repo, MONOCRATE_SIZE, uuid);
+    await dc.upAll({ cwd: DOCKER_ROOT, log: true});
+    const indexed = await indexer_stopped();
+    expect(indexed).to.be.true;
+
+  });
+
+  it('can index a single crate and retrieve the items via solr', async function () {
+
+    for( let id in items ) {
+      const item = items[id];
+      const resp = await axios({
+        url: SOLR_URL + id,
+        method: 'get',
+        responseType: 'json',
+        timeout: HTTP_TIMEOUT,
+        headers: {
+          'Content-Type': 'application/json; charset=utf-8'
+        }
+      });
+      expect(resp).to.not.be.null;
+      expect(resp.status).to.equal(200);
+      const solrResp = resp.data;
+      expect(solrResp.response.numFound).to.equal(1);
+      const solrDoc = solrResp.response.docs[0];
+      const dataset = items[id];
+      expect(solrDoc.name[0]).to.equal(dataset.name);
+      expect(solrDoc.description).to.equal(dataset.description);
+      expect(solrDoc.keywords).to.deep.equal(dataset.keywords);
+    }
+
+  });
+
+});
+
+describe('ids which start with hashes', function () {
+  this.timeout(0);
+
+  let items;
+
+  before(async function () {
+
+    await dc.stop({ cwd: DOCKER_ROOT, log: true});
+    const repo = await make_repo();
+
+    items = await make_monocrate(repo, MONOCRATE_SIZE, () => { return '#' + uuid() });
+    await dc.upAll({ cwd: DOCKER_ROOT, log: true});
+    const indexed = await indexer_stopped();
+    expect(indexed).to.be.true;
+
+  });
+
+
+  it('can index a single crate with ids starting with #', async function () {
+
+    for( let id in items ) {
+      const item = items[id];
+      const resp = await axios({
+        url: SOLR_URL + id,
+        method: 'get',
+        responseType: 'json',
+        timeout: HTTP_TIMEOUT,
+        headers: {
+          'Content-Type': 'application/json; charset=utf-8'
+        }
+      });
+      expect(resp).to.not.be.null;
+      expect(resp.status).to.equal(200);
+      const solrResp = resp.data;
+      expect(solrResp.response.numFound).to.equal(1);
+      const solrDoc = solrResp.response.docs[0];
+      const dataset = items[id];
+      expect(solrDoc.name[0]).to.equal(dataset.name);
+      expect(solrDoc.description).to.equal(dataset.description);
+      expect(solrDoc.keywords).to.deep.equal(dataset.keywords);
+    }
+
+  });
+
+
+});
+

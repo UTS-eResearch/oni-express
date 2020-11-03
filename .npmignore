@@ -1,0 +1,6 @@
+.gitignore
+node_modules/
+.DS_Store
+attach.sh
+logs/
+test-data/

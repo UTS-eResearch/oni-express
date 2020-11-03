@@ -1,0 +1,54 @@
+{
+  "ocfl": "/etc/share/ocfl",
+  "identifierNamespace": "public_ocfl",
+  "uriIds": "identifiers",
+  "retries": 10,
+  "retryInterval": 10,
+  "purge": true,
+  "updateSchema": true,
+  "dryRun": false,
+  "catalogFilename": [ "ro-crate-metadata.jsonld", "ro-crate-metadata.json" ],
+  "solrBase": "http://solr:8983/solr/ocfl",
+  "hashAlgorithm": "md5",
+  "waitPeriod": 0,
+  "schemaBase": "/etc/share/config/schema_base.json",
+
+  "logLevel": "info",
+
+  "log": {
+    "filename": "/etc/share/logs/indexer.log",
+    "level": "info"
+  },
+
+
+  "portal": {
+    "base": "/etc/share/config/portal_base.json",
+    "config": "/etc/share/config/portal.json",
+    "facetDefaults": {
+      "limit": 5
+    }
+  },
+
+
+
+  "fields": {
+    "main_search": [ "name", "description", "id" ],
+    "map_all": {
+      "@id": [ "id", "id_orig" ],
+      "@type": [ "record_type_s", "type_label" ]
+    },
+
+
+    "types": {
+
+      "Dataset": {
+    
+        "keywords": {
+          "facet": true,
+          "multi": true
+        }
+
+      }
+    }
+  }
+}
