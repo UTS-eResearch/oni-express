@@ -4,6 +4,7 @@ const _ = require('lodash');
 const path = require('path');
 const fs = require('fs-extra');
 const dc = require('docker-compose');
+const axios = require('axios');
 const uuid = require('uuid').v4;
 const Repository = require('ocfl').Repository;
 const ROCrate = require('ro-crate').ROCrate;
@@ -12,13 +13,13 @@ const randomWord = require('random-word');
 
 const RETRIES = 20;
 const SLEEP = 5000;
+const HTTP_TIMEOUT = 60000;
 
 const DOCKER_ROOT = path.join(process.cwd(), 'test-data', 'indexing');
 const OCFL = path.join(DOCKER_ROOT, 'ocfl');
 const WORKING = path.join(DOCKER_ROOT, 'working');
 
-const axios = require('axios');
-
+const SOLR_URL = "http://localhost:8983/solr/ocfl/select?q=id%3A";
 
 // FIXME - portal isn't getting config refreshed, but I don't need to
 // solve that now
@@ -64,6 +65,8 @@ async function make_crates(ocfl, n) {
 
   // const names = await load_vocabs(path.join(DOCKER_ROOT, 'vocabularies'));
 
+  const crates = {};
+
   const keywords = random_words(10, 20);
 
   for( let i = 0; i < n; i++ ) {
@@ -86,7 +89,12 @@ async function make_crates(ocfl, n) {
 
     await fs.writeJSON(path.join(workingDir, 'ro-crate-metadata.json'), crate.json_ld);
     await ocfl.importNewObjectDir(id, workingDir);
+    console.log(`Created OCFL object ${id}`);
+    crates[id] = crate;
+    crates[id].index();
   }
+
+  return crates;
 }
 
 
@@ -124,22 +132,47 @@ async function indexer_stopped() {
 describe('basic indexing', function () {
   this.timeout(0);
 
-  it('can index and retrieve a bunch of random ro-crates', async function () {
+  let crates;
+
+  before(async function () {
+
+    await dc.stop({ cwd: DOCKER_ROOT, log: true});
     const repo = await make_repo();
-    await make_crates(repo, 20);
+    crates = await make_crates(repo, 20);
     console.log(`Starting docker-compose in ${DOCKER_ROOT} `);
+
     await dc.upAll({ cwd: DOCKER_ROOT, log: true});
     const indexed = await indexer_stopped();
     expect(indexed).to.be.true;
 
-    cy.visit('http://localhost:8080/');
-
-    cy.
-
-
-
-    await dc.stop({ cwd: DOCKER_ROOT, log: true});
   });
+
+  it('can index simple ro-crates and retrieve them via solr', async function () {
+
+    for( let id in crates ) {
+      console.log(`Fetching ${id} from Solr`);
+      const resp = await axios({
+        url: SOLR_URL + id,
+        method: 'get',
+        responseType: 'json',
+        timeout: HTTP_TIMEOUT,
+        headers: {
+          'Content-Type': 'application/json; charset=utf-8'
+        }
+      });
+      expect(resp).to.not.be.null;
+      expect(resp.status).to.equal(200);
+      const solrResp = resp.data;
+      expect(solrResp.response.numFound).to.equal(1);
+      const solrDoc = solrResp.response.docs[0];
+      const dataset = crates[id].getRootDataset();
+      expect(solrDoc.name[0]).to.equal(dataset.name);
+      expect(solrDoc.description).to.equal(dataset.description);
+      expect(solrDoc.keywords).to.deep.equal(dataset.keywords);
+    }
+
+  });
+
 
 
 
