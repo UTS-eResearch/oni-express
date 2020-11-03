@@ -27,6 +27,7 @@
   "devDependencies": {
     "chai": "^4.2.0",
     "composefile": "^0.3.0",
+    "cypress": "^5.5.0",
     "docker-compose": "^0.23.5",
     "mocha": "^8.2.0",
     "ocfl": "^1.0.9",

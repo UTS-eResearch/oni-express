@@ -17,6 +17,9 @@ const DOCKER_ROOT = path.join(process.cwd(), 'test-data', 'indexing');
 const OCFL = path.join(DOCKER_ROOT, 'ocfl');
 const WORKING = path.join(DOCKER_ROOT, 'working');
 
+const axios = require('axios');
+
+
 // FIXME - portal isn't getting config refreshed, but I don't need to
 // solve that now
 
@@ -121,13 +124,20 @@ async function indexer_stopped() {
 describe('basic indexing', function () {
   this.timeout(0);
 
-  it('can start up an Oni using docker-compose', async function () {
+  it('can index and retrieve a bunch of random ro-crates', async function () {
     const repo = await make_repo();
     await make_crates(repo, 20);
     console.log(`Starting docker-compose in ${DOCKER_ROOT} `);
     await dc.upAll({ cwd: DOCKER_ROOT, log: true});
     const indexed = await indexer_stopped();
     expect(indexed).to.be.true;
+
+    cy.visit('http://localhost:8080/');
+
+    cy.
+
+
+
     await dc.stop({ cwd: DOCKER_ROOT, log: true});
   });
 
