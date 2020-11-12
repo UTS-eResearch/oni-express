@@ -3,9 +3,9 @@
 		"ocfl": "/ocfl",
 		"solr": "/solr/ocfl"
 	},
-	
+
   "header":{
-    "title": "Research Data Portal",
+    "title": "Estuary Salinity",
     "URL": "/",
     "logo": "images/logo.svg",
     "menu": [ "help", "about" ]
@@ -22,7 +22,7 @@
    	"searchText": "Search",
    	"mainSearch": "main_search"
   },
-  
+
 
   "pages": {
     "about": {
@@ -45,19 +45,16 @@
       "Dataset": {
         "summaryFields": [
           {
-            "label": "Author/s",
-            "field": "author"
-          },
-          {
-            "label": "Licence",
-            "field": "license"
-          },
-          {
+            "label": "Date",
             "field": "datePublished"
+          },
+          {
+            "label": "Name",
+            "field": "name"
           }
   		  ],
   		  "viewFields": [
-          { 
+          {
             "field": "description"
           }
         ],
@@ -65,15 +62,5 @@
         "linkText": "Dataset"
       }
     }
-  },
-
-  "dev": {
-    "proxy": {
-      "/solr": {
-        "target": "http://localhost:8080/",
-        "secure": false
-      }
-    }
   }
 }
-
