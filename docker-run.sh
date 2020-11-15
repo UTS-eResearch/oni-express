@@ -5,7 +5,7 @@
 
 DCK_PRE=sf #DCK_PRE or docker prefix to identify docker group
 VOL_BASE="/Volumes/simon_seafood_testing/arkisto"
-VOL_OCFL="$VOL_BASE/fake_ocfl/"
+VOL_OCFL="$VOL_BASE/oni-express/ocfl/"
 VOL_CONFIG="$VOL_BASE/oni-express/config/"
 
 PORT=8080

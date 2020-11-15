@@ -8,7 +8,7 @@
   "updateSchema": true,
   "dryRun": false,
   "catalogFilename": "ro-crate-metadata.json",
-  "solrBase": "http://host.docker.internal:8983/solr/ocfl",
+  "solrBase": "http://solr:8983/solr/ocfl",
   "hashAlgorithm": "md5",
   "schemaBase": "/etc/share/config/schema_base.json",
 
@@ -55,6 +55,11 @@
         "temporalCoverage": { "skip": true },
 
         "datePublished": {
+          "multi": true,
+          "facet": true
+        },
+
+        "name": {
           "multi": true,
           "facet": true
         }

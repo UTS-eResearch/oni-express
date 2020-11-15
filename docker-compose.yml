@@ -40,7 +40,7 @@ services:
     networks:
       - main
     volumes:
-      - "./test_solr/:/opt/solr/server/solr/ocfl"
+      - "./solr/:/var/solr/data"
     command: solr-precreate ocfl
     logging:
         driver: none

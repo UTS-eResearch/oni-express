@@ -4,7 +4,7 @@
 			"secret": "change me to a real secret",
 			"name": "session",
 			"expiry": 24,
-			"server": "host.docker.internal:11211"
+			"server": "memcached:11211"
 		},
 
 		"auth": {
@@ -13,7 +13,7 @@
 
 		"cors": true,
 
-		"solr": "http://host.docker.internal:8983",
+		"solr": "http://solr:8983",
 
 		"clientBlock": [ "isIE" ],
 
@@ -25,7 +25,7 @@
 			"index_file": "ro-crate-preview.html",
 			"versions": true,
 			"page_size": 20,
-			"solr": "http://host.docker.internal:8983/solr/ocfl",
+			"solr": "http://solr:8983/solr/ocfl",
 			"resolver": ""
 		},
 		"portal": "/etc/share/config/portal.json",
