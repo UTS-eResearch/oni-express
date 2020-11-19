@@ -4,9 +4,9 @@
 ## stand-alone containers
 
 DCK_PRE=sf #DCK_PRE or docker prefix to identify docker group
-VOL_BASE="/Volumes/simon_seafood_testing/arkisto"
-VOL_OCFL="$VOL_BASE/oni-express/ocfl/"
-VOL_CONFIG="$VOL_BASE/oni-express/config/"
+VOL_BASE="$(pwd)"
+VOL_OCFL="$VOL_BASE/ocfl/"
+VOL_CONFIG="$VOL_BASE/config/"
 
 PORT=8080
 NETWORK=${DCK_PRE}-main

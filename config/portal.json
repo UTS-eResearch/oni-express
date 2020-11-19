@@ -45,12 +45,8 @@
       "Dataset": {
         "summaryFields": [
           {
-            "label": "Date",
-            "field": "datePublished"
-          },
-          {
-            "label": "Name",
-            "field": "name"
+            "label": "Location",
+            "field": "contentLocation"
           }
   		  ],
   		  "viewFields": [

@@ -46,6 +46,12 @@
     "types": {
 
       "Dataset": {
+
+        "@id": {
+         "name": "seafood",
+         "filter": { "is_root": true }
+       },
+
         "@reverse": { "skip": true },
 
         "hasPart": { "skip": true },
@@ -59,12 +65,15 @@
           "facet": true
         },
 
-        "name": {
+        "contentLocation": {
           "multi": true,
-          "facet": true
+          "facet": true,
+          "resolve": {
+            "search": "@id",
+            "display": "name"
+          }
         }
       }
-
 
     }
   }
