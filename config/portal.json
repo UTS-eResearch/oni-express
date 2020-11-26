@@ -5,7 +5,7 @@
 	},
 	
   "header":{
-    "title": "Research Data Portal",
+    "title": "Criminal Characters",
     "URL": "/",
     "logo": "images/logo.svg",
     "menu": [ "help", "about" ]
@@ -42,27 +42,17 @@
   	],
 
     "view": {
-      "Dataset": {
+      "Person": {
         "summaryFields": [
-          {
-            "label": "Author/s",
-            "field": "author"
-          },
-          {
-            "label": "Licence",
-            "field": "license"
-          },
-          {
-            "field": "datePublished"
-          }
   		  ],
   		  "viewFields": [
-          { 
-            "field": "description"
+          {
+            "label": "Subgraph",
+            "field": "subgraph",
+            "display": "SubDocSubgraph"
           }
         ],
-  		  "viewLinks": true,
-        "linkText": "Dataset"
+  		  "viewLinks": false
       }
     }
   },

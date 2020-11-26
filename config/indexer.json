@@ -7,7 +7,7 @@
   "purge": true,
   "updateSchema": true,
   "dryRun": false,
-  "catalogFilename": [ "ro-crate-metadata.jsonld", "ro-crate-metadata.json" ],
+  "catalogFilename": "ro-crate-metadata.json",
   "solrBase": "http://solr:8983/solr/ocfl",
   "hashAlgorithm": "md5",
   "waitPeriod": 0,
@@ -32,7 +32,7 @@
 
 
   "fields": {
-    "main_search": [ "name", "description", "id", "author" ],
+    "main_search": [ "name", "id", "conviction" ],
     "map_all": {
       "@id": [ "id", "id_orig" ],
       "@type": [ "record_type_s", "type_label" ]
@@ -42,98 +42,39 @@
       "__default__": "public"
     },
 
+    "store_subgraph": true,
+
     "types": {
 
-      "Dataset": {
-    
-        "@id": { 
-          "name": "public_ocfl",
-          "filter": { "is_root": true }
-        },
-        "@reverse": { "skip": true },
- 
+      "Person": {
+
         "hasPart": { "skip": true },
 
         "hasFile": { "skip": true },
       
         "temporalCoverage": { "skip": true },
 
-        "license": {
-          "multi": true,
-          "facet": true
-        },
-
-        "licenseOriginal": {
-          "multi": true
-        },
-
-        "author": {
-          "multi": true,
+        "birthPlace": {
           "resolve": {
-            "search": "@id",
-            "display": "name"
+            "display": "name",
+            "search": "@id"
           },
           "facet": true
         },
 
-        "creator": {
-          "index_as": "author",
+        "conviction": {
           "multi": true,
-          "resolve": {
-            "search": "@id",
-            "display": "name"
-          },
-          "facet": true
-        },
-
-        "keywords": {
-          "multi": true,
-          "facet": {
-            "tokenize": { "delim": "[,;]\\s*" }
-          }
-        },
-
-        "description": {
-          "link_rebase": "publication"
-        },
-
-        "about": [
-          {
-            "match": { "@id": { "re": "anzsrc-for" } },
-            "index_as": "FOR",
-            "multi": true,
-            "resolve": {
-              "search": "@id", 
-              "display": "name"
-            }
-          }
-        ],
-
-        "contactPoint" : {
-          "multi": "true",
-          "escapedJSON": true
-        },
-
-        "geo" : {
-          "multi": "true",
-          "escapedJSON": true
-        },
-
-        "datePublished": {
           "facet": true,
-          "validate": {
-            "re": "^\\d\\d\\d\\d"
-          }
-        },
-      
-        "publisher": {
-          "multi": true,
           "resolve": {
-            "search": "@id", 
+            "via": [ { "property": "location" } ],
+            "search": "@id",
             "display": "name"
-          }
+          },
+          "store_subgraph": true
         }
+
       }
     }
   }
+
 }

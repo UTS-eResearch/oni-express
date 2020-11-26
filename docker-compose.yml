@@ -18,18 +18,18 @@ services:
       - "./ocfl/:/etc/share/ocfl"
       - "./config/:/etc/share/config"
 
-  oni-indexer:
-    image: mikelynch/oni-indexer:v1.0.13
-    ports:
-      - "8090:8090"
-    expose:
-      - "8090"
-    networks:
-      - main
-    volumes:
-      - "./ocfl/:/etc/share/ocfl"
-      - "./config/:/etc/share/config"
-      - "./logs/:/etc/share/logs"
+  # oni-indexer:
+  #   build: ../oni-indexer 
+  #   ports:
+  #     - "8090:8090"
+  #   expose:
+  #     - "8090"
+  #   networks:
+  #     - main
+  #   volumes:
+  #     - "./ocfl/:/etc/share/ocfl"
+  #     - "./config/:/etc/share/config"
+  #     - "./logs/:/etc/share/logs"
 
   solr:
     image: solr:8
