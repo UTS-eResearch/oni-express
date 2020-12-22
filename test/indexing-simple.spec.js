@@ -236,7 +236,6 @@ async function make_monocrate(ocfl, n, idfn) {
     const id = idfn();
     const item = random_dataset(id, keywords);
     items[id] = item;
-    console.log(JSON.stringify(item, null, 2));
     crate.addItem(item);
   }
 
@@ -320,7 +319,7 @@ describe('ids which start with hashes', function () {
     for( let id in items ) {
       const item = items[id];
       const resp = await axios({
-        url: SOLR_URL + id,
+        url: SOLR_URL + encodeURIComponent(id),
         method: 'get',
         responseType: 'json',
         timeout: HTTP_TIMEOUT,

@@ -13,7 +13,7 @@
   "waitPeriod": 0,
   "schemaBase": "/etc/share/config/schema_base.json",
 
-  "logLevel": "info",
+  "logLevel": "debug",
 
   "log": {
     "filename": "/etc/share/logs/indexer.log",
