@@ -8,7 +8,7 @@
   "updateSchema": true,
   "dryRun": false,
   "catalogFilename": "ro-crate-metadata.json",
-  "solrBase": "http://solr:8983/solr/ocfl",
+  "solrBase": "http://localhost:8983/solr/ocfl",
   "hashAlgorithm": "md5",
   "waitPeriod": 0,
   "schemaBase": "/etc/share/config/schema_base.json",
