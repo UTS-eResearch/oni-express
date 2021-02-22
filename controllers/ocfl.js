@@ -96,7 +96,7 @@ async function resolve_oid(config, oid) {
 
 async function resolve_solr(solr, oid) {
 
-  var esc_oid = oid.replace(' ', '\\ ');
+  var esc_oid = oid.replace(/ /g, '\\ ');
 
   var query = { q: "uri_id:" + esc_oid, fl: 'path' };
   
