@@ -48,7 +48,7 @@
         },
         {
             "name": "*_id",
-            "type": "text_en",
+            "type": "string",
             "stored": true,
             "multiValued": true
         },
