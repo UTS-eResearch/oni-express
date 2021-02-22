@@ -60,9 +60,6 @@ function checkSession(req, res, next) {
 	if( req.url === '/jwt/' || req.url === '/jwt' || config['auth']['UNSAFE_MODE'] ) {
 		next();
 	} else {
-	// if( config['auth']['UNSAFE_MODE'] ) {
-	// 	next();
-	// }
 		const allow = config['auth']['allow'];
 		if( ! req.session ||  ! req.session.uid ) {
 			if( req.url === '/' ) {
