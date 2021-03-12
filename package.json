@@ -30,6 +30,7 @@
     "morgan": "~1.9.1",
     "nocache": "^2.1.0",
     "oni-indexer": "^1.0.4",
-    "requests": "^0.3.0"
+    "requests": "^0.3.0",
+    "yargs": "^13.3.0"
   }
 }

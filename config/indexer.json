@@ -1,6 +1,6 @@
 {
   "ocfl": "/etc/share/ocfl",
-  "identifierNamespace": "seafood",
+  "identifierNamespace": "maptest",
   "uriIds": "identifiers",
   "retries": 10,
   "retryInterval": 10,
@@ -48,31 +48,14 @@
       "Dataset": {
 
         "@id": {
-         "name": "seafood",
+         "name": "maptest",
          "filter": { "is_root": true }
        },
 
         "@reverse": { "skip": true },
 
-        "hasPart": { "skip": true },
 
-        "hasFile": { "skip": true },
 
-        "temporalCoverage": { "skip": true },
-
-        "datePublished": {
-          "multi": true,
-          "facet": true
-        },
-
-        "contentLocation": {
-          "multi": true,
-          "facet": true,
-          "resolve": {
-            "search": "@id",
-            "display": "name"
-          }
-        }
       }
 
     }
