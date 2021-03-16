@@ -7,7 +7,7 @@
   "purge": true,
   "updateSchema": true,
   "dryRun": false,
-  "catalogFilename": "ro-crate-metadata.json",
+  "catalogFilename": "ro-crate-metadata.jsonld",
   "solrBase": "http://solr:8983/solr/ocfl",
   "hashAlgorithm": "md5",
   "schemaBase": "/etc/share/config/schema_base.json",
@@ -50,10 +50,27 @@
         "@id": {
          "name": "maptest",
          "filter": { "is_root": true }
-       },
+        },
 
         "@reverse": { "skip": true },
 
+        "author": {
+          "facet": true,
+          "resolve": { "search": "@id", "display": "name"}
+        },
+
+        "spatialCoverage": {
+          "resolve": {
+            "via": [ { "property": "geo" } ],
+            "search": "lat,lon",
+            "display": "lat,lon"
+          }
+        },
+
+        "keywords": {
+          "multi": true,
+          "facet": true
+        }
 
 
       }

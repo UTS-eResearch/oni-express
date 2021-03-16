@@ -5,7 +5,7 @@
 	},
 
   "header":{
-    "title": "Estuary Salinity",
+    "title": "Geolocation Test",
     "URL": "/",
     "logo": "images/logo.svg",
     "menu": [ "help", "about" ]
@@ -41,21 +41,26 @@
   	"resultFacets": [
   	],
 
+    "map": {
+      "Dataset": {
+        "location": "spatialCoverage",
+        "label": "name"
+      }
+    },
+
     "view": {
       "Dataset": {
         "summaryFields": [
           {
-            "label": "Location",
-            "field": "contentLocation"
+            "field": "name"
           }
   		  ],
   		  "viewFields": [
           {
-            "field": "description"
+            "field": "spatialCoverage"
           }
         ],
-  		  "viewLinks": true,
-        "linkText": "Dataset"
+  		  "viewLinks": false
       }
     }
   }
