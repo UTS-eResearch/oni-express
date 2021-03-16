@@ -6,7 +6,7 @@
     "build": "npm run portal:getAndBuild && npm install",
     "start": "node ./bin/www",
     "portal:getAndBuild": "npm run portal:get && npm run portal:build",
-    "portal:get": "rm -rf oni-portal && git clone -b release-1.2.0.rc1 --depth 1 https://github.com/UTS-eResearch/oni-portal.git",
+    "portal:get": "rm -rf oni-portal && git clone -b feature-maps --depth 1 https://github.com/UTS-eResearch/oni-portal.git",
     "portal:build": "cd oni-portal && npm install && npm run build && cp -r dist ../portal && cd ..",
     "d:attach": "docker exec -it sf-oni-express /bin/bash",
     "d:build": "source docker-build.sh",
