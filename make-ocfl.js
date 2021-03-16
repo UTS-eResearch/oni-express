@@ -38,7 +38,8 @@ async function isDir(dir) {
 async function connectRepo(repoPath) {
   const exists = await isDir(repoPath);
   if( !exists ) {
-    return false;
+    console.log(`Creating empty repository at ${repoPath}`);
+    await fs.mkdir(repoPath);
   }
   
   try {
@@ -92,11 +93,10 @@ async function main() {
   }
 
   const repoDir = path.join(process.cwd(), REPODIR);
-  const fullDir = path.join(process.cwd(), contentDir);
 
-  const dirExists = await isDir(fullDir);
+  const dirExists = await isDir(contentDir);
   if( !dirExists ) {
-    console.error(`${fullDir} is not a directory`);
+    console.error(`${contentDir} is not a directory`);
     process.exit(-1);
   }
 
@@ -107,7 +107,7 @@ async function main() {
     process.exit(-1);
   }
 
-  const crates = await loadCrates(fullDir);
+  const crates = await loadCrates(contentDir);
 
   console.log("Importing to ocfl at " + repoDir);
   for ( let crateId in crates ) {
