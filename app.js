@@ -5,6 +5,8 @@ var proxy = require('express-http-proxy');
 var logger = require('morgan');
 var bodyParser = require('body-parser');
 var cors = require('cors');
+var nocache = require('nocache');
+var useragent = require('express-useragent');
 
 const jwt = require('jwt-simple');
 
@@ -16,12 +18,19 @@ var MemcachedStore = require("connect-memcached")(session);
 var app = express();
 
 var env = app.get('env');
-var config = require('./config/express.json')[env];
+
+var configFile = process.argv[2] || './config/express.json';
+console.log('Using config file: ' + configFile);
+var config = require(configFile)[env];
+
+const {getPortalConfig} = require('./controllers/config');
 
 const ocfl_path = config.ocfl.url_path || 'ocfl';
 
 app.use(logger('dev'));
 
+app.use(nocache());
+app.use(useragent.express());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -57,6 +66,16 @@ if( config['cors'] ) {
 
 function checkSession(req, res, next) {
 	console.log(`checkSession: ${req.url}`);
+	if( config['clientBlock'] ) {
+		const ua = req.useragent;
+		for( cond of config['clientBlock'] ) {
+			if( ua[cond] ) {
+				console.log(`client blocked ${cond}`);
+				res.status(403).send("Browser or client not supported");
+				return;
+			}
+		}
+	}
 	if( req.url === '/jwt/' || req.url === '/jwt' || config['auth']['UNSAFE_MODE'] ) {
 		next();
 	} else {
@@ -67,7 +86,7 @@ function checkSession(req, res, next) {
 			} else {
 				res.status(403).send("Forbidden");
 			}
-		} else {		
+		} else {
 			var ok = true;
 			for( field in allow ) {
 				if( !(field in req.session) || ! req.session[field].match(allow[field]) ) {
@@ -78,10 +97,10 @@ function checkSession(req, res, next) {
 			if( ok ) {
 				next();
 			} else {
-				req.status(403).send("Forbidden");
+				req.status(403).send("Forbidden (this is from checkSession)");
 			}
-		}	
-	} 
+		}
+	}
 }
 
 
@@ -120,11 +139,21 @@ app.post("/auth", (req, res) => {
 
 
 
+app.get('/config/portal', async (req,res) =>{
+	const portalConfig = await getPortalConfig({indexer: config['indexer'], express: config, base: config['portal']});
+	res.json(portalConfig);
+});
+
 // ocfl-express endpoints
 
 
 app.get(`/${ocfl_path}/`, async (req, res) => {
 	console.log(`/ocfl/ Session id: ${req.session.id}`);
+	// if( !req.session.uid ) {
+	// 	console.log("/ocfl/repo endpoint: no uid in session");
+	//   	res.status(403).send("Forbidden");
+	//   	return;
+	// }
 	if( config.ocfl.autoindex ) {
 		const index = await ocfl.index(config, req.params.repo, req.query);
 		res.send(index);
@@ -137,8 +166,13 @@ app.get(`/${ocfl_path}/`, async (req, res) => {
 // fixme: make cache-control no-store
 
 app.get(`/${ocfl_path}/:oidv/:content*?`, async (req, res) => {
-	console.log(`/ocfl/ Session id: ${req.session.id}`);
-	console.log(`ocfl: session = ${req.session.uid}`);
+	// console.log(`/ocfl/ Session id: ${req.session.id}`);
+	// console.log(`ocfl: session = ${req.session.uid}`);
+	// if( !req.session.uid ) {
+	// 	console.log("/ocfl/repo/oid: no uid found in session");
+	//  	res.status(403).send("Forbidden");
+	//   	return;
+	// }
 
 	if( config.ocfl.referrer && req.headers['referer'] !== config.ocfl.referrer ) {
 		console.log(`Request referrer ${req.headers['referer']} does not match ${config.ocfl.referrer}`);
@@ -154,15 +188,15 @@ app.get(`/${ocfl_path}/:oidv/:content*?`, async (req, res) => {
   		var v = ( oidparts.length === 2 ) ? 'v' + oidparts[1] : '';
 
 		console.log(`ocfl get: oid ${oid} v ${v} content ${content}`);
-		
+
 		if( !content || content.slice(-1) === '/' ) {
 			if( config.ocfl.index_file ) {
-				const index_file = content ? content + config.ocfl.index_file : config.ocfl.index_file;  
+				const index_file = content ? content + config.ocfl.index_file : config.ocfl.index_file;
 				const file = await ocfl.file(config, oid, v, index_file);
 				if( file ) {
 					res.sendFile(file);
 					return;
-				} 
+				}
 				// if the index_file is not found, fall through to autoindex if
 				// it's configured
 			}
@@ -188,11 +222,16 @@ app.get(`/${ocfl_path}/:oidv/:content*?`, async (req, res) => {
 	}
 });
 
-// solr proxy - only allows select queries 
+// solr proxy - only allows select queries
 
 
 app.use('/solr/ocfl/select*', proxy(config['solr'], {
   filter: (req, res) => {
+
+  	// if( ! req.session.uid ) {
+ 		// console.log("/solr/ocfl/ No iud found in session");
+  	// 	return false;
+  	// }
   	if( req.method !== 'GET') {
   		return false;
   	}
@@ -204,7 +243,7 @@ app.use('/solr/ocfl/select*', proxy(config['solr'], {
   	} else {
   		return req.originalUrl;
 	}
-  } 
+  }
 }));
 
 

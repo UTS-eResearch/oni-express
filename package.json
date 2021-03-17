@@ -1,9 +1,18 @@
 {
   "name": "oni-express",
-  "version": "1.0.1",
+  "version": "1.2.0",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www"
+    "build": "npm run portal:getAndBuild && npm install",
+    "start": "node ./bin/www",
+    "portal:getAndBuild": "npm run portal:get && npm run portal:build",
+    "portal:get": "rm -rf oni-portal && git clone -b release-1.2.0.rc1 --depth 1 https://github.com/UTS-eResearch/oni-portal.git",
+    "portal:build": "cd oni-portal && npm install && npm run build && cp -r dist ../portal && cd ..",
+    "d:attach": "docker exec -it sf-oni-express /bin/bash",
+    "d:build": "source docker-build.sh",
+    "d:stopAll": "source docker-stop-all.sh",
+    "d:start": "source docker-run.sh",
+    "d:clearIndex": "docker volume rm sf-solr_ocfl"
   },
   "dependencies": {
     "axios": "^0.19.2",
@@ -15,9 +24,11 @@
     "express": "~4.16.1",
     "express-http-proxy": "^1.6.0",
     "express-session": "^1.17.0",
+    "express-useragent": "^1.0.15",
     "fs-extra": "^8.1.0",
     "jwt-simple": "^0.5.6",
     "morgan": "~1.9.1",
+    "nocache": "^2.1.0",
     "oni-indexer": "^1.0.4",
     "requests": "^0.3.0"
   }

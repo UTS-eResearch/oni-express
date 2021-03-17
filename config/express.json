@@ -15,8 +15,10 @@
 
 		"solr": "http://solr:8983",
 
+		"clientBlock": [ "isIE" ],
+
 		"ocfl": {
-			"url_path": "publication",
+			"url_path": "ocfl",
 			"repository": "/etc/share/ocfl",
 			"allow": "\\.html",
 			"autoindex": true,
@@ -24,8 +26,10 @@
 			"versions": true,
 			"page_size": 20,
 			"solr": "http://solr:8983/solr/ocfl",
-			"resolver": "solr"
-		}
+			"resolver": ""
+		},
+		"portal": "/etc/share/config/portal.json",
+		"indexer": "/etc/share/config/indexer.json"
 	}
 
 }

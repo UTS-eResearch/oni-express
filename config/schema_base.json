@@ -49,6 +49,7 @@
         {
             "name": "*_id",
             "type": "string",
+            "type": "text_en",
             "stored": true,
             "multiValued": true
         },
