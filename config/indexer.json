@@ -1,27 +1,24 @@
 {
   "ocfl": "/etc/share/ocfl",
-  "identifierNamespace": "seafood",
+  "identifierNamespace": "SuccessfulGrantsRepository",
   "uriIds": "identifiers",
   "retries": 10,
   "retryInterval": 10,
   "purge": true,
   "updateSchema": true,
   "dryRun": false,
-  "catalogFilename": "ro-crate-metadata.json",
+  "catalogFilename": "ro-crate-metadata.jsonld",
   "solrBase": "http://solr:8983/solr/ocfl",
   "hashAlgorithm": "md5",
+  "waitPeriod": 0,
   "schemaBase": "/etc/share/config/schema_base.json",
 
   "logLevel": "debug",
-
-  "dump": "/etc/share/dump",
 
   "log": {
     "filename": "/etc/share/logs/indexer.log",
     "level": "debug"
   },
-
-
   "portal": {
     "base": "/etc/share/config/portal_base.json",
     "config": "/etc/share/config/portal.json",
@@ -29,52 +26,115 @@
       "limit": 5
     }
   },
-
-
-
   "fields": {
-    "main_search": [ "name", "description", "id" ],
+    "main_search": [
+      "name",
+      "description",
+      "id",
+      "lead",
+      "dateCreated",
+      "FOR",
+      "keywords",
+      "funder",
+      "full_text"
+    ],
     "map_all": {
-      "@id": [ "id", "id_orig" ],
-      "@type": [ "record_type_s", "type_label" ]
+      "@id": [
+        "id",
+        "id_orig"
+      ],
+      "@type": [
+        "record_type_s",
+        "type_label"
+      ]
     },
-
     "licenses": {
-      "__default__": "public"
+      "__default__": "UTS Confidential"
     },
-
     "types": {
-
       "Dataset": {
-
         "@id": {
-         "name": "seafood",
-         "filter": { "is_root": true }
-       },
-
-        "@reverse": { "skip": true },
-
-        "hasPart": { "skip": true },
-
-        "hasFile": { "skip": true },
-
-        "temporalCoverage": { "skip": true },
-
-        "datePublished": {
+          "name": "SuccessfulGrantsRepository",
+          "filter": {
+            "is_root": true
+          }
+        },
+        "@reverse": {
+          "skip": true
+        },
+        "hasPart": [
+          {
+            "index_as": "html",
+            "match": {
+              "@id": {
+                "re": "\\.html"
+              }
+            }
+          },
+          {
+            "index_as": "full_text",
+            "match": {
+              "@id": {
+                "re": "\\.txt$"
+              }
+            },
+            "load_file": true
+          }
+        ],
+        "hasFile": {
+          "skip": true
+        },
+        "temporalCoverage": {
+          "skip": true
+        },
+        "license": {
           "multi": true,
           "facet": true
         },
-
-        "contentLocation": {
+        "licenseOriginal": {
+          "multi": true
+        },
+        "author": {
+          "index_as": "lead",
+          "facet": true
+        },
+        "affiliation": {
+          "facet": true
+        },
+        "keywords": {
           "multi": true,
-          "facet": true,
-          "resolve": {
-            "search": "@id",
-            "display": "name"
+          "facet": {
+            "tokenize": {
+              "delim": "[,;]\\s*"
+            }
           }
+        },
+        "description": {
+          "link_rebase": "ocfl"
+        },
+        "about": [
+          {
+            "match": {
+              "@id": {
+                "re": "anzsrc-for"
+              }
+            },
+            "index_as": "FOR",
+            "multi": true,
+            "resolve": {
+              "search": "@id",
+              "display": "name"
+            },
+            "facet": true
+          }
+        ],
+        "funder": {
+          "facet": true
+        },
+        "dateCreated": {
+          "facet": true
         }
       }
-
     }
   }
 }

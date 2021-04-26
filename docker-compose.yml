@@ -35,8 +35,9 @@ services:
       - "./logs/:/etc/share/logs"
 
   solr:
-    image: solr:8
     image: solr:8.6.3
+    environment:
+      - SOLR_HEAP=1024m
     ports:
       - "8983:8983"
     expose:
