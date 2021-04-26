@@ -138,7 +138,11 @@ app.post("/auth", (req, res) => {
 
 
 
-// anything past this point just gives a 403 if there's no uid in the session
+
+app.get('/config/portal', async (req,res) =>{
+	const portalConfig = await getPortalConfig({indexer: config['indexer'], express: config, base: config['portal']});
+	res.json(portalConfig);
+});
 
 app.get('/config/portal', async (req,res) =>{
 	const portalConfig = await getPortalConfig({indexer: config['indexer'], express: config, base: config['portal']});
@@ -189,15 +193,15 @@ app.get(`/${ocfl_path}/:oidv/:content*?`, async (req, res) => {
   		var v = ( oidparts.length === 2 ) ? 'v' + oidparts[1] : '';
 
 		console.log(`ocfl get: oid ${oid} v ${v} content ${content}`);
-		
+
 		if( !content || content.slice(-1) === '/' ) {
 			if( config.ocfl.index_file ) {
-				const index_file = content ? content + config.ocfl.index_file : config.ocfl.index_file;  
+				const index_file = content ? content + config.ocfl.index_file : config.ocfl.index_file;
 				const file = await ocfl.file(config, oid, v, index_file);
 				if( file ) {
 					res.sendFile(file);
 					return;
-				} 
+				}
 				// if the index_file is not found, fall through to autoindex if
 				// it's configured
 			}
@@ -223,7 +227,7 @@ app.get(`/${ocfl_path}/:oidv/:content*?`, async (req, res) => {
 	}
 });
 
-// solr proxy - only allows select queries 
+// solr proxy - only allows select queries
 
 
 app.use('/solr/ocfl/select*', proxy(config['solr'], {
@@ -239,38 +243,19 @@ app.use('/solr/ocfl/select*', proxy(config['solr'], {
   	return true;
   },
   proxyReqPathResolver: (req) => {
-  	console.log(`resolving solr proxy: ${req.originalUrl}`);
-  	return req.originalUrl;
-  } 
+  	if( config['solr_fl'] ) {
+  		return req.originalUrl + '&fl=' + config['solr_fl'].join(',')
+  	} else {
+  		return req.originalUrl;
+	}
+  }
 }));
 
 
 
 // data portal front page
 
-
-// app.use('/', ( req, res, next ) => {
-// 	console.log(`/: session id = ${req.session.id}`);
-// 	console.log(`/: session = ${req.session.uid}`);
-// 	console.log(`/: affiliation = ${req.session.affiliation}`);
-// 	if( req.session.uid ) {
-// 		next();
-// 	} else {
-// 		console.log("/: no iud found in session");
-// 		res.redirect(303, config.auth.authURL);
-// 	}
-// });
-
-
 app.use('/', express.static(path.join(__dirname, 'portal')));
-
-
-
-
-
-
-
-
 
 
 module.exports = app;

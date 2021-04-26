@@ -18,8 +18,11 @@ services:
       - "./ocfl/:/etc/share/ocfl"
       - "./config/:/etc/share/config"
 
+# Oni-Indexer currently using a build branch matching oni-express
+# place it under ../oni-indexer
   oni-indexer:
-    image: mikelynch/oni-indexer:v1.0.13
+    image: oni-indexer:latest
+    build: ../oni-indexer
     ports:
       - "8090:8090"
     expose:
@@ -32,7 +35,9 @@ services:
       - "./logs/:/etc/share/logs"
 
   solr:
-    image: solr:8
+    image: solr:8.6.3
+    environment:
+      - SOLR_HEAP=1024m
     ports:
       - "8983:8983"
     expose:
@@ -40,7 +45,7 @@ services:
     networks:
       - main
     volumes:
-      - "./test_solr/:/opt/solr/server/solr/ocfl"
+      - "./solr/:/var/solr/data"
     command: solr-precreate ocfl
     logging:
         driver: none

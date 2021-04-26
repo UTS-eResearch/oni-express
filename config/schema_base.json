@@ -16,6 +16,11 @@
             "stored": true
         },
         {
+            "name": "full_text",
+            "type": "text_en",
+            "stored": false
+        },
+        {
             "name": "main_search",
             "type": "text_en",
             "stored": true,
@@ -28,11 +33,11 @@
             "multiValued": true
         },
         {
-            "name": "author_id",
+            "name": "lead_id",
             "type": "string",
             "stored": true,
             "multiValued": true
-        },    
+        },
         {
             "name": "affiliation_id",
             "type": "text_en",
@@ -48,7 +53,7 @@
         },
         {
             "name": "*_id",
-            "type": "text_en",
+            "type": "string",
             "stored": true,
             "multiValued": true
         },

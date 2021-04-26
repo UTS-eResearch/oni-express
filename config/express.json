@@ -6,30 +6,55 @@
 			"expiry": 24,
 			"server": "memcached:11211"
 		},
-
 		"auth": {
+			"sessionSecret": "xxx",
+			"jwtSecret": "xxxx",
+			"authURL": "https://rapid.test.aaf.edu.au/jwt/authnrequest/research/XXX",
+			"iss": "https://rapid.test.aaf.edu.au",
+			"aud": "http://localhost:8080",
+			"attributes": "https://aaf.edu.au/attributes",
+			"allow": {
+				"uid": "uts.edu.au",
+				"affiliation": "^staff@uts.edu.au$"
+			},
 			"UNSAFE_MODE": true
 		},
-
 		"cors": true,
-
 		"solr": "http://solr:8983",
-
 		"clientBlock": [ "isIE", "isBot" ],
-
+		"solr_fl": [
+			"record_type_s",
+			"uri_id",
+			"id",
+			"description",
+			"name",
+			"Dataset_license_facetmulti",
+			"Dataset_lead_facet",
+			"Dataset_keywords_facetmulti",
+			"Dataset_FOR_facetmulti",
+			"Dataset_funder_facet",
+			"Dataset_dateCreated_facet",
+			"Dataset_affiliation_facet",
+			"lead",
+			"funder",
+			"keywords",
+			"FOR",
+			"dateCreated",
+			"html"
+		],
 		"ocfl": {
-			"url_path": "publication",
+			"url_path": "ocfl",
 			"repository": "/etc/share/ocfl",
 			"allow": "\\.html",
-			"autoindex": true,
+			"autoindex": false,
 			"index_file": "ro-crate-preview.html",
-			"versions": true,
+			"versions": false,
 			"page_size": 20,
 			"solr": "http://solr:8983/solr/ocfl",
-			"resolver": "solr"
+			"resolver": "solr",
+			"referrer": "http://localhost:8080/"
 		},
-		"portal": "config/portal.json",
-		"indexer": "config/indexer.json"
+		"portal": "/etc/share/config/portal.json",
+		"indexer": "/etc/share/config/indexer.json"
 	}
-
 }

@@ -1,6 +1,7 @@
 .idea
 node_modules
 solr
+test_solr
 dump
 ocfl
 logs/indexer.log
