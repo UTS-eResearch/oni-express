@@ -55,6 +55,10 @@
 			"referrer": "http://localhost:8080/"
 		},
 		"portal": "/etc/share/config/portal.json",
-		"indexer": "/etc/share/config/indexer.json"
+		"indexer": "/etc/share/config/indexer.json",
+		"api": {
+			"enabled": true,
+			"token": "my_token_password"
+		}
 	}
 }

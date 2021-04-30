@@ -25,3 +25,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added docker,build_config scripts,using sessions with memcached,authentication
 
 
+## [1.2.1] - 2021-04-XX
+
+- Added the ability to index in the same express server

@@ -1,0 +1,75 @@
+{
+  "id": [
+    "./"
+  ],
+  "id_orig": [
+    "./"
+  ],
+  "record_type_s": [
+    "Dataset"
+  ],
+  "type_label": [
+    "Dataset"
+  ],
+  "@id": [
+    "./"
+  ],
+  "@type": [
+    "Dataset"
+  ],
+  "name": [
+    "Test ro-crate with FOR codes"
+  ],
+  "identifier": [],
+  "description": [
+    "An empty dataset with FOR codes"
+  ],
+  "author": [
+    {
+      "@id": ""
+    }
+  ],
+  "contactPoint": [
+    "{\"@id\":\"Michael.Lynch@uts.edu.au\",\"@type\":\"ContactPoint\",\"contactType\":\"customer service\",\"email\":\"Michael.Lynch@uts.edu.au\",\"identifier\":\"Michael.Lynch@uts.edu.au\",\"@reverse\":{\"contactPoint\":[{\"@id\":\"https://www.uts.edu.au/staff/michael.lynch\"},{\"@id\":\"./\"}]}}"
+  ],
+  "datePublished": "2020-02-10",
+  "Dataset_datePublished_facet": "2020-02-10",
+  "publisher": "{\"@id\":\"https://uts.edu.au/\"}",
+  "publisher_id": [
+    "https://uts.edu.au/"
+  ],
+  "Dataset_publisher_facet": "{\"@id\":\"https://uts.edu.au/\"}",
+  "copyrightHolder": [
+    "University of Technology Sydney"
+  ],
+  "FOR": [
+    "{\"@id\":\"http://purl.org/au-research/vocabulary/anzsrc-for/2008/080503\",\"display\":\"080503 - Networking and Communications\",\"search\":\"http://purl.org/au-research/vocabulary/anzsrc-for/2008/080503\"}",
+    "{\"@id\":\"http://purl.org/au-research/vocabulary/anzsrc-for/2008/080302\",\"display\":\"080302 - Computer System Architecture\",\"search\":\"http://purl.org/au-research/vocabulary/anzsrc-for/2008/080302\"}",
+    "{\"@id\":\"http://purl.org/au-research/vocabulary/anzsrc-for/2008/090609\",\"display\":\"090609 - Signal Processing\",\"search\":\"http://purl.org/au-research/vocabulary/anzsrc-for/2008/090609\"}"
+  ],
+  "FOR_id": [],
+  "Dataset_FOR_facetmulti": [
+    "{\"@id\":\"http://purl.org/au-research/vocabulary/anzsrc-for/2008/080503\",\"display\":\"080503 - Networking and Communications\",\"search\":\"http://purl.org/au-research/vocabulary/anzsrc-for/2008/080503\"}",
+    "{\"@id\":\"http://purl.org/au-research/vocabulary/anzsrc-for/2008/080302\",\"display\":\"080302 - Computer System Architecture\",\"search\":\"http://purl.org/au-research/vocabulary/anzsrc-for/2008/080302\"}",
+    "{\"@id\":\"http://purl.org/au-research/vocabulary/anzsrc-for/2008/090609\",\"display\":\"090609 - Signal Processing\",\"search\":\"http://purl.org/au-research/vocabulary/anzsrc-for/2008/090609\"}"
+  ],
+  "SEO": [
+    "{\"@id\":\"http://purl.org/au-research/vocabulary/anzsrc-seo/2008/890102\",\"display\":\"890102 - Fixed Line Telephone Networks and Services\",\"search\":\"http://purl.org/au-research/vocabulary/anzsrc-seo/2008/890102\"}",
+    "{\"@id\":\"http://purl.org/au-research/vocabulary/anzsrc-seo/2008/890202\",\"display\":\"890202 - Application Tools and System Utilities\",\"search\":\"http://purl.org/au-research/vocabulary/anzsrc-seo/2008/890202\"}"
+  ],
+  "SEO_id": [],
+  "Dataset_SEO_facetmulti": [
+    "{\"@id\":\"http://purl.org/au-research/vocabulary/anzsrc-seo/2008/890102\",\"display\":\"890102 - Fixed Line Telephone Networks and Services\",\"search\":\"http://purl.org/au-research/vocabulary/anzsrc-seo/2008/890102\"}",
+    "{\"@id\":\"http://purl.org/au-research/vocabulary/anzsrc-seo/2008/890202\",\"display\":\"890202 - Application Tools and System Utilities\",\"search\":\"http://purl.org/au-research/vocabulary/anzsrc-seo/2008/890202\"}"
+  ],
+  "@reverse": [
+    {
+      "about": [
+        {
+          "@id": "ro-crate-metadata.jsonld"
+        }
+      ]
+    }
+  ],
+  "licenseOriginal": []
+}

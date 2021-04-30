@@ -1,0 +1,196 @@
+{
+  "@graph": [
+    {
+      "@type": "CreativeWork",
+      "@id": "ro-crate-metadata.jsonld",
+      "identifier": "ro-crate-metadata.jsonld",
+      "about": {
+        "@id": "./"
+      }
+    },
+    {
+      "@id": "https://www.uts.edu.au/staff/michael.lynch",
+      "@type": "Person",
+      "familyName": "Lynch",
+      "givenName": "Michael",
+      "name": "Michael Lynch",
+      "email": "Michael.Lynch@uts.edu.au",
+      "affiliation": {
+        "@id": "https://uts.edu.au/"
+      },
+      "contactPoint": {
+        "@id": "Michael.Lynch@uts.edu.au"
+      },
+      "@reverse": {
+        "author": [
+          {
+            "@id": "./"
+          }
+        ]
+      }
+    },
+    {
+      "@id": "Michael.Lynch@uts.edu.au",
+      "@type": "ContactPoint",
+      "contactType": "customer service",
+      "email": "Michael.Lynch@uts.edu.au",
+      "identifier": "Michael.Lynch@uts.edu.au",
+      "@reverse": {
+        "contactPoint": [
+          {
+            "@id": "https://www.uts.edu.au/staff/michael.lynch"
+          },
+          {
+            "@id": "./"
+          }
+        ]
+      }
+    },
+    {
+      "@id": "https://uts.edu.au/",
+      "@type": "Organization",
+      "name": "University of Technology Sydney",
+      "@reverse": {
+        "affiliation": [
+          {
+            "@id": "https://www.uts.edu.au/staff/michael.lynch"
+          }
+        ],
+        "publisher": [
+          {
+            "@id": "./"
+          }
+        ],
+        "copyrightHolder": [
+          {
+            "@id": "./"
+          }
+        ]
+      }
+    },
+    {
+      "@id": "./",
+      "@type": "Dataset",
+      "name": "Test ro-crate with FOR codes",
+      "identifier": [
+        {
+          "@id": "_:local-id:public_ocfl:deadbeef"
+        }
+      ],
+      "description": "An empty dataset with FOR codes",
+      "author": {
+        "@id": ""
+      },
+      "contactPoint": {
+        "@id": "Michael.Lynch@uts.edu.au"
+      },
+      "datePublished": "2020-02-10",
+      "publisher": {
+        "@id": "https://uts.edu.au/"
+      },
+      "copyrightHolder": {
+        "@id": "https://uts.edu.au/"
+      },
+      "license": [
+        {
+          "@id": "http://creativecommons.org/licenses/by-sa/3.0/au"
+        }
+        ],
+      "about": [
+        {
+          "@id": "http://purl.org/au-research/vocabulary/anzsrc-for/2008/080503"
+        },
+        {
+          "@id": "http://purl.org/au-research/vocabulary/anzsrc-for/2008/080302"
+        },
+        {
+          "@id": "http://purl.org/au-research/vocabulary/anzsrc-for/2008/090609"
+        },
+        {
+          "@id": "http://purl.org/au-research/vocabulary/anzsrc-seo/2008/890102"
+        },
+        {
+          "@id": "http://purl.org/au-research/vocabulary/anzsrc-seo/2008/890202"
+        }
+      ],
+      "@reverse": {
+        "about": [
+          {
+            "@id": "ro-crate-metadata.jsonld"
+          }
+        ]
+      }
+    },
+    {
+      "@id": "http://purl.org/au-research/vocabulary/anzsrc-for/2008/080503",
+      "@type": "StructuredValue",
+      "url": "http://purl.org/au-research/vocabulary/anzsrc-for/2008/080503",
+      "identifier": "http://purl.org/au-research/vocabulary/anzsrc-for/2008/080503",
+      "name": "080503 - Networking and Communications",
+      "@reverse": {
+        "about": [
+          {
+            "@id": "./"
+          }
+        ]
+      }
+    },
+    {
+      "@id": "http://purl.org/au-research/vocabulary/anzsrc-for/2008/080302",
+      "@type": "StructuredValue",
+      "url": "http://purl.org/au-research/vocabulary/anzsrc-for/2008/080302",
+      "identifier": "http://purl.org/au-research/vocabulary/anzsrc-for/2008/080302",
+      "name": "080302 - Computer System Architecture",
+      "@reverse": {
+        "about": [
+          {
+            "@id": "./"
+          }
+        ]
+      }
+    },
+    {
+      "@id": "http://purl.org/au-research/vocabulary/anzsrc-for/2008/090609",
+      "@type": "StructuredValue",
+      "url": "http://purl.org/au-research/vocabulary/anzsrc-for/2008/090609",
+      "identifier": "http://purl.org/au-research/vocabulary/anzsrc-for/2008/090609",
+      "name": "090609 - Signal Processing",
+      "@reverse": {
+        "about": [
+          {
+            "@id": "./"
+          }
+        ]
+      }
+    },
+    {
+      "@id": "http://purl.org/au-research/vocabulary/anzsrc-seo/2008/890102",
+      "@type": "StructuredValue",
+      "url": "http://purl.org/au-research/vocabulary/anzsrc-seo/2008/890102",
+      "identifier": "http://purl.org/au-research/vocabulary/anzsrc-seo/2008/890102",
+      "name": "890102 - Fixed Line Telephone Networks and Services",
+      "@reverse": {
+        "about": [
+          {
+            "@id": "./"
+          }
+        ]
+      }
+    },
+    {
+      "@id": "http://purl.org/au-research/vocabulary/anzsrc-seo/2008/890202",
+      "@type": "StructuredValue",
+      "url": "http://purl.org/au-research/vocabulary/anzsrc-seo/2008/890202",
+      "identifier": "http://purl.org/au-research/vocabulary/anzsrc-seo/2008/890202",
+      "name": "890202 - Application Tools and System Utilities",
+      "@reverse": {
+        "about": [
+          {
+            "@id": "./"
+          }
+        ]
+      }
+    }
+  ],
+  "@context": "https://raw.githubusercontent.com/ResearchObject/ro-crate/master/docs/0.3-DRAFT/context.json"
+}

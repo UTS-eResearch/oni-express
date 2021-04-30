@@ -1,0 +1,33 @@
+{
+  "map_all": {
+    "@id": [ "id", "id_orig" ],
+    "@type": [ "record_type_s", "type_label" ]
+  },
+
+  "types": {
+
+    "Dataset": {
+      "path": {
+        "filter": { "re": "^\\./|data/$" }
+      },
+
+      "hasPart": {"skip": true},
+
+      "license": {
+        "facet": true,
+        "multi": true
+      },
+
+      "author": {
+        "multi": true,
+        "index_as": "lead",
+        "resolve": {
+          "search": "@id",
+          "display": "name"
+        },
+        "facet": true
+      }
+
+    }
+  }
+}

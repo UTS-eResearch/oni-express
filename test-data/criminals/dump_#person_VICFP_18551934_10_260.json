@@ -1,0 +1,62 @@
+[
+  {
+    "id": [
+      "#person_VICFP_18551934_10_260"
+    ],
+    "id_orig": [
+      "#person_VICFP_18551934_10_260"
+    ],
+    "record_type_s": [
+      "Person"
+    ],
+    "type_label": [
+      "Person"
+    ],
+    "reverseSentence": [
+      "{\"@id\":\"#place_SANDHURST PETTY SESSIONS\",\"display\":\"SANDHURST PETTY SESSIONS\",\"search\":{\"@id\":\"#-36.756587,144.280495\"}}"
+    ],
+    "reverseSentence_id": [],
+    "@id": [
+      "#person_VICFP_18551934_10_260"
+    ],
+    "@type": [
+      "Person"
+    ],
+    "name": [
+      "ZAHRINGER, MARTHA"
+    ],
+    "birthDate": [
+      "1855"
+    ],
+    "birthPlace": "{\"@id\":\"#place_ENGLAND\",\"display\":\"ENGLAND\",\"search\":\"#place_ENGLAND\"}",
+    "birthPlace_id": [
+      "#place_ENGLAND"
+    ],
+    "religion": [
+      "Church of England"
+    ],
+    "education": [
+      "Read and write"
+    ],
+    "conviction": [
+      "{\"@id\":\"#place_SANDHURST PETTY SESSIONS\",\"display\":\"SANDHURST PETTY SESSIONS\",\"search\":\"#place_SANDHURST PETTY SESSIONS\"}"
+    ],
+    "conviction_id": [
+      "#place_SANDHURST PETTY SESSIONS"
+    ],
+    "@reverse": [
+      {
+        "object": [
+          {
+            "@id": "#conviction_3672"
+          }
+        ],
+        "about": [
+          {
+            "@id": "VICFP_18551934_000010_260.pdf"
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,62 @@
+[
+  {
+    "id": [
+      "#person__VICFP_18551934_9_323"
+    ],
+    "id_orig": [
+      "#person__VICFP_18551934_9_323"
+    ],
+    "record_type_s": [
+      "Person"
+    ],
+    "type_label": [
+      "Person"
+    ],
+    "reverseSentence": [
+      "{\"@id\":\"#place_RICHMOND PETTY SESSIONS\",\"display\":\"RICHMOND PETTY SESSIONS\",\"search\":{\"@id\":\"#-37.823,144.998\"}}"
+    ],
+    "reverseSentence_id": [],
+    "@id": [
+      "#person__VICFP_18551934_9_323"
+    ],
+    "@type": [
+      "Person"
+    ],
+    "name": [
+      "PIPER, MARGARET"
+    ],
+    "birthDate": [
+      "1870"
+    ],
+    "birthPlace": "{\"@id\":\"#place_FOOTSCRAY\",\"display\":\"FOOTSCRAY\",\"search\":\"#place_FOOTSCRAY\"}",
+    "birthPlace_id": [
+      "#place_FOOTSCRAY"
+    ],
+    "religion": [
+      "Church of England"
+    ],
+    "education": [
+      "Read and write"
+    ],
+    "conviction": [
+      "{\"@id\":\"#place_RICHMOND PETTY SESSIONS\",\"display\":\"RICHMOND PETTY SESSIONS\",\"search\":\"#place_RICHMOND PETTY SESSIONS\"}"
+    ],
+    "conviction_id": [
+      "#place_RICHMOND PETTY SESSIONS"
+    ],
+    "@reverse": [
+      {
+        "object": [
+          {
+            "@id": "#conviction_2724"
+          }
+        ],
+        "about": [
+          {
+            "@id": "VICFP_18551934_000009_323.pdf"
+          }
+        ]
+      }
+    ]
+  }
+]

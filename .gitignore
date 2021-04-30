@@ -7,3 +7,5 @@ ocfl
 logs/indexer.log
 oni-portal
 portal
+token_api
+.DS_Store

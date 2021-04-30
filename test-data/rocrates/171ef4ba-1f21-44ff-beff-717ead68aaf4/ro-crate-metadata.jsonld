@@ -1,0 +1,117 @@
+{
+  "@context": [
+    "https://w3id.org/ro/crate/1.1/context",
+    {
+      "@vocab": "http://schema.org/"
+    }
+  ],
+  "@graph": [
+    {
+      "@id": "#spatialCoveragePlace",
+      "geo": {
+        "@id": "_:b0"
+      },
+      "name": "Droghers",
+      "@reverse": {
+        "spatialCoverage": [
+          {
+            "@id": "/"
+          }
+        ]
+      }
+    },
+    {
+      "@id": "/",
+      "@type": "Dataset",
+      "author": {
+        "@id": "https://orcid.org/b9fcea37-d3ff-493e-b121-8cc141e74ff2"
+      },
+      "contactPoint": {
+        "@id": "contact@examples.edu"
+      },
+      "datePublished": "2016-01-02",
+      "description": "Republicanize stealing supporture arrogator fussily pickins legalese dishorsed relacquered dishcloths stillicide ponding acrobatically spumones jarlsbergs togetherness. Coauthorships curviness sicks vergency acceptance reducibly oxlands chicons sansculottic raspiness cheerlessly chechako heterocarpous hagiographist yolk dubbos obsignates sandals eruptive. Conciseness starlets tucutuco inarched faggier reshapers transcendingly inscrutable reties duration sciomancers reskillings squarishly adversaries acceptations chipboards vaulty preshape recounter wheelie epiphytologies heldentenors carcake appayd diachronic eyestones intermediating benedict mires. Outlearned bumpkinly banksides serrations lichen nape kingklips jackplanes perivitelline adjoin accusal sinningias colbies carcinoma sandcastles vexed centriole finicalness wrapt phthaleins counteradaptations hierocracy aphis literalistic. Vociferation unhirable speargun spittoons bahuvrihi intendancies jirbles kneads immeasurableness. Cornstone blazed sourishly tulpas bergenias retrievability harpsichords bikini oldish underlapping frivoling spined sleuthed bacteriolyses taxable monsteras. Airlifts duplexed wireworm humanistic horseradish lumbersomeness piecemeal exonic outbidden stipplers malgres rosier ripienos macronucleus electrothermies creolizations impassions causeways.\n",
+      "id": "171ef4ba-1f21-44ff-beff-717ead68aaf4",
+      "keywords": [],
+      "license": {
+        "@id": "https://creativecommons.org/licenses/by-nc-sa/3.0/au/"
+      },
+      "name": "Airlifting Nonfilterable Embourgeoise Emphlyses Budgeteers Manicurists",
+      "spatialCoverage": {
+        "@id": "#spatialCoveragePlace"
+      },
+      "@reverse": {
+        "about": [
+          {
+            "@id": "ro-crate-metadata.json"
+          }
+        ]
+      }
+    },
+    {
+      "@id": "_:b0",
+      "@type": "GeoCoordinates",
+      "latitude": -16.960329291354583,
+      "longitude": 89.88239476640973,
+      "@reverse": {
+        "geo": [
+          {
+            "@id": "#spatialCoveragePlace"
+          }
+        ]
+      }
+    },
+    {
+      "@id": "contact@examples.edu",
+      "@type": "ContactPoint",
+      "contactType": "customer service",
+      "email": "contact@examples.edu",
+      "identifier": "peter.sefton@uts.edu.au",
+      "name": "Contact our data manager",
+      "@reverse": {
+        "contactPoint": [
+          {
+            "@id": "/"
+          }
+        ]
+      }
+    },
+    {
+      "@id": "https://creativecommons.org/licenses/by-nc-sa/3.0/au/",
+      "@type": "CreativeWork",
+      "description": "This work is licensed under the Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Australia License. To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-sa/3.0/au/ or send a letter to Creative Commons, PO Box 1866, Mountain View, CA 94042, USA.",
+      "identifier": "https://creativecommons.org/licenses/by-nc-sa/3.0/au/",
+      "name": "Attribution-NonCommercial-ShareAlike 3.0 Australia (CC BY-NC-SA 3.0 AU)",
+      "@reverse": {
+        "license": [
+          {
+            "@id": "/"
+          }
+        ]
+      }
+    },
+    {
+      "@id": "https://orcid.org/b9fcea37-d3ff-493e-b121-8cc141e74ff2",
+      "@type": "Person",
+      "email": "Mel.Zhurov@examples.edu",
+      "familyName": "Zhurov",
+      "givenName": "Mel",
+      "name": "Dr Mel Zhurov",
+      "@reverse": {
+        "author": [
+          {
+            "@id": "/"
+          }
+        ]
+      }
+    },
+    {
+      "@id": "ro-crate-metadata.json",
+      "@type": "CreativeWork",
+      "about": {
+        "@id": "/"
+      },
+      "identifier": "ro-crate-metadata.json"
+    }
+  ]
+}
