@@ -27,6 +27,9 @@
     }
   },
   "fields": {
+    "_plugins":[
+      "person-sector"
+    ],
     "main_search": [
       "name",
       "description",
@@ -51,6 +54,7 @@
     "licenses": {
       "__default__": "UTS Confidential"
     },
+    "store_subgraph": true,
     "types": {
       "Dataset": {
         "@id": {

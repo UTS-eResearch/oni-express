@@ -1,11 +1,13 @@
 const axios = require('axios');
+const utils = require('../services/utils');
 
-const sleep = ms => new Promise((r, j) => {
-  setTimeout(r, ms * 1000);
-});
-
-async function buildSchema(logger, schema, fields) {
+async function buildSchema(logger, schemaFile, fields) {
   try {
+    let schema = await utils.readConf(logger, schemaFile);
+    if (!schema) {
+      logger.error('Could not read schema config');
+      return {error: `Couldn't read schema config ${schemaFile}`}
+    }
     logger.debug(`Building Solr schema on ${schema}`);
     schema['copyfield'] = [];
     for (let ms_field of fields['main_search']) {
@@ -26,7 +28,7 @@ async function updateSchema(logger, solrURL, schemaConf) {
   for (const type of Object.keys(schemaConf)) {
     for (const field of schemaConf[type]) {
       logger.debug(`Setting schema field ${type} ${JSON.stringify(field)}`);
-      await setSchemaField(solrURL, type, field);
+      await setSchemaField(logger, solrURL, type, field);
     }
   }
 }
@@ -113,7 +115,7 @@ async function purgeSolr(logger, solrUpdate) {
 
 module.exports = {buildSchema, updateSchema, checkSolr, commitDocs, updateDocs, purgeSolr};
 
-async function setSchemaField(solrURL, fieldtype, schemaJson) {
+async function setSchemaField(logger, solrURL, fieldtype, schemaJson) {
   const url = solrURL + '/' + fieldtype + 's';
   const schemaAPIJson = {};
   const name = schemaJson['name'];
@@ -123,11 +125,11 @@ async function setSchemaField(solrURL, fieldtype, schemaJson) {
 
   if (fieldtype === 'copyfield') {
     logger.debug(`Schema: deleting copyfield ${JSON.stringify(schemaJson)}`);
-    await tryDeleteCopyField(solrURL, schemaJson);
+    await tryDeleteCopyField(logger, solrURL, schemaJson);
     schemaAPIJson['add-copy-field'] = schemaJson;
   } else {
     const apifield = (fieldtype === 'field') ? 'field' : 'dynamic-field';
-    if (await schemaFieldExists(url, name)) {
+    if (await schemaFieldExists(logger, url, name)) {
       logger.debug(`Schema: replacing ${fieldtype} ${name}`);
       schemaAPIJson['replace-' + apifield] = schemaJson;
     } else {
@@ -160,7 +162,7 @@ async function setSchemaField(solrURL, fieldtype, schemaJson) {
 }
 
 
-async function schemaFieldExists(solrURL, field) {
+async function schemaFieldExists(logger, solrURL, field) {
   const url = solrURL + '/' + field;
   try {
     const resp = await axios({
@@ -182,7 +184,7 @@ async function schemaFieldExists(solrURL, field) {
   }
 }
 
-async function tryDeleteCopyField(solrURL, copyFieldJson) {
+async function tryDeleteCopyField(logger, solrURL, copyFieldJson) {
   try {
     const resp = await axios({
       url: solrURL,

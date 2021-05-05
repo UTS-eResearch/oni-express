@@ -4,20 +4,20 @@ networks:
   main:
 
 services:
-  oni-express:
-    environment:
-      - NODE_ENV=development
-    build: .
-    ports:
-      - "8080:8080"
-    expose:
-      - "80"
-    networks:
-      - main
-    volumes:
-      - "./ocfl/:/etc/share/ocfl"
-      - "./config/:/etc/share/config"
-      - "./logs/:/etc/share/logs"
+#  oni-express:
+#    environment:
+#      - NODE_ENV=development
+#    build: .
+#    ports:
+#      - "8080:8080"
+#    expose:
+#      - "80"
+#    networks:
+#      - main
+#    volumes:
+#      - "./ocfl/:/etc/share/ocfl"
+#      - "./config/:/etc/share/config"
+#      - "./logs/:/etc/share/logs"
 
   solr:
     image: solr:8.6.3

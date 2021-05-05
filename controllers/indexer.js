@@ -1,6 +1,7 @@
 const _ = require('lodash');
 const ROCrateIndexer = require('../services/ROCrateIndexer');
 const SolrService = require('../services/SolrService');
+const utils = require('../services/utils');
 const ROCrate = require('ro-crate').ROCrate;
 const fs = require('fs-extra');
 const path = require('path');
@@ -31,13 +32,9 @@ const DEFAULTS = {
 };
 
 
-const sleep = ms => new Promise((r, j) => {
-  setTimeout(r, ms * 1000);
-});
-
 async function buildSchema(argv) {
 
-  let cf = await readConf(argv.indexer);
+  let cf = await utils.readConf(logger, argv.indexer);
   if (!cf) {
     logger.error('Could not read indexer config');
     return {error: `Couldn't read indexer config ${argv.indexer}`}
@@ -60,7 +57,7 @@ async function buildSchema(argv) {
 
 async function index(argv) {
 
-  let cf = await readConf(argv.indexer);
+  let cf = await utils.readConf(logger, argv.indexer);
   if (!cf) {
     return {error: `Couldn't read indexer config ${argv.indexer}`}
   }
@@ -322,7 +319,7 @@ async function makePortalFacets(cf, facets) {
     }
   }
 
-  let portalcf = await readConf(portal['config']);
+  let portalcf = await utils.readConf(logger, portal['config']);
 
   if (portalcf) {
     logger.info(`Updating facets in existing portal config ${portal['config']}`);
@@ -362,14 +359,5 @@ async function makePortalFacets(cf, facets) {
 }
 
 
-async function readConf(portalcf) {
-  try {
-    const conf = await fs.readJson(portalcf);
-    return conf;
-  } catch (e) {
-    logger.info(`Portal conf ${portalcf} not found`);
-    return null;
-  }
-}
 
 module.exports = {buildSchema, index};

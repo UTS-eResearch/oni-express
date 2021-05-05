@@ -11,7 +11,6 @@ const path = require('path');
 // and needs fixing.
 
 
-
 class ROCrateIndexer {
 
   // debug is an optional array of fields to pass - the indexer will emit
@@ -19,7 +18,7 @@ class ROCrateIndexer {
 
   constructor(logger, debug) {
     this.logger = logger;
-    if( debug ) {
+    if (debug) {
       this.debug = debug;
     }
   }
@@ -31,21 +30,22 @@ class ROCrateIndexer {
     this.root = undefined;
     this.facets = {};
     this.errors = [];
+    this.plugins = {};
     const obj = this;
 
-    _.each(this.config['types'], ( typecf, type ) => {
+    _.each(this.config['types'], (typecf, type) => {
       const typef = {};
-      _.each(typecf, ( fieldcf, field ) => {
-        if( 'filter' in fieldcf ) {
+      _.each(typecf, (fieldcf, field) => {
+        if ('filter' in fieldcf) {
           typef[field] = fieldcf['filter'];
         }
         this.saveFacetNames(type, field, fieldcf);
-        if( field === 'licence' ) {
+        if (field === 'licence') {
           this.errors.push(type);
         }
-        if( Array.isArray(fieldcf) ) {
-          for( let altcf of fieldcf ) {
-            if( altcf['match'] ) {
+        if (Array.isArray(fieldcf)) {
+          for (let altcf of fieldcf) {
+            if (altcf['match']) {
               const filterId = `${type}_${altcf['index_as']}`;
               const filterfn = this.compileFilter(altcf['match']);
               this.logger.debug(`Compiled match filter for ${filterId}: ${filterfn}`);
@@ -57,7 +57,7 @@ class ROCrateIndexer {
       this.typeFilters[type] = this.compileFilter(typef);
     });
 
-    if( this.errors.length > 0 ) {
+    if (this.errors.length > 0) {
       this.logger.error(`
 For consistency with schema.org, this codebase uses the US spelling
 of "license". Your fields config has at least one type which uses
@@ -79,11 +79,11 @@ Types with errors: ${this.errors.join(', ')}`);
   // can facet as something other than the JSON-LD property
 
   saveFacetNames(type, field, fieldcf) {
-    const cfs = Array.isArray(fieldcf) ? fieldcf : [ fieldcf ];
+    const cfs = Array.isArray(fieldcf) ? fieldcf : [fieldcf];
 
-    for( let cf of cfs ) {
-      if( cf['facet'] ) {
-        if( !this.facets[type] ) {
+    for (let cf of cfs) {
+      if (cf['facet']) {
+        if (!this.facets[type]) {
           this.facets[type] = {};
         }
         const facet_as = cf['index_as'] ? cf['index_as'] : field;
@@ -109,38 +109,37 @@ Types with errors: ${this.errors.join(', ')}`);
   // names based on the config, not on what they see during indexing.
 
   facetFieldName(type, field, cf) {
-    const multi = ( cf['multi'] || ( cf['resolve'] === 'multi' ) );
-    return [ type, field, multi ? 'facetmulti' : 'facet' ].join('_');
+    const multi = (cf['multi'] || (cf['resolve'] === 'multi'));
+    return [type, field, multi ? 'facetmulti' : 'facet'].join('_');
   }
-
 
 
   // build a filter function from the config for an item type
 
   compileFilter(cf) {
     const fs = [];
-    if( typeof cf === 'string') {
+    if (typeof cf === 'string') {
       // if the cf is just a string
       fs.push(this.makeEq('', cf))
     } else {
-      if( 're' in cf ) {
+      if ('re' in cf) {
         // if the cf looks like a re, not a set of field matches
         fs.push(this.makeEq('', new RegExp(cf['re'])))
       } else {
-        _.each(cf, ( condition, field ) => {
-          if( typeof condition === 'object' ) {
-            if( condition['re'] ) {
+        _.each(cf, (condition, field) => {
+          if (typeof condition === 'object') {
+            if (condition['re']) {
               fs.push(this.makeEq(field, new RegExp(condition['re'])));
-            } else if ( condition['is_root'] ) {
+            } else if (condition['is_root']) {
               fs.push((item) => {
-                if( this.root ) {
+                if (this.root) {
                   return this.root['@id'] === item['@id'];
                 } else {
                   return false;
                 }
               })
             } else {
-              this.logger.error("Unknown filter type in " + JSON.stringify(condition) );
+              this.logger.error("Unknown filter type in " + JSON.stringify(condition));
             }
           } else {
             const f = this.makeEq(field, condition);
@@ -160,22 +159,22 @@ Types with errors: ${this.errors.join(', ')}`);
 
   makeEq(field, target) {
     var match;
-    if ( typeof target === 'string' ) {
+    if (typeof target === 'string') {
       match = (v) => {
-        return ( v === target);
+        return (v === target);
       };
     } else {
       match = (v) => {
         return v.match(target);
       };
     }
-    return ( item ) => {
-      if( typeof item === 'string') {
+    return (item) => {
+      if (typeof item === 'string') {
         return match(item);
       }
-      if( field in item ) {
+      if (field in item) {
         const value = item[field];
-        if( Array.isArray(value) ) {
+        if (Array.isArray(value)) {
           return _.some(value, match);
         } else {
           return match(value);
@@ -186,22 +185,22 @@ Types with errors: ${this.errors.join(', ')}`);
   }
 
 
-
   // precompile the licence regexps as a method, mapLicenses, which takes
   // a raw license list and returns a list of mapped licenses, or the
   // default license, or an empty list if there's no config
 
 
-
   compileLicense(dataset) {
     const lCf = this.config['licenses'];
-    if( ! lCf ) {
-      this.mapLicenses = (raw) => { return [] };
+    if (!lCf) {
+      this.mapLicenses = (raw) => {
+        return []
+      };
       return;
     }
     this.licenseRes = [];
     _.each(lCf, (value, re) => {
-      if( re !== '__default__' ) {
+      if (re !== '__default__') {
         this.licenseRes.push({re: new RegExp(re), value: value});
       }
     });
@@ -210,18 +209,18 @@ Types with errors: ${this.errors.join(', ')}`);
       const mapped = [];
       _.each(ls, (l) => {
         _.each(this.licenseRes, (lre) => {
-          if(l['@id']){
+          if (l['@id']) {
             l = l['@id'];
           }
-          if( l.match(lre['re']) ) {
+          if (l.match(lre['re'])) {
             mapped.push(lre['value']);
           }
         })
       });
       const umapped = _.uniq(mapped)
-      if( umapped.length === 0 ) {
-        if( lCf['__default__'] ) {
-          return [ lCf['__default__'] ];
+      if (umapped.length === 0) {
+        if (lCf['__default__']) {
+          return [lCf['__default__']];
         } else {
           return [];
         }
@@ -230,7 +229,6 @@ Types with errors: ${this.errors.join(', ')}`);
       }
     };
   }
-
 
 
   // pathResolver is an async function which resolves a file path in the ro-crate
@@ -261,7 +259,7 @@ Types with errors: ${this.errors.join(', ')}`);
     const datasetCf = cfTypes['Dataset'];
 
     this.root = this.crate.getRootDataset();
-    if( !this.root ) {
+    if (!this.root) {
       throw Error("Couldn't find ro-crate's root dataset");
     }
     // clone the item and rewrite its @id to a named identifier if
@@ -269,10 +267,10 @@ Types with errors: ${this.errors.join(', ')}`);
     const rootItem = _.clone(this.root);
     this.rootOrigId = rootItem['@id']; // so we can skip it later
 
-    if( datasetCf && datasetCf['@id'] ) {
+    if (datasetCf && datasetCf['@id']) {
       const namespace = datasetCf['@id']['name'];
       const identifier = this.crate.getNamedIdentifier(namespace);
-      if( identifier ) {
+      if (identifier) {
         rootItem['@id'] = identifier;
       } else {
         rootItem['@id'] = default_id;
@@ -286,9 +284,9 @@ Types with errors: ${this.errors.join(', ')}`);
 
     const solrDocument = {};
 
-    if( datasetCf ) {
+    if (datasetCf) {
       const rootSolr = await this.mapItem(cfBase, datasetCf, 'Dataset', rootItem);
-      solrDocument['Dataset'] = [ rootSolr ];
+      solrDocument['Dataset'] = [rootSolr];
     }
 
     // First cut of inheritance for licenses: if an item doesn't have a field
@@ -297,7 +295,6 @@ Types with errors: ${this.errors.join(', ')}`);
     // the tree of resolutions)
 
     this.rootItem = rootItem; // set this so that inheritance can access it
-
 
 
     // loop through each item in the JSON-LD @graph
@@ -354,11 +351,15 @@ Types with errors: ${this.errors.join(', ')}`);
 
     this.solr = this.baseSolr(cfBase, item);
 
+    // this is used to collect subgraphs of resolved links to items, if so configured
+
+    this.subgraphs = [];
+
     // reverse lookups
 
-    if( item['@reverse'] && cf['@reverse'] ) {
-      for( let field in item['@reverse'] ) {
-        if( cf['@reverse'][field] ) {
+    if (item['@reverse'] && cf['@reverse']) {
+      for (let field in item['@reverse']) {
+        if (cf['@reverse'][field]) {
           // note - pass in cf['@reverse'] rather than cf to mapValues because
           // the @reverse config has an extra layer of nesting
           await this.mapValues(cfBase, cf['@reverse'], type, item['@reverse'], field);
@@ -366,24 +367,92 @@ Types with errors: ${this.errors.join(', ')}`);
       }
     }
 
-    for( let field in item ) {
+    for (let field in item) {
       await this.mapValues(cfBase, cf, type, item, field);
     }
 
     // look for fields with 'inherit' which didn't have a value
-    _.each( cf, ( fieldcf, field ) => {
-      if( fieldcf['inherit'] ) {
-        if( ! this.solr[field] ) {
+    _.each(cf, (fieldcf, field) => {
+      if (fieldcf['inherit']) {
+        if (!this.solr[field]) {
           this.logger.info(`Inheriting ${field} from root`)
           this.solr[field] = this.rootItem[field];
-          if( ! this.rootItem[field] ) {
+          if (!this.rootItem[field]) {
             this.logger.warn(`WARNING: no ${field} on root item`);
             this.logger.warn(`Root item: ${JSON.stringify(this.rootItem)}`);
           }
         }
       }
     });
+
+    if (this.config['_plugins']) {
+      for (let plugin of this.config['_plugins']) {
+        await this.runPlugin(cfBase, cf, type, plugin, item);
+      }
+    }
+
+    if (this.config['store_subgraph']) {
+      this.storeSubgraph(item);
+    }
+
     return this.solr;
+  }
+
+  async runPlugin(cfBase, cf, type, plugin, item) {
+    if (!this.plugins[plugin.name]) {
+      this.plugins[plugin.name] = require(path.join(process.cwd(), 'plugins', plugin.name))
+    }
+    const result = this.plugins[plugin.name](item, this.crate);
+    if (result) {
+      if (plugin.json) {
+        this.solr[plugin.destination] = JSON.stringify(result);
+      } else {
+        this.solr[plugin.destination] = result;
+      }
+      if(plugin.facet) {
+        await this.mapValue(plugin, type, item, plugin.destination, plugin.destination, result)
+      }
+
+    }
+  }
+
+
+  storeSubgraph(baseItem) {
+
+// housekeeping for the subgraph - trim reverse links,
+// and look up name / description for any links which go
+// outside the subgraph (where available)
+
+    const subgraph = this.crate.dedupeSubgraphs(this.subgraphs);
+
+    subgraph.unshift(baseItem);
+
+    const ids = subgraph.map((i) => i['@id']);
+
+    for (let item of subgraph) {
+      // remove @reverse links, if any
+
+      delete item['@reverse'];
+
+      // resolve all values which point at an @id outside the subgraph
+
+      for (let field in item) {
+        for (let value of this.crate.utils.asArray(item[field])) {
+          const id = value['@id'];
+          if (!ids.includes(id)) {
+            this.logger.debug(`Resolving subgraph external: ${id}`);
+            const extItem = this.crate.getItem(id);
+            this.logger.debug(`External: ${JSON.stringify(extItem)}`);
+            if (extItem) {
+              value['name'] = extItem['name'];
+              value['description'] = extItem['description'];
+            }
+          }
+        }
+      }
+    }
+
+    this.solr['subgraph'] = JSON.stringify(subgraph).replace(/"/g, '\"');
   }
 
   // Resolve index matching and pass through to mapValue, which does
@@ -397,22 +466,21 @@ Types with errors: ${this.errors.join(', ')}`);
 
   async mapValues(cfBase, cf, type, item, field) {
     const value = item[field];
-    if( Array.isArray(cf[field]) ) {
+    if (Array.isArray(cf[field])) {
       // do each match clause separately
       // FIXME this isn't checking that the config is complete
       this.logger.debug(`Matching multiple config ${field}: ${JSON.stringify(cf[field])}`);
-      for( let match of cf[field] ) {
-        if( !(match['index_as'] in cfBase) ) {
+      for (let match of cf[field]) {
+        if (!(match['index_as'] in cfBase)) {
           this.logger.debug(` --match ${match["index_as"]}`);
           await this.mapValue(match, type, item, field, match['index_as'], value)
         }
       }
     } else {
-      const index_as = ( cf[field] && cf[field]['index_as'] ) ? cf[field]['index_as'] : field;
+      const index_as = (cf[field] && cf[field]['index_as']) ? cf[field]['index_as'] : field;
       await this.mapValue(cf[field], type, item, field, index_as, value)
     }
   }
-
 
 
   // mapValue(fieldcf, type, item, field, index_as, value)
@@ -435,29 +503,29 @@ Types with errors: ${this.errors.join(', ')}`);
     // for conversion errors
     this.currentType = type;
     this.currentField = field;
-    if( ! fieldcf ) {
+    if (!fieldcf) {
       // no config for this field so copy
       this.solr[index_as] = this.unwrap(value);
-      if( debug ) {
+      if (debug) {
         this.logger.debug(`field ${index_as} copy ${value}`);
       }
     } else {
-      if( ! fieldcf['skip'] ) {
+      if (!fieldcf['skip']) {
         // load files
-        if( fieldcf['load_file'] ) {
+        if (fieldcf['load_file']) {
           this.solr[field] = await this.loadFile(value);
-          if( debug ) {
+          if (debug) {
             this.logger.debug(`field ${field} load file ${value}`);
           }
         } else {
           // resolve lookups - note that this disregards
           // whatever was passed to mapValue as 'value'
-          if( fieldcf['resolve'] ) {
+          if (fieldcf['resolve']) {
             this.logger.debug(`resolving lookups for ${item['@id']} ${field}`);
             this.solr[index_as] = this.resolveValues(item, field, index_as, fieldcf);
             const vals = this.crate.utils.asArray(this.solr[field]);
             // FIXME does this need to change for geovalues?
-            this.solr[`${index_as}_id`] =  [];
+            this.solr[`${index_as}_id`] = [];
             for (let val of vals) {
               try {
                 const value = JSON.parse(val);
@@ -466,31 +534,31 @@ Types with errors: ${this.errors.join(', ')}`);
                 this.logger.warn(`Resolution error for '${val}' ${e.message}`);
               }
             }
-            if( debug ) {
+            if (debug) {
               this.logger.debug(`field ${field} resolved ${JSON.stringify(value)}`);
             }
           } else {
             this.solr[index_as] = this.unwrap(value, fieldcf.escapedJSON);
           }
-          if( fieldcf['validate'] ) {
+          if (fieldcf['validate']) {
             this.solr[index_as] = this.validate(fieldcf['validate'], this.solr[index_as]);
           }
         }
         // make facets - these can be based on raw or resolved values depending
         // on the faceting rule, so pass both in
         this.logger.debug(`Facet config for ${index_as} = ${JSON.stringify(fieldcf['facet'])}`);
-        if( fieldcf['facet'] ) {
+        if (fieldcf['facet']) {
           const facet = this.makeFacet(fieldcf['facet'], value, this.solr[index_as]);
-          if( ! this.facets[type][index_as] ) {
+          if (!this.facets[type][index_as]) {
             this.logger.error(`No facet config found for ${type}/${index_as}`);
             this.logger.debug(JSON.stringify(this.facets[type]));
             throw Error(`No facet config for ${index_as}`);
           }
           const facetField = this.facets[type][index_as]['facetField'];
-          if( debug ) {
+          if (debug) {
             this.logger.debug(`field ${field} (${index_as}) facet ${facetField} ${value} = ${facet}`);
           }
-          if( !facet ) {
+          if (!facet) {
             this.logger.warn(`Empty value for facet ${facetField} - check config`);
           }
           // NOTE - at this point might have to check that the arity of facet
@@ -511,16 +579,16 @@ Types with errors: ${this.errors.join(', ')}`);
   // FIXME -this is redundant now
 
   filterCf(type, cf, field, value) {
-    if( !Array.isArray(cf[field]) ) {
+    if (!Array.isArray(cf[field])) {
       // if there's only one config, don't split the values
-      return [ { field: field, cf: cf[field], value: value } ];
+      return [{field: field, cf: cf[field], value: value}];
     } else {
       const indexable = [];
-      const values = Array.isArray(value) ? value : [ value ];
+      const values = Array.isArray(value) ? value : [value];
       _.each(cf[field], (indexCf) => {
         const matcher = this.compileFilter(indexCf['match']);
         const ivalues = values.filter(matcher);
-        if( ivalues.length > 0 ) {
+        if (ivalues.length > 0) {
           indexable.push({
             field: indexCf['index_as'],
             cf: indexCf,
@@ -552,16 +620,16 @@ Types with errors: ${this.errors.join(', ')}`);
 
 
   resolveValues(item, field, index_as, cf) {
-    if( index_as !== field ) {
+    if (index_as !== field) {
       this.logger.debug(`resolveValues for ${item["@id"]} ${field} ${index_as}`);
     }
     const resolved = this.resolveAndFlatten(item, field, index_as, cf);
 
-    if( cf['multi'] ) {
+    if (cf['multi']) {
       return resolved;
     } else {
-      if( Array.isArray(resolved) ) {
-        if( resolved.length > 1 ) {
+      if (Array.isArray(resolved)) {
+        if (resolved.length > 1) {
           this.logger.warn(`${field} resolves to multiple values, but isn't configured as multi`);
           this.logger.warn(`config = ${JSON.stringify(cf)}`);
         }
@@ -572,9 +640,9 @@ Types with errors: ${this.errors.join(', ')}`);
 
 
   resolveAndFlatten(item, field, index_as, cf) {
-    const via = [ { property: field } ];
+    const via = [{property: field}];
 
-    if( cf["resolve"]["via"] ) {
+    if (cf["resolve"]["via"]) {
       const rvia = _.clone(cf["resolve"]["via"]);
       via.splice(2, 0, ...rvia);
     }
@@ -584,25 +652,32 @@ Types with errors: ${this.errors.join(', ')}`);
     const matchId = `${this.currentType}_${index_as}`;
     this.logger.debug(`itemFilters = ${JSON.stringify(this.itemFilters, null, 2)}`);
     this.logger.debug(`matchId = ${matchId}`);
-    if( matchId in this.itemFilters ) {
+    if (matchId in this.itemFilters) {
       this.logger.debug('matchId in itemFilters');
       const lasti = via.length - 1;
       this.logger.debug(`Setting item filter on ${lasti} for ${matchId}`);
       via[lasti]['matchFn'] = this.itemFilters[matchId];
     }
 
+    let target, subgraph;
 
-    const target = this.crate.resolve(item, via);
+    if (cf["store_subgraph"]) {
+      [target, subgraph] = this.crate.resolveAll(item, via);
+      this.logger.debug(`Got subgraph: ${JSON.stringify(subgraph, null, 2)}`);
+      this.subgraphs.push(subgraph);
+    } else {
+      target = this.crate.resolve(item, via);
+    }
 
 
-    if( !target ) {
+    if (!target) {
       this.logger.warn(`item resolution failed for ${item['@id']} ${JSON.stringify(via)} ${field}`);
       return '';
     }
 
     // FIXME -this will be where we decide to index all the JSON
 
-    if( ! cf['resolve']['search'] ) {
+    if (!cf['resolve']['search']) {
       this.convertError(`Resolve config doesn't have search value`);
       return '';
     }
@@ -614,14 +689,15 @@ Types with errors: ${this.errors.join(', ')}`);
         "@id": t['@id'],
         display: t[cf['resolve']['display']],
         search: this.convertSearch(t, cf['resolve']['search'])
-      }});
+      }
+    });
 
     // TODO - check for normalised duplicates
 
     const resolvedTypes = this.crate.utils.asArray(resolved["@type"]);
     for (let type of Object.keys(this.config['types'])) {
       const cf = this.config['type'];
-      for( let r of resolved ) {
+      for (let r of resolved) {
         if (resolvedTypes.includes(type) && !this.alreadyIndexed[r["@id"]]) {
           this.alreadyIndexed[r["@id"]] = true;
           this.resolvedItemsToIndex.push(r);
@@ -635,21 +711,19 @@ Types with errors: ${this.errors.join(', ')}`);
   }
 
 
-
-
   resolveValues_old(cf, value) {
-    if( typeof value !== 'object' ) {
+    if (typeof value !== 'object') {
       this.convertError(`Can't resolve '${value} - not an object'`);
       return value;
     }
-    if( cf['multi'] ) {
-      if( Array.isArray(value) ) {
+    if (cf['multi']) {
+      if (Array.isArray(value)) {
         return value.map((v) => this.resolveAndFlatten(cf, v));
       } else {
-        return [ this.resolveAndFlatten(cf, value) ];
+        return [this.resolveAndFlatten(cf, value)];
       }
     } else {
-      if( Array.isArray(value) ) {
+      if (Array.isArray(value)) {
         return this.resolveAndFlatten(cf, value[0]);
       } else {
         return this.resolveAndFlatten(cf, value);
@@ -661,32 +735,32 @@ Types with errors: ${this.errors.join(', ')}`);
   // resolution
 
   resolveAndFlatten_old(cf, value, solr) {
-    if( !('@id' in value ) ) {
+    if (!('@id' in value)) {
       this.convertError(`no @id found in value ${JSON.stringify(value)}`);
       return value;
     }
 
-    if( !cf['resolve'] ) {
+    if (!cf['resolve']) {
       this.convertError(`Attempt to resolve an item without a resolve config`);
       return '';
     }
 
     let item;
 
-    if( cf["resolve"]["via"] ) {
+    if (cf["resolve"]["via"]) {
       const via = _.clone(cf["resolve"]["via"]);
       item = this.crate.resolve(this.currentItem, via);
     } else {
       item = this.crate.getItem(value['@id']);
     }
 
-    if( !item ) {
+    if (!item) {
       this.logger.warn(`resolveAndFlatten failed for ${JSON.stringify(value)}`)
       return '';
     }
 
 
-    if( ! cf['resolve']['search'] ) {
+    if (!cf['resolve']['search']) {
       this.convertError(`Resolve config doesn't have search value`);
       return '';
     }
@@ -718,8 +792,8 @@ Types with errors: ${this.errors.join(', ')}`);
   // is geo
 
   convertSearch(item, field) {
-    if( field === 'lat,lon' ) {
-      return `${item['latitude'],item['longitude']}`;
+    if (field === 'lat,lon') {
+      return `${item['latitude'], item['longitude']}`;
     } else {
       return item[field];
     }
@@ -727,14 +801,12 @@ Types with errors: ${this.errors.join(', ')}`);
   }
 
 
-
-
   makeFacet(cf, raw, resolved) {
 
     // tokenize the contents on the delim regexp and facet
-    if( cf['tokenize'] ) {
-      if( raw ) {
-        const raws = Array.isArray(raw) ? raw[0]: raw;
+    if (cf['tokenize']) {
+      if (raw) {
+        const raws = Array.isArray(raw) ? raw[0] : raw;
         return raws.split(RegExp(cf['tokenize']['delim']));
       } else {
         return [];
@@ -744,10 +816,10 @@ Types with errors: ${this.errors.join(', ')}`);
 
     // I think this is obsolete - not sure though
     if (cf['fieldName']) {
-      if( Array.array(raw) ) {
+      if (Array.array(raw)) {
         return raw.map((v) => {
           const lookup = this.crate.getItem(v['@id']);
-          if( lookup ) {
+          if (lookup) {
             return lookup[cf['field']]
           } else {
             return v['@id'];
@@ -766,18 +838,18 @@ Types with errors: ${this.errors.join(', ')}`);
   // validate as a date or re
 
   validate(vcf, values) {
-    if( vcf === 'date' ) {
-      for (let value of values ){
+    if (vcf === 'date') {
+      for (let value of values) {
         value = value.replace(/[^\d-]+/, "");
         const m = value.match(/(\d\d\d\d-\d\d-\d\d)/);
-        if( m ) {
+        if (m) {
           return m[1];
         }
         this.convertError(`Invalid ${type}: ${value}`);
         return '';
       }
       this.convertError(`Unknown validation type ${type}`);
-    } else if( typeof(vcf) === 'object' && vcf['re'] ) {
+    } else if (typeof (vcf) === 'object' && vcf['re']) {
       return this.validate_re(vcf, values);
     }
   }
@@ -787,9 +859,9 @@ Types with errors: ${this.errors.join(', ')}`);
     // if the re doesn't include a () group, wrap it in one
     const res = vcf['re'].includes('(') ? vcf['re'] : '(' + vcf['re'] + ')';
     const vre = RegExp(res);
-    for( let value of values ) {
+    for (let value of values) {
       const m = value.match(vre);
-      if( m ) {
+      if (m) {
         return m[1];
       }
     }
@@ -800,7 +872,7 @@ Types with errors: ${this.errors.join(', ')}`);
 
   async loadFile(value) {
     const file = value[0];
-    if( !file['@id'] ) {
+    if (!file['@id']) {
       this.logger.error("Can't find id on file");
       return '';
     }
@@ -809,7 +881,7 @@ Types with errors: ${this.errors.join(', ')}`);
     try {
       const content = await fs.readFile(filename, 'utf8');
       return content;
-    } catch(e) {
+    } catch (e) {
       this.logger.error(`Error loading file ${file['@id']}: ${e}`);
       return '';
     }
@@ -825,8 +897,8 @@ Types with errors: ${this.errors.join(', ')}`);
 
   baseSolr(map_all, item) {
     const base = {};
-    _.each(map_all, ( targets, field ) => {
-      _.each(targets, ( target ) => {
+    _.each(map_all, (targets, field) => {
+      _.each(targets, (target) => {
         base[target] = this.unwrap(item[field])
       });
     });
@@ -843,23 +915,20 @@ Types with errors: ${this.errors.join(', ')}`);
       if (val["@id"]) {
         const target = this.crate.getItem(val["@id"]);
         if (target) {
-          if(target.name && !returnJson) {
+          if (target.name && !returnJson) {
             newValues.push(target.name);
-          }
-          else {
+          } else {
             // TODO - should this use a better serialiser
             newValues.push(JSON.stringify(target).replace(/"/, '\"'));
           }
         }
-      }
-      else {
+      } else {
         newValues.push(val)
       }
       return newValues;
     }
   }
 }
-
 
 
 module.exports = ROCrateIndexer;
