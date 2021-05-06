@@ -8,13 +8,6 @@ function militaryService(item, crate) {
         return placesMatch[1].split(/, */);
       }
     }
-    // if (item['occupation_'] && item['occupation_']['@id']) {
-    //   const o = crate.getItem(item["occupation_"]["@id"]);
-    //   const s = crate.getItem(o["sector"]["@id"])
-    //   if (s) {
-    //     item.sectorName = s.name;
-    //   }
-    // }
   }
 
 }
