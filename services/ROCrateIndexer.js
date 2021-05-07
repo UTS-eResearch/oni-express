@@ -410,6 +410,7 @@ Types with errors: ${this.errors.join(', ')}`);
         this.solr[plugin.destination] = result;
       }
       if(plugin.facet) {
+        //TODO: Maybe we just need this function in the plugin, because mapValue stores in solr and deals with facets
         await this.mapValue(plugin, type, item, plugin.destination, plugin.destination, result)
       }
 
