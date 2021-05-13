@@ -75,16 +75,20 @@ Pointers to portal and indexer configuration
 
 API:
 
-To Run the indexer you can index via the API if it is enabled in express.json config
-
-```shell
-curl localhost:8080/config/index/run --header "Authorization: Bearer my_token_password"
-```
-
-If disabled, to index run `node app_index.run.js`
+To Run the indexer you can index via the Rest API, if it is enabled, in express.json config
 ```shell
 "api": {
   "enabled": true,
   "token": "my_token_password"
 }
+```
+Example:
+```shell
+curl localhost:8080/config/index/run --header "Authorization: Bearer my_token_password"
+```
+
+If disabled, you can also index by running:
+
+```shell
+node app_index.run.js './config/express.json'
 ```
