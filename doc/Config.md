@@ -1,6 +1,10 @@
 # Configuration
 
-To run the application
+To run the application for **development**
+
+run `docker-compose -f docker-compose.dev.yml up -d` this will start a solr and a memcached container
+
+Then run:
 
 ```shell
 node ./bin/www ./config/express.json

@@ -1,0 +1,31 @@
+version: '3.1'
+
+networks:
+  main:
+
+services:
+
+  solr:
+    image: solr:8.6.3
+    environment:
+      - SOLR_HEAP=1024m
+    ports:
+      - "8983:8983"
+    expose:
+      - "8983"
+    networks:
+      - main
+    volumes:
+      - "./solr/:/var/solr/data"
+    command: solr-precreate ocfl
+    logging:
+        driver: none
+
+  memcached:
+    image: memcached
+    ports:
+      - "11211:11211"
+    expose:
+      - "11211"
+    networks:
+      - main
