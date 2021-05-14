@@ -10,7 +10,7 @@
     "start": "node ./bin/www",
     "portal:getAndBuild": "npm run portal:get && npm run portal:build",
     "portal:get": "rm -rf oni-portal && git clone -b feature_adding_subdocjsonarray --single-branch --depth 1 https://github.com/moisbo/oni-portal.git",
-    "portal:build": "cd oni-portal && npm install && npm run build && cp -r dist ../portal && cd ..",
+    "portal:build": "cd oni-portal && npm install && npm run build && rm -rf ../portal && cp -r dist ../portal && cd ..",
     "d:attach": "docker exec -it oni-express_oni-express_1 /bin/bash",
     "d:logs": "docker-compose logs -f",
     "d:compose": "docker-compose up -d",
