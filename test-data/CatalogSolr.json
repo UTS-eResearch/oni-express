@@ -1,0 +1,71 @@
+{
+  "dataset": {
+    "record_type_s": "dataset",
+    "record_format_s": "jsonld",
+    "id_orig": "moises",
+    "id": "moises",
+    "type": "Dataset",
+    "type_label": "Dataset",
+    "type_facetmulti": "Dataset",
+    "path": ["./"],
+    "name": "Moises Sacal Unrecounted Sulphurizing Embalmments Hugging Interfused Confirmee Cultivar Downsizer Serousnesses Zinckier Adown Oropharynxes",
+    "description": "Glamouring whitlows enhypostatises gnarling unshrubbed revoking alkannins immiserised disjointed shaggier subsistent fissiped. Pastoralnesses starlights peripatetic facelessnesses vichies bookmobile ouds photomosaic. Syndromes lapstrake autecious profluent gorblimeys hobos endospores ballerine fickles technos kalumpits timocratical colbys elbow shiverers complies votivenesses dilatancy. Carelessly gaen possessionates reorganizational paradoxist incurableness interviewer religieuse moneylenders zoeform idiopathies. Pilfers empleaching neurochip prussiate autotheist ferromagnet deattributed inauthenticity sea bespeckling woodshedding steading cease subtenancies epinastically osmundines circumstantials halloes cryptogamous keratitides scuddling undisturbed degasses felting. Verballing sprent enthusiasms enamellers antiestrogens glutes moanfully reallocation missellings supplejacks allomorphs reopen phenylene thalassocracies poultry glucosamine pangenes commodifies pharmacotherapies autoradiography callunas hederal devitalises sacroiliitis. Suddenly moony proctorages auscultate plutoniums irregardless anonymize metalising counterproposals appropriateness guilloches. Shaly hallucinate steelmen behappened boiseries ruthlessnesses proverbialists wildfowlings equipaged endogenous headmaster broomstick beknighting pustulate amebocytes leasowe hobgoblinry tongs thyroiditises.",
+    "dateCreated": "2019-04-16T03:07:25.568Z",
+    "datePublished": "2019-04-16T03:07:25.568Z",
+    "datePublished_Dataset_facet": "2019-04-16T03:07:25.568Z",
+    "publisher": {
+      "@id": "https://examples.edu",
+      "id_orig": "https://examples.edu",
+      "@type": "Organization",
+      "identifier": "https://examples.edu",
+      "name": "Examples University"
+    },
+    "publisher_Dataset_facet": "https://examples.edu",
+    "creator": [
+      "{'id_orig':'Evangelina.Maughan@examples.edu','@id':'Evangelina.Maughan@examples.edu','@type':'Person','identifier':'Evangelina.Maughan@examples.edu','name':'Evangelina Maughan','email':'Evangelina.Maughan@examples.edu','affiliation':{'@id':'https://examples.edu'}}",
+      "{'id_orig':'Manny.Dobb@examples.edu','@id':'Manny.Dobb@examples.edu','@type':'Person','identifier':'Manny.Dobb@examples.edu','name':'Manny Dobb','email':'Manny.Dobb@examples.edu','affiliation':{'@id':'https://examples.edu'}}"
+    ],
+    "creator_Dataset_facetmulti": [
+      "Evangelina Maughan",
+      "Manny Dobb"
+    ],
+    "keywords": "Moises, resighted",
+    "keywords_Dataset_facetmulti": [
+      "Moises",
+      "resighted"
+    ],
+    "date_updated_at": "2019-04-16T03:07:25.568Z"
+  },
+  "person": [
+    {
+      "record_type_s": "person",
+      "record_format_s": "jsonld",
+      "id_orig": "Evangelina.Maughan@examples.edu",
+      "id": "Evangelina.Maughan@examples.edu",
+      "type": "Person",
+      "type_label": "Person",
+      "type_facetmulti": "Person",
+      "identifier": "Evangelina.Maughan@examples.edu",
+      "name": "Evangelina Maughan",
+      "email": "Evangelina.Maughan@examples.edu",
+      "affiliation": [
+        "{'@id': 'https://examples.edu','id_orig': 'https://examples.edu','@type': 'Organization','identifier': 'https://examples.edu','name': 'Examples University'}"
+      ]
+    },
+    {
+      "record_type_s": "person",
+      "record_format_s": "jsonld",
+      "id_orig": "Manny.Dobb@examples.edu",
+      "id": "Manny.Dobb@examples.edu",
+      "type": "Person",
+      "type_label": "Person",
+      "type_facetmulti": "Person",
+      "identifier": "Manny.Dobb@examples.edu",
+      "name": "Manny Dobb",
+      "email": "Manny.Dobb@examples.edu",
+      "affiliation": [
+        "{'@id': 'https://examples.edu','id_orig': 'https://examples.edu','@type': 'Organization','identifier': 'https://examples.edu','name': 'Examples University'}"
+      ]
+    }
+  ]
+}

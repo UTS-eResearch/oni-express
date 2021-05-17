@@ -1,0 +1,32 @@
+{
+	"#person__VICFP_18551934_1_573": {
+		"birthPlace": "{\"@id\":\"#place_IRELAND\",\"display\":\"IRELAND\",\"search\":\"#place_IRELAND\"}",
+		"conviction": [ "{\"@id\":\"#place_BEECHWORTH PETTY SESSIONS\",\"display\":\"BEECHWORTH PETTY SESSIONS\",\"search\":\"#place_BEECHWORTH PETTY SESSIONS\"}" ]
+	},
+	"#person_VICFP_18551934_10_260":{
+		"birthPlace": "{\"@id\":\"#place_ENGLAND\",\"display\":\"ENGLAND\",\"search\":\"#place_ENGLAND\"}",
+		"conviction": [ "{\"@id\":\"#place_SANDHURST PETTY SESSIONS\",\"display\":\"SANDHURST PETTY SESSIONS\",\"search\":\"#place_SANDHURST PETTY SESSIONS\"}"]
+	},
+	"#person__VICFP_18551934_9_323": {
+		"birthPlace": "{\"@id\":\"#place_FOOTSCRAY\",\"display\":\"FOOTSCRAY\",\"search\":\"#place_FOOTSCRAY\"}",
+		"conviction": [ "{\"@id\":\"#place_RICHMOND PETTY SESSIONS\",\"display\":\"RICHMOND PETTY SESSIONS\",\"search\":\"#place_RICHMOND PETTY SESSIONS\"}" ]
+	},
+	"#person__VICFP_18551934_2_522": {
+		"birthPlace": "{\"@id\":\"#place_SCOTLAND\",\"display\":\"SCOTLAND\",\"search\":\"#place_SCOTLAND\"}",
+		"conviction": [ "{\"@id\":\"#place_MELBOURNE PETTY SESSIONS\",\"display\":\"MELBOURNE PETTY SESSIONS\",\"search\":\"#place_MELBOURNE PETTY SESSIONS\"}" ]
+	},
+	"#person___VICFP_18551934_14_8": {
+		"birthPlace": "{\"@id\":\"#place_NSW\",\"display\":\"NSW\",\"search\":\"#place_NSW\"}",
+		"conviction": [
+			"{\"@id\":\"#place_MELBOURNE PETTY SESSIONS\",\"display\":\"MELBOURNE PETTY SESSIONS\",\"search\":\"#place_MELBOURNE PETTY SESSIONS\"}",
+			"{\"@id\":\"#place_CARLTON PETTY SESSIONS\",\"display\":\"CARLTON PETTY SESSIONS\",\"search\":\"#place_CARLTON PETTY SESSIONS\"}",
+			"{\"@id\":\"#place_NORTH MELBOURNE PETTY SESSIONS\",\"display\":\"NORTH MELBOURNE PETTY SESSIONS\",\"search\":\"#place_NORTH MELBOURNE PETTY SESSIONS\"}",
+			"{\"@id\":\"#place_COBURG PRISON POLICE MAGISTRATE\",\"display\":\"COBURG PRISON POLICE MAGISTRATE\",\"search\":\"#place_COBURG PRISON POLICE MAGISTRATE\"}",
+			"{\"@id\":\"#place_UNKNOWN\",\"display\":\"UNKNOWN\",\"search\":\"#place_UNKNOWN\"}",
+			"{\"@id\":\"#place_FITZROY PETTY SESSIONS\",\"display\":\"FITZROY PETTY SESSIONS\",\"search\":\"#place_FITZROY PETTY SESSIONS\"}",
+			"{\"@id\":\"#place_CALRTON PETTY SESSIONS\",\"display\":\"CALRTON PETTY SESSIONS\",\"search\":\"#place_CALRTON PETTY SESSIONS\"}",
+			"{\"@id\":\"#place_SOUTH MELBOURNE PETTY SESSIONS\",\"display\":\"SOUTH MELBOURNE PETTY SESSIONS\",\"search\":\"#place_SOUTH MELBOURNE PETTY SESSIONS\"}",
+			"{\"@id\":\"#place_RICHMOND PETTY SESSIONS\",\"display\":\"RICHMOND PETTY SESSIONS\",\"search\":\"#place_RICHMOND PETTY SESSIONS\"}" ]
+	}
+}
+

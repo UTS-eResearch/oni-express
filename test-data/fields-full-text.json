@@ -1,0 +1,72 @@
+{
+  "map_all": {
+    "@id": [ "id", "id_orig" ],
+    "@type": [ "record_type_s", "type_label" ]
+  },
+
+  "types": {
+
+    "Dataset": {
+      "path": {
+        "filter": { "re": "^\\./|data/$" }
+      },
+
+      "hasPart": {
+        "match": { "re": "\\.txt$" },
+        "read_file": true,
+        "index_as": "full_text"
+      },
+
+      "license": {
+        "facet": true,
+        "multi": true
+      },
+
+      "about": [
+        {
+          "match": { "@id": { "re": "anzsrc-for" } },
+          "index_as": "FOR",
+          "multi": true,
+          "resolve": "multi",
+          "facet": true
+        },
+        {
+          "match": { "@id": { "re": "anzsrc-seo" } },
+          "index_as": "SEO",
+          "multi": true,
+          "resolve": "multi",
+          "facet": true
+        }
+      ],
+
+      "creator": {
+        "resolve": "multi",
+        "facet": true
+      },
+
+      "keywords": {
+        "facet": true
+      },
+
+      "datePublished": {
+        "facet": true,
+        "validate": "date"
+      },
+
+      "publisher": {
+        "resolve": "single",
+        "facet": {
+          "field": "@id"
+        }
+      }
+    },
+
+    "Person": {
+
+      "affiliation": {
+        "resolve": "multi"
+      }
+
+    }
+  }
+}

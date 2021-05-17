@@ -2,6 +2,7 @@ const _ = require('lodash');
 const fs = require('fs-extra');
 const oi = require('oni-indexer');
 const winston = require('winston');
+const utils = require('../services/utils');
 
 const consoleLog = new winston.transports.Console();
 const logger = winston.createLogger({
@@ -10,6 +11,11 @@ const logger = winston.createLogger({
     transports: [ consoleLog ]
 });
 
+async function getVersion() {
+  const package = await utils.readConf(logger,'./package.json');
+  return package.version;
+}
+
 // Script which takes the facet configuration for oni-indexer and uses it to build the facets
 // section of the config for oni-portal.
 async function getPortalConfig(argv) {
@@ -17,7 +23,7 @@ async function getPortalConfig(argv) {
     if( !expresscf ) {
         return {error:`Couldn't read express config ${argv.express}`};
     }
-    const indexcf = await readConf(argv.indexer);
+    const indexcf = await utils.readConf(logger, argv.indexer);
     if( !expresscf ) {
         return {error:`Couldn't read indexer config ${argv.indexer}`}
     }
@@ -30,7 +36,7 @@ async function getPortalConfig(argv) {
         indexcf['portal']['config'] = argv.portal;
     }
 
-    const basecf = await readConf(indexcf['portal']['base']);
+    const basecf = await utils.readConf(logger, indexcf['portal']['base']);
     if( !basecf ) {
         return {error: `Couldn't read base portal cf ${indexcf['portal']['base']}`}
     }
@@ -72,14 +78,14 @@ async function makePortalConfig(indexfile, cf, facets) {
         }
     }
 
-    let portalcf = await readConf(portal['config']);
+    let portalcf = await utils.readConf(logger, portal['config']);
     let portalbase = "portal config " + portal['config'];
 
     if( portalcf ) {
         logger.info(`Updating facets in existing portal config ${portal['config']}`);
     } else {
         logger.info(`Creating new portal config based on ${portal['base']}`);
-        portalcf = await readConf(portal['base']);
+        portalcf = await utils.readConf(logger, portal['base']);
         if( ! portalcf ) {
             return {error:"Can't read either existing portal config or portal base: exit"}
         }
@@ -143,14 +149,4 @@ async function makePortalConfig(indexfile, cf, facets) {
     return portalcf;
 }
 
-async function readConf(cfFile) {
-    logger.debug("Loading " + cfFile);
-    try {
-        const conf = await fs.readJson(cfFile);
-        return conf;
-    } catch(e) {
-        return null;
-    }
-}
-
-module.exports = {getPortalConfig};
+module.exports = {getVersion, getPortalConfig};

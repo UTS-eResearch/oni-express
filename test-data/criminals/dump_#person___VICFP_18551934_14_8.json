@@ -1,0 +1,260 @@
+[
+  {
+    "id": [
+      "#person___VICFP_18551934_14_8"
+    ],
+    "id_orig": [
+      "#person___VICFP_18551934_14_8"
+    ],
+    "record_type_s": [
+      "Person"
+    ],
+    "type_label": [
+      "Person"
+    ],
+    "reverseSentence": [
+      "{\"@id\":\"#place_MELBOURNE PETTY SESSIONS\",\"display\":\"MELBOURNE PETTY SESSIONS\",\"search\":{\"@id\":\"#-37.8136,144.9631\"}}",
+      "{\"@id\":\"#place_CARLTON PETTY SESSIONS\",\"display\":\"CARLTON PETTY SESSIONS\",\"search\":{\"@id\":\"#-37.8001,144.9671\"}}",
+      "{\"@id\":\"#place_NORTH MELBOURNE PETTY SESSIONS\",\"display\":\"NORTH MELBOURNE PETTY SESSIONS\",\"search\":{\"@id\":\"#-37.7992,144.9467\"}}",
+      "{\"@id\":\"#place_COBURG PRISON POLICE MAGISTRATE\",\"display\":\"COBURG PRISON POLICE MAGISTRATE\"}",
+      "{\"@id\":\"#place_UNKNOWN\",\"display\":\"UNKNOWN\"}",
+      "{\"@id\":\"#place_FITZROY PETTY SESSIONS\",\"display\":\"FITZROY PETTY SESSIONS\",\"search\":{\"@id\":\"#-37.8011,144.9789\"}}",
+      "{\"@id\":\"#place_CALRTON PETTY SESSIONS\",\"display\":\"CALRTON PETTY SESSIONS\"}",
+      "{\"@id\":\"#place_SOUTH MELBOURNE PETTY SESSIONS\",\"display\":\"SOUTH MELBOURNE PETTY SESSIONS\",\"search\":{\"@id\":\"#-37.835,144.96\"}}",
+      "{\"@id\":\"#place_RICHMOND PETTY SESSIONS\",\"display\":\"RICHMOND PETTY SESSIONS\",\"search\":{\"@id\":\"#-37.823,144.998\"}}"
+    ],
+    "reverseSentence_id": [],
+    "@id": [
+      "#person___VICFP_18551934_14_8"
+    ],
+    "@type": [
+      "Person"
+    ],
+    "name": [
+      "ADAMS, LAURA"
+    ],
+    "alternateName": [
+      "NORAH ADAMS"
+    ],
+    "birthDate": [
+      "1882"
+    ],
+    "birthPlace": "{\"@id\":\"#place_NSW\",\"display\":\"NSW\",\"search\":\"#place_NSW\"}",
+    "birthPlace_id": [
+      "#place_NSW"
+    ],
+    "religion": [
+      "Church of England"
+    ],
+    "education": [
+      "Read and write"
+    ],
+    "conviction": [
+      "{\"@id\":\"#place_MELBOURNE PETTY SESSIONS\",\"display\":\"MELBOURNE PETTY SESSIONS\",\"search\":\"#place_MELBOURNE PETTY SESSIONS\"}",
+      "{\"@id\":\"#place_CARLTON PETTY SESSIONS\",\"display\":\"CARLTON PETTY SESSIONS\",\"search\":\"#place_CARLTON PETTY SESSIONS\"}",
+      "{\"@id\":\"#place_NORTH MELBOURNE PETTY SESSIONS\",\"display\":\"NORTH MELBOURNE PETTY SESSIONS\",\"search\":\"#place_NORTH MELBOURNE PETTY SESSIONS\"}",
+      "{\"@id\":\"#place_COBURG PRISON POLICE MAGISTRATE\",\"display\":\"COBURG PRISON POLICE MAGISTRATE\",\"search\":\"#place_COBURG PRISON POLICE MAGISTRATE\"}",
+      "{\"@id\":\"#place_UNKNOWN\",\"display\":\"UNKNOWN\",\"search\":\"#place_UNKNOWN\"}",
+      "{\"@id\":\"#place_FITZROY PETTY SESSIONS\",\"display\":\"FITZROY PETTY SESSIONS\",\"search\":\"#place_FITZROY PETTY SESSIONS\"}",
+      "{\"@id\":\"#place_CALRTON PETTY SESSIONS\",\"display\":\"CALRTON PETTY SESSIONS\",\"search\":\"#place_CALRTON PETTY SESSIONS\"}",
+      "{\"@id\":\"#place_SOUTH MELBOURNE PETTY SESSIONS\",\"display\":\"SOUTH MELBOURNE PETTY SESSIONS\",\"search\":\"#place_SOUTH MELBOURNE PETTY SESSIONS\"}",
+      "{\"@id\":\"#place_RICHMOND PETTY SESSIONS\",\"display\":\"RICHMOND PETTY SESSIONS\",\"search\":\"#place_RICHMOND PETTY SESSIONS\"}"
+    ],
+    "conviction_id": [
+      "#place_MELBOURNE PETTY SESSIONS",
+      "#place_CARLTON PETTY SESSIONS",
+      "#place_NORTH MELBOURNE PETTY SESSIONS",
+      "#place_COBURG PRISON POLICE MAGISTRATE",
+      "#place_UNKNOWN",
+      "#place_FITZROY PETTY SESSIONS",
+      "#place_CALRTON PETTY SESSIONS",
+      "#place_SOUTH MELBOURNE PETTY SESSIONS",
+      "#place_RICHMOND PETTY SESSIONS"
+    ],
+    "@reverse": [
+      {
+        "object": [
+          {
+            "@id": "#conviction_5"
+          },
+          {
+            "@id": "#conviction_6"
+          },
+          {
+            "@id": "#conviction_7"
+          },
+          {
+            "@id": "#conviction_8"
+          },
+          {
+            "@id": "#conviction_9"
+          },
+          {
+            "@id": "#conviction_10"
+          },
+          {
+            "@id": "#conviction_11"
+          },
+          {
+            "@id": "#conviction_12"
+          },
+          {
+            "@id": "#conviction_13"
+          },
+          {
+            "@id": "#conviction_14"
+          },
+          {
+            "@id": "#conviction_15"
+          },
+          {
+            "@id": "#conviction_16"
+          },
+          {
+            "@id": "#conviction_17"
+          },
+          {
+            "@id": "#conviction_18"
+          },
+          {
+            "@id": "#conviction_19"
+          },
+          {
+            "@id": "#conviction_20"
+          },
+          {
+            "@id": "#conviction_21"
+          },
+          {
+            "@id": "#conviction_22"
+          },
+          {
+            "@id": "#conviction_23"
+          },
+          {
+            "@id": "#conviction_24"
+          },
+          {
+            "@id": "#conviction_25"
+          },
+          {
+            "@id": "#conviction_26"
+          },
+          {
+            "@id": "#conviction_27"
+          },
+          {
+            "@id": "#conviction_28"
+          },
+          {
+            "@id": "#conviction_29"
+          },
+          {
+            "@id": "#conviction_30"
+          },
+          {
+            "@id": "#conviction_31"
+          },
+          {
+            "@id": "#conviction_32"
+          },
+          {
+            "@id": "#conviction_33"
+          },
+          {
+            "@id": "#conviction_34"
+          },
+          {
+            "@id": "#conviction_35"
+          },
+          {
+            "@id": "#conviction_36"
+          },
+          {
+            "@id": "#conviction_37"
+          },
+          {
+            "@id": "#conviction_38"
+          },
+          {
+            "@id": "#conviction_39"
+          },
+          {
+            "@id": "#conviction_40"
+          },
+          {
+            "@id": "#conviction_41"
+          },
+          {
+            "@id": "#conviction_42"
+          },
+          {
+            "@id": "#conviction_43"
+          },
+          {
+            "@id": "#conviction_44"
+          },
+          {
+            "@id": "#conviction_45"
+          },
+          {
+            "@id": "#conviction_46"
+          },
+          {
+            "@id": "#conviction_47"
+          },
+          {
+            "@id": "#conviction_48"
+          },
+          {
+            "@id": "#conviction_49"
+          },
+          {
+            "@id": "#conviction_50"
+          },
+          {
+            "@id": "#conviction_51"
+          },
+          {
+            "@id": "#conviction_52"
+          },
+          {
+            "@id": "#conviction_53"
+          },
+          {
+            "@id": "#conviction_54"
+          },
+          {
+            "@id": "#conviction_55"
+          },
+          {
+            "@id": "#conviction_56"
+          },
+          {
+            "@id": "#conviction_57"
+          },
+          {
+            "@id": "#conviction_58"
+          },
+          {
+            "@id": "#conviction_59"
+          },
+          {
+            "@id": "#conviction_60"
+          },
+          {
+            "@id": "#conviction_61"
+          },
+          {
+            "@id": "#conviction_62"
+          }
+        ],
+        "about": [
+          {
+            "@id": "VICFP_18551934_000014_008.pdf"
+          }
+        ]
+      }
+    ]
+  }
+]

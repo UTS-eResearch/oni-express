@@ -1,0 +1,62 @@
+[
+  {
+    "id": [
+      "#person__VICFP_18551934_1_573"
+    ],
+    "id_orig": [
+      "#person__VICFP_18551934_1_573"
+    ],
+    "record_type_s": [
+      "Person"
+    ],
+    "type_label": [
+      "Person"
+    ],
+    "reverseSentence": [
+      "{\"@id\":\"#place_BEECHWORTH PETTY SESSIONS\",\"display\":\"BEECHWORTH PETTY SESSIONS\"}"
+    ],
+    "reverseSentence_id": [],
+    "@id": [
+      "#person__VICFP_18551934_1_573"
+    ],
+    "@type": [
+      "Person"
+    ],
+    "name": [
+      "YOUNGTROTTER, MARY JANE"
+    ],
+    "birthDate": [
+      "1835"
+    ],
+    "birthPlace": "{\"@id\":\"#place_IRELAND\",\"display\":\"IRELAND\",\"search\":\"#place_IRELAND\"}",
+    "birthPlace_id": [
+      "#place_IRELAND"
+    ],
+    "religion": [
+      "Catholic"
+    ],
+    "education": [
+      "Illiterate"
+    ],
+    "conviction": [
+      "{\"@id\":\"#place_BEECHWORTH PETTY SESSIONS\",\"display\":\"BEECHWORTH PETTY SESSIONS\",\"search\":\"#place_BEECHWORTH PETTY SESSIONS\"}"
+    ],
+    "conviction_id": [
+      "#place_BEECHWORTH PETTY SESSIONS"
+    ],
+    "@reverse": [
+      {
+        "object": [
+          {
+            "@id": "#conviction_3671"
+          }
+        ],
+        "about": [
+          {
+            "@id": "VICFP_18551934_000001_573.pdf"
+          }
+        ]
+      }
+    ]
+  }
+]

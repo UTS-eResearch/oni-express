@@ -1,0 +1,64 @@
+{
+  "id": [
+    "./"
+  ],
+  "id_orig": [
+    "./"
+  ],
+  "record_type_s": [
+    "Dataset"
+  ],
+  "type_label": [
+    "Dataset"
+  ],
+  "@id": [
+    "./"
+  ],
+  "@type": [
+    "Dataset"
+  ],
+  "lead": [
+    "{\"@id\":\"Bruce Welch\",\"display\":\"Bruce Welch\",\"search\":\"Bruce Welch\"}",
+    "{\"@id\":\"http://orcid.org/0000-0003-4953-0830\",\"display\":\"Mike Lake\",\"search\":\"http://orcid.org/0000-0003-4953-0830\"}",
+    "{\"@id\":\"Lukas Kaul\",\"display\":\"Lukas Kaul\",\"search\":\"Lukas Kaul\"}"
+  ],
+  "lead_id": [],
+  "Dataset_lead_facetmulti": [
+    "{\"@id\":\"Bruce Welch\",\"display\":\"Bruce Welch\",\"search\":\"Bruce Welch\"}",
+    "{\"@id\":\"http://orcid.org/0000-0003-4953-0830\",\"display\":\"Mike Lake\",\"search\":\"http://orcid.org/0000-0003-4953-0830\"}",
+    "{\"@id\":\"Lukas Kaul\",\"display\":\"Lukas Kaul\",\"search\":\"Lukas Kaul\"}"
+  ],
+  "contactPoint": [
+    "Contact Mike Lake"
+  ],
+  "contentLocation": [
+    "Victoria Arch"
+  ],
+  "datePublished": [
+    "2017-10-01"
+  ],
+  "description": [
+    "This data is part of a project by Michael Lake and supported by the Australian Speleological Federation. Data was acquired at Wombeyan Caves by Robert Zlot in January 2014 using the Zebedee 3D Mapping System developed by CSIRO."
+  ],
+  "identifier": [
+    "./"
+  ],
+  "name": [
+    "Survey of Victoria Arch, Wombeyan Caves NSW"
+  ],
+  "publisher": [
+    "University of Technology Sydney"
+  ],
+  "@reverse": [
+    {
+      "about": [
+        {
+          "@id": "ro-crate-metadata.jsonld"
+        }
+      ]
+    }
+  ],
+  "licenseOriginal": [
+    "Copyright CSIRO 2014:  Available for research and academic purposes"
+  ]
+}

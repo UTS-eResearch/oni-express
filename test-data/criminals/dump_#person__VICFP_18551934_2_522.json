@@ -1,0 +1,62 @@
+[
+  {
+    "id": [
+      "#person__VICFP_18551934_2_522"
+    ],
+    "id_orig": [
+      "#person__VICFP_18551934_2_522"
+    ],
+    "record_type_s": [
+      "Person"
+    ],
+    "type_label": [
+      "Person"
+    ],
+    "reverseSentence": [
+      "{\"@id\":\"#place_MELBOURNE PETTY SESSIONS\",\"display\":\"MELBOURNE PETTY SESSIONS\",\"search\":{\"@id\":\"#-37.8136,144.9631\"}}"
+    ],
+    "reverseSentence_id": [],
+    "@id": [
+      "#person__VICFP_18551934_2_522"
+    ],
+    "@type": [
+      "Person"
+    ],
+    "name": [
+      "PATTERSON, SUSAN"
+    ],
+    "birthDate": [
+      "1830"
+    ],
+    "birthPlace": "{\"@id\":\"#place_SCOTLAND\",\"display\":\"SCOTLAND\",\"search\":\"#place_SCOTLAND\"}",
+    "birthPlace_id": [
+      "#place_SCOTLAND"
+    ],
+    "religion": [
+      "Church of Scotland"
+    ],
+    "education": [
+      "Read and write"
+    ],
+    "conviction": [
+      "{\"@id\":\"#place_MELBOURNE PETTY SESSIONS\",\"display\":\"MELBOURNE PETTY SESSIONS\",\"search\":\"#place_MELBOURNE PETTY SESSIONS\"}"
+    ],
+    "conviction_id": [
+      "#place_MELBOURNE PETTY SESSIONS"
+    ],
+    "@reverse": [
+      {
+        "object": [
+          {
+            "@id": "#conviction_2678"
+          }
+        ],
+        "about": [
+          {
+            "@id": "VICFP_18551934_000002_522.pdf"
+          }
+        ]
+      }
+    ]
+  }
+]

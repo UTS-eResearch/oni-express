@@ -1,0 +1,88 @@
+{
+  "ocfl": "/etc/share/ocfl",
+  "identifierNamespace": "public_ocfl",
+  "uriIds": "identifiers",
+  "retries": 10,
+  "retryInterval": 10,
+  "purge": true,
+  "updateSchema": true,
+  "dryRun": false,
+  "catalogFilename": "ro-crate-metadata.json",
+  "solrBase": "http://host.docker.internal:8983/solr/ocfl",
+  "hashAlgorithm": "md5",
+  "schemaBase": "/etc/share/config/schema_base.json",
+
+  "logLevel": "info",
+
+  "dump": "/etc/share/dump",
+
+  "timeout": 1200,
+
+  "log": {
+    "filename": "/etc/share/logs/indexer.log",
+    "level": "debug"
+  },
+
+
+  "portal": {
+    "base": "/etc/share/config/portal_base.json",
+    "config": "/etc/share/config/portal.json",
+    "facetDefaults": {
+      "limit": 5
+    }
+  },
+
+
+
+  "fields": {
+    "main_search": [ "name", "description", "id" ],
+    "map_all": {
+      "@id": [ "id", "id_orig" ],
+      "@type": [ "record_type_s", "type_label" ]
+    },
+
+    "licenses": {
+      "__default__": "public"
+    },
+
+    "types": {
+
+      "Person": {
+
+        "hasPart": { "skip": true },
+
+        "hasFile": { "skip": true },
+      
+        "temporalCoverage": { "skip": true },
+
+        "birthPlace": {
+          "resolve": {
+            "display": "name",
+            "search": "@id"
+          }
+        },
+
+        "conviction": {
+          "multi": true,
+          "resolve": {
+            "via": [ { "property": "location" } ],
+            "search": "@id",
+            "display": "name"
+          }
+        },
+        "@reverse": {
+          "object": {
+            "multi": true,
+            "index_as": "reverseSentence",
+            "resolve": {
+              "via": [ { "property": "location" } ],
+              "search": "geo",
+              "display": "name"
+            }
+          }
+        }
+
+      }
+    }
+  }
+}

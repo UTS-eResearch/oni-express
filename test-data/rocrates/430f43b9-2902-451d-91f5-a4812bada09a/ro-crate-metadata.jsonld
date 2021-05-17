@@ -1,0 +1,117 @@
+{
+  "@context": [
+    "https://w3id.org/ro/crate/1.1/context",
+    {
+      "@vocab": "http://schema.org/"
+    }
+  ],
+  "@graph": [
+    {
+      "@id": "#spatialCoveragePlace",
+      "geo": {
+        "@id": "_:b0"
+      },
+      "name": "Lubricationshowring",
+      "@reverse": {
+        "spatialCoverage": [
+          {
+            "@id": "/"
+          }
+        ]
+      }
+    },
+    {
+      "@id": "/",
+      "@type": "Dataset",
+      "author": {
+        "@id": "https://orcid.org/88ab7d14-7446-4860-afc7-2f3ebab3b37b"
+      },
+      "contactPoint": {
+        "@id": "contact@examples.edu"
+      },
+      "datePublished": "2018-04-22",
+      "description": "Synthpop sharecropped tyreless countersignature nubble pommy moderator briskens titivated lovemakings ultramicro malodor hummocky attired anticholinesterase glyphographical woundworts guanas enow supposed. Prophesy appropinquities remixing telluride shredding anticarcinogen anticonvulsant misallotting institute friezed langspiels saddlebred cursednesses stenographists medigaps hyphenizes pellucidity deleaving decode cringings crinkle. Villiago aphorists hospitalizations leylandiis. Diarrhetic toploftinesses estreping firers fellnesses hysterectomised remandment gristliness paleogeographies microsmatic disposings coloratures guidings literate roucous feathered speeled overharvested desists. Locusts warlocks inebriation sideliner superhigh obsequious flannelled chenille gruffier glances contrariously. Mangonel lushier abusable fallibleness.\n",
+      "id": "430f43b9-2902-451d-91f5-a4812bada09a",
+      "keywords": [],
+      "license": {
+        "@id": "https://creativecommons.org/licenses/by-nc-sa/3.0/au/"
+      },
+      "name": "Collegially Qualificative Dangerous Offsides Fuggier Exodermal Childlikenesses Durgy Cotes Goatishnesses Snivelling Communise",
+      "spatialCoverage": {
+        "@id": "#spatialCoveragePlace"
+      },
+      "@reverse": {
+        "about": [
+          {
+            "@id": "ro-crate-metadata.json"
+          }
+        ]
+      }
+    },
+    {
+      "@id": "_:b0",
+      "@type": "GeoCoordinates",
+      "latitude": 50.230102713909105,
+      "longitude": 54.986257585808886,
+      "@reverse": {
+        "geo": [
+          {
+            "@id": "#spatialCoveragePlace"
+          }
+        ]
+      }
+    },
+    {
+      "@id": "contact@examples.edu",
+      "@type": "ContactPoint",
+      "contactType": "customer service",
+      "email": "contact@examples.edu",
+      "identifier": "peter.sefton@uts.edu.au",
+      "name": "Contact our data manager",
+      "@reverse": {
+        "contactPoint": [
+          {
+            "@id": "/"
+          }
+        ]
+      }
+    },
+    {
+      "@id": "https://creativecommons.org/licenses/by-nc-sa/3.0/au/",
+      "@type": "CreativeWork",
+      "description": "This work is licensed under the Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Australia License. To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-sa/3.0/au/ or send a letter to Creative Commons, PO Box 1866, Mountain View, CA 94042, USA.",
+      "identifier": "https://creativecommons.org/licenses/by-nc-sa/3.0/au/",
+      "name": "Attribution-NonCommercial-ShareAlike 3.0 Australia (CC BY-NC-SA 3.0 AU)",
+      "@reverse": {
+        "license": [
+          {
+            "@id": "/"
+          }
+        ]
+      }
+    },
+    {
+      "@id": "https://orcid.org/88ab7d14-7446-4860-afc7-2f3ebab3b37b",
+      "@type": "Person",
+      "email": "Kiera.Tiedemann@examples.edu",
+      "familyName": "Tiedemann",
+      "givenName": "Kiera",
+      "name": "Mr Kiera Tiedemann",
+      "@reverse": {
+        "author": [
+          {
+            "@id": "/"
+          }
+        ]
+      }
+    },
+    {
+      "@id": "ro-crate-metadata.json",
+      "@type": "CreativeWork",
+      "about": {
+        "@id": "/"
+      },
+      "identifier": "ro-crate-metadata.json"
+    }
+  ]
+}

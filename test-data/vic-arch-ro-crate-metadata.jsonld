@@ -1,0 +1,420 @@
+{
+  "@context": "https://raw.githubusercontent.com/ResearchObject/ro-crate/master/docs/0.2-DRAFT/context.json",
+  "@graph": [
+    {
+      "@id": "./",
+      "@type": "Dataset",
+      "author": [
+        {
+          "@id": "Bruce Welch"
+        },
+        {
+          "@id": "http://orcid.org/0000-0003-4953-0830"
+        },
+        {
+          "@id": "Lukas Kaul"
+        }
+      ],
+      "contactPoint": {
+        "@id": "schema:emailmike.lake@uts.edu.au"
+      },
+      "contentLocation": {
+        "@id": "victoria_arch"
+      },
+      "datePublished": "2017-10-01",
+      "description": "This data is part of a project by Michael Lake and supported by the Australian Speleological Federation. Data was acquired at Wombeyan Caves by Robert Zlot in January 2014 using the Zebedee 3D Mapping System developed by CSIRO.",
+      "hasPart": {
+        "@id": "README.html"
+      },
+      "identifier": [
+        "./",
+        {
+          "@id": "_:local-id:ocfl_demo:f5eb7a0b-eda3-46b7-8fa4-41ac7a9f7b34"
+        }
+      ],
+      "license": {
+        "@id": "License"
+      },
+      "name": "Survey of Victoria Arch, Wombeyan Caves NSW",
+      "publisher": "University of Technology Sydney"
+    },
+    {
+      "@id": "4827ca1d-9e41-4ff6-b420-4a923e3cb7f7",
+      "@type": "GeoCoordinates",
+      "latitude": "-34.31733",
+      "longitude": "149.96454",
+      "name": "Latitude:-34.31733, Longitude: 149.96454"
+    },
+    {
+      "@id": "Bruce Welch",
+      "@type": "Person",
+      "familyName": "Welch",
+      "givenName": "Bruce",
+      "identifier": "Bruce Welch",
+      "name": "Bruce Welch"
+    },
+    {
+      "@id": "Conversion_wcc02",
+      "@type": "CreateAction",
+      "agent": {
+        "@id": "http://orcid.org/0000-0002-1672-552X"
+      },
+      "identifier": "Conversion_wcc02",
+      "object": {
+        "@id": "wcc02_arch.laz"
+      },
+      "result": [
+        {
+          "@id": "wcc02_arch_3cm_shape.ply"
+        },
+        {
+          "@id": "wcc02_arch_9pct.ply"
+        }
+      ]
+    },
+    {
+      "@id": "Conversion_wcc02_traj",
+      "@type": "CreateAction",
+      "agent": {
+        "@id": "http://orcid.org/0000-0002-1672-552X"
+      },
+      "identifier": "Conversion_wcc02_traj",
+      "object": {
+        "@id": "wcc02_arch_traj.txt"
+      },
+      "result": {
+        "@id": "wcc02_arch_traj2.ply"
+      }
+    },
+    {
+      "@id": "Conversion_wcc03",
+      "@type": "CreateAction",
+      "agent": {
+        "@id": "http://orcid.org/0000-0002-1672-552X"
+      },
+      "identifier": "Conversion_wcc03",
+      "object": {
+        "@id": "wcr03_victoria_arch.laz"
+      },
+      "result": [
+        {
+          "@id": "wcr03_victoria_arch_9pct.ply"
+        },
+        {
+          "@id": "wcr03_victoria_arch_3cm_shape.ply"
+        }
+      ]
+    },
+    {
+      "@id": "Conversion_wcc04",
+      "@type": "CreateAction",
+      "agent": {
+        "@id": "http://orcid.org/0000-0002-1672-552X"
+      },
+      "identifier": "Conversion_wcc04",
+      "object": {
+        "@id": "wcc04_archentrance.laz"
+      },
+      "result": [
+        {
+          "@id": "wcc04_archentrance_3cm_shape.ply"
+        },
+        {
+          "@id": "wcc04_archentrance_9pct.ply"
+        }
+      ]
+    },
+    {
+      "@id": "Conversion_wcc04_traj",
+      "@type": "CreateAction",
+      "agent": {
+        "@id": "http://orcid.org/0000-0002-1672-552X"
+      },
+      "identifier": "Conversion_wcc04_traj",
+      "object": "wcc04_arch_traj.txt",
+      "result": {
+        "@id": "wcc04_archentrance_traj2.ply"
+      }
+    },
+    {
+      "@id": "Conversion_wcc06",
+      "@type": "CreateAction",
+      "agent": {
+        "@id": "http://orcid.org/0000-0002-1672-552X"
+      },
+      "identifier": "Conversion_wcc06",
+      "object": {
+        "@id": "wcc06_archencentre1.laz"
+      },
+      "result": [
+        {
+          "@id": "wcc06_archencentre1_3cm_shape.ply"
+        },
+        {
+          "@id": "wcc06_archencentre1_9pct.ply"
+        }
+      ]
+    },
+    {
+      "@id": "Conversion_wcc06_traj",
+      "@type": "CreateAction",
+      "agent": {
+        "@id": "http://orcid.org/0000-0002-1672-552X"
+      },
+      "identifier": "Conversion_wcc06_traj",
+      "object": {
+        "@id": "wcc06_archencentre1_traj.txt"
+      },
+      "result": {
+        "@id": "wcc06_archencentre1_traj2.ply"
+      }
+    },
+    {
+      "@id": "Conversion_wcc08",
+      "@type": "CreateAction",
+      "agent": {
+        "@id": "http://orcid.org/0000-0002-1672-552X"
+      },
+      "identifier": "Conversion_wcc08",
+      "object": {
+        "@id": "wcc08_archencentre2.laz"
+      },
+      "result": [
+        {
+          "@id": "wcc08_archencentre2_3cm_shape.ply"
+        },
+        {
+          "@id": "wcc08_archencentre2_9pct.ply"
+        }
+      ]
+    },
+    {
+      "@id": "Conversion_wcc08_traj",
+      "@type": "CreateAction",
+      "agent": {
+        "@id": "http://orcid.org/0000-0002-1672-552X"
+      },
+      "identifier": "Conversion_wcc08_traj",
+      "object": {
+        "@id": "wcc08_archencentre2_traj.txt"
+      },
+      "result": "/wcc08_archencentre2_traj2.ply"
+    },
+    {
+      "@id": "Conversion_wcr03_traj",
+      "@type": "CreateAction",
+      "agent": {
+        "@id": "http://orcid.org/0000-0002-1672-552X"
+      },
+      "identifier": "Conversion_wcr03_traj",
+      "object": {
+        "@id": "wcr03_victoria_arch_traj.txt"
+      },
+      "result": {
+        "@id": "wcr03_victoria_arch_traj2.ply"
+      }
+    },
+    {
+      "@id": "DataCapture_wcc02",
+      "@type": "CreateAction",
+      "agent": {
+        "@id": "http://orcid.org/0000-0002-1672-552X"
+      },
+      "identifier": "DataCapture_wcc02",
+      "instrument": {
+        "@id": "https://confluence.csiro.au/display/ASL/Hovermap"
+      },
+      "object": {
+        "@id": "victoria_arch"
+      },
+      "result": [
+        {
+          "@id": "wcc02_arch.laz"
+        },
+        {
+          "@id": "wcc02_arch_traj.txt"
+        }
+      ]
+    },
+    {
+      "@id": "DataCapture_wcc04",
+      "@type": "CreateAction",
+      "agent": {
+        "@id": "http://orcid.org/0000-0002-1672-552X"
+      },
+      "identifier": "DataCapture_wcc04",
+      "instrument": {
+        "@id": "https://confluence.csiro.au/display/ASL/Hovermap"
+      },
+      "object": {
+        "@id": "victoria_arch"
+      },
+      "result": [
+        {
+          "@id": "wcc04_archentrance.laz"
+        },
+        "/Users/124411/working/Victoria_Arch_pub/wcc04_archentrance_traj.txt"
+      ]
+    },
+    {
+      "@id": "DataCapture_wcc06",
+      "@type": "CreateAction",
+      "agent": {
+        "@id": "http://orcid.org/0000-0002-1672-552X"
+      },
+      "identifier": "DataCapture_wcc06",
+      "instrument": {
+        "@id": "https://confluence.csiro.au/display/ASL/Hovermap"
+      },
+      "object": {
+        "@id": "victoria_arch"
+      },
+      "result": [
+        {
+          "@id": "wcc06_archencentre1.laz"
+        },
+        {
+          "@id": "wcc06_archencentre1_traj.txt"
+        }
+      ]
+    },
+    {
+      "@id": "DataCapture_wcc08",
+      "@type": "CreateAction",
+      "agent": {
+        "@id": "http://orcid.org/0000-0002-1672-552X"
+      },
+      "identifier": "DataCapture_wcc08",
+      "instrument": {
+        "@id": "https://confluence.csiro.au/display/ASL/Hovermap"
+      },
+      "object": {
+        "@id": "victoria_arch"
+      },
+      "result": [
+        {
+          "@id": "wcc08_archencentre2.laz"
+        },
+        {
+          "@id": "wcc08_archencentre2_traj.txt"
+        }
+      ]
+    },
+    {
+      "@id": "DataCapture_wcr03",
+      "@type": "CreateAction",
+      "agent": {
+        "@id": "http://orcid.org/0000-0002-1672-552X"
+      },
+      "identifier": "DataCapture_wcr03",
+      "instrument": {
+        "@id": "https://confluence.csiro.au/display/ASL/Hovermap"
+      },
+      "object": {
+        "@id": "victoria_arch"
+      },
+      "result": [
+        {
+          "@id": "wcr03_victoria_arch.laz"
+        },
+        {
+          "@id": "wcr03_victoria_arch_traj.txt"
+        }
+      ]
+    },
+    {
+      "@id": "License",
+      "@type": "CreativeWork",
+      "description": "The data included in this data collection is copyright 2014 CSIRO and available for research and academic purposes. Please contact Robert Zlot / CSIRO to request usage for other purposes. \r\nPlease credit CSIRO when using any of this data in publications or external communications (and where possible/appropriate please inform or coordinate such communications with CSIRO). The minimum requirement for acknowledgment is to state the date, location, equipment used, and technology developers (CSIRO), as in: \"Data was acquired at Wombeyan Caves in January 2014 using the Zebedee 3D Mapping System and the bentwing Aerial Scanning System developed by CSIRO Australia.\"\r\n",
+      "identifier": "License",
+      "name": "Copyright CSIRO 2014:  Available for research and academic purposes"
+    },
+    {
+      "@id": "Lukas Kaul",
+      "@type": "Person",
+      "familyName": "Kaul",
+      "givenName": "Lukas",
+      "identifier": "Lukas Kaul",
+      "name": "Lukas Kaul"
+    },
+    {
+      "@id": "README.html",
+      "@type": "File",
+      "contentSize": "304",
+      "encodingFormat": "Hypertext Markup Language",
+      "fileFormat": "http://www.nationalarchives.gov.uk/PRONOM/fmt/96",
+      "name": "README.html"
+    },
+    {
+      "@id": "Rowena Larkins",
+      "@type": "Person",
+      "familyName": "Larkins",
+      "givenName": "Rowena",
+      "identifier": "Rowena Larkins",
+      "name": "Rowena Larkins"
+    },
+    {
+      "@id": "http://orcid.org/0000-0002-1672-552X",
+      "@type": "Person",
+      "familyName": "Zlot",
+      "givenName": "Robert",
+      "identifier": "http://orcid.org/0000-0002-1672-552X",
+      "name": "Robert Zlot"
+    },
+    {
+      "@id": "http://orcid.org/0000-0003-4953-0830",
+      "@type": "Person",
+      "familyName": "Lake",
+      "givenName": "Mike",
+      "identifier": "http://orcid.org/0000-0003-4953-0830",
+      "name": "Mike Lake"
+    },
+    {
+      "@id": "schema:emailmike.lake@uts.edu.au",
+      "@type": "ContactPoint",
+      "contactType": "customer service",
+      "email": "mike.lake@uts.edu.au",
+      "identifier": "email:mike.lake@uts.edu.au",
+      "name": "Contact Mike Lake"
+    },
+    {
+      "@id": "http://www.uts.edu.au/partners-and-community/initiatives/data-arena/overview",
+      "@type": "IndividualProduct",
+      "description": "The UTS Data Arena is a 360-degree interactive data visualisation facility",
+      "identifier": "http://www.uts.edu.au/partners-and-community/initiatives/data-arena/overview",
+      "name": "Data Arena"
+    },
+    {
+      "@id": "https://confluence.csiro.au/display/ASL/Hovermap",
+      "@type": "IndividualProduct",
+      "description": "The CSIRO bentwing is an unmanned aerial vehicle (UAV, commonly known as a drone) with a LIDAR mounted underneath to capture 3D information on the surroundings.",
+      "identifier": "https://confluence.csiro.au/display/ASL/Hovermap",
+      "name": "bentwing"
+    },
+    {
+      "@id": "ro-crate-metadata.jsonld",
+      "@type": "CreativeWork",
+      "about": {
+        "@id": "./"
+      },
+      "identifier": "ro-crate-metadata.jsonld"
+    },
+    {
+      "@id": "victoria_arch",
+      "@type": "Place",
+      "address": "Wombeyan Caves, NSW 2580",
+      "description": "This is the GDA94 datum, which is for most situations is close to WGS84",
+      "geo": {
+        "@id": "4827ca1d-9e41-4ff6-b420-4a923e3cb7f7"
+      },
+      "identifier": "victoria_arch",
+      "name": "Victoria Arch"
+    },
+    {
+      "@id": "_:local-id:ocfl_demo:f5eb7a0b-eda3-46b7-8fa4-41ac7a9f7b34",
+      "@type": "PropertyValue",
+      "value": "f5eb7a0b-eda3-46b7-8fa4-41ac7a9f7b34",
+      "name": "ocfl_demo"
+    }
+  ]
+}
