@@ -28,7 +28,13 @@
   },
   "fields": {
     "_plugins":[
-      "person-sector"
+      {
+        "name":"person-sectorName",
+        "destination": "sectorName",
+        "json": true,
+        "multi": true,
+        "facet": true
+      }
     ],
     "main_search": [
       "name",
