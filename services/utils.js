@@ -5,11 +5,12 @@ const sleep = ms => new Promise((r, j) => {
 });
 
 async function readConf(logger, portalcf) {
+  logger.debug("Loading " + portalcf);
   try {
     const conf = await fs.readJson(portalcf);
     return conf;
   } catch (e) {
-    logger.info(`Portal conf ${portalcf} not found`);
+    logger.error(`Portal conf ${portalcf} not found`);
     return null;
   }
 }

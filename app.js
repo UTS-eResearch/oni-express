@@ -23,7 +23,7 @@ var configFile = process.argv[2] || './config/express.json';
 console.log('Using config file: ' + configFile);
 var config = require(configFile)[env];
 
-const {getPortalConfig} = require('./controllers/config');
+const {getVersion, getPortalConfig} = require('./controllers/config');
 const indexer = require('./controllers/indexer');
 const {verifyToken, simpleVerify} = require('./controllers/local_auth');
 
@@ -127,8 +127,12 @@ app.post("/auth", (req, res) => {
 });
 
 app.get('/config/portal', async (req, res) => {
-  const portalConfig = await getPortalConfig({indexer: config['indexer'], express: config, base: config['portal']});
-  res.json(portalConfig);
+  try {
+    const portalConfig = await getPortalConfig({indexer: config['indexer'], express: config, base: config['portal']});
+    res.status(200).json(portalConfig);
+  } catch (e) {
+    res.status(500).json({error: e});
+  }
 });
 //Attach to an event listener
 
@@ -145,6 +149,15 @@ app.get('/config/index/run', verifyToken, async (req, res) => {
     res.status(500).json({error: e});
   }
 });
+
+app.get('/config/version', async (req, res) => {
+  try {
+    const version = await getVersion();
+    res.status(200).json({version: version});
+  } catch (e) {
+    res.status(500).json({error: e});
+  }
+})
 
 // ocfl-express endpoints
 
