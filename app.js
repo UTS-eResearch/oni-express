@@ -149,15 +149,6 @@ app.get('/config/index/run', verifyToken, async (req, res) => {
     res.status(500).json({error: e});
   }
 });
-//TODO: remove in favor of config/status
-app.get('/config/version', async (req, res) => {
-  try {
-    const version = await getVersion();
-    res.status(200).json({version: version});
-  } catch (e) {
-    res.status(500).json({error: e});
-  }
-})
 
 app.get('/config/status', async (req, res) => {
   try {
