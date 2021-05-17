@@ -31,6 +31,16 @@ const DEFAULTS = {
   'timeout': 180
 };
 
+async function solrStatus(config) {
+  try {
+    const solrCores = await SolrService.checkSolrStatus(logger, config['solr'] + '/solr/admin/cores');
+    return solrCores;
+  } catch (e) {
+    logger.error('solrStatus');
+    logger.error(e);
+    throw new Error(e);
+  }
+}
 
 async function buildSchema(argv) {
 
@@ -359,5 +369,4 @@ async function makePortalFacets(cf, facets) {
 }
 
 
-
-module.exports = {buildSchema, index};
+module.exports = {buildSchema, index, solrStatus};

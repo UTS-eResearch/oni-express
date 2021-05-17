@@ -10,6 +10,7 @@ async function readConf(logger, portalcf) {
     const conf = await fs.readJson(portalcf);
     return conf;
   } catch (e) {
+    logger.error(e);
     logger.error(`Portal conf ${portalcf} not found`);
     return null;
   }

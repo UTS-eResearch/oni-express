@@ -65,7 +65,7 @@ describe('indexing values with item resolution', function () {
   });
 
 
-  it.skip('can resolve reverse lookups', async function () {
+  it('can resolve reverse lookups', async function () {
     await testResolveCase('reverse_conviction');
   });
 

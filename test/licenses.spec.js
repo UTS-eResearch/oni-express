@@ -117,7 +117,7 @@ describe('mapping licenses', function () {
 
 
 
-  it.skip('maps a crate with two known licenses', async function () {
+  it('maps a crate with two known licenses', async function () {
     const indexer = makeIndexer(true);
 
     const jsonld = makeGraph([ PREFIXES['uts'] + '/' + randomWord(), PREFIXES['cc'] + '/' + randomWord() ]);

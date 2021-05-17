@@ -149,7 +149,7 @@ app.get('/config/index/run', verifyToken, async (req, res) => {
     res.status(500).json({error: e});
   }
 });
-
+//TODO: remove in favor of config/status
 app.get('/config/version', async (req, res) => {
   try {
     const version = await getVersion();
@@ -159,6 +159,30 @@ app.get('/config/version', async (req, res) => {
   }
 })
 
+app.get('/config/status', async (req, res) => {
+  try {
+    let error = false;
+    const version = await getVersion();
+    const checkSolr = await indexer.solrStatus(config);
+    if (checkSolr.error) {
+      error = true;
+    }
+    const status = {
+      version: version,
+    }
+    if (error) {
+      status.error = error;
+      status.solr = checkSolr;
+      res.status(500).json(status);
+    } else {
+      status.error = error;
+      status.solr = checkSolr;
+      res.status(200).json(status);
+    }
+  } catch (e) {
+    res.status(500).json({error: e});
+  }
+})
 // ocfl-express endpoints
 
 app.get(`/${ocfl_path}/`, async (req, res) => {

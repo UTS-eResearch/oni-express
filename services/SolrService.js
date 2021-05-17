@@ -51,7 +51,7 @@ async function checkSolr(logger, solrPing, retries, retryInterval) {
     } catch (e) {
       logger.debug("Waiting for Solr to start");
     }
-    await sleep(retryInterval);
+    await utils.sleep(retryInterval);
   }
   logger.error(`Couldn't connect to Solr after ${retries} connection attempts`);
   return false;
@@ -113,7 +113,27 @@ async function purgeSolr(logger, solrUpdate) {
   }
 }
 
-module.exports = {buildSchema, updateSchema, checkSolr, commitDocs, updateDocs, purgeSolr};
+async function checkSolrStatus(logger, solrUrl) {
+  try {
+    const response = await axios({
+      url: solrUrl,
+      method: 'get',
+      responseType: 'json'
+    });
+    if (response.status !== 200) {
+      logger.info("Solr status cores");
+      return {status: response.data['status'], error: true}
+    } else {
+      return {status: response.data['status']}
+    }
+  } catch (e) {
+    logger.error("checkSolrStatus");
+    logger.error(e);
+    throw new Error(e);
+  }
+}
+
+module.exports = {buildSchema, updateSchema, checkSolr, checkSolrStatus, commitDocs, updateDocs, purgeSolr};
 
 async function setSchemaField(logger, solrURL, fieldtype, schemaJson) {
   const url = solrURL + '/' + fieldtype + 's';

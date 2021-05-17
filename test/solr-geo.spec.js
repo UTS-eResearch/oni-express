@@ -40,10 +40,10 @@ before(async () => {
 
 let catalogjson = null;
 
-describe.skip('Solr indexing of random geolocations', function () {
+describe('Solr indexing of random geolocations', function () {
 	this.timeout(0); // can be slow
  	 it(`can create ${NPUBS} randomised publications`, async function () {
-    datapubs = randomize.randdatapubs(NPUBS, sourcedata);
+    datapubs = await randomize.randdatapubs(NPUBS, sourcedata);
     for ( let datapub of datapubs ) {
     	const pubdir = await randomize.makedir(GEOPATH);
     	await randomize.makerocrate(GEOPATH, datapub, pubdir);

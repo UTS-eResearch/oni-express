@@ -9,3 +9,5 @@ oni-portal
 portal
 token_api
 .DS_Store
+test-data/geo
+test-data/rocrates
