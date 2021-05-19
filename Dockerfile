@@ -1,6 +1,6 @@
 FROM node:10
 
-VOLUME [ "/etc/share/ocfl","/etc/share/logs","/etc/share/config" ]
+VOLUME [ "/etc/share" ]
 
 WORKDIR /usr/src/app
 COPY . .
@@ -8,4 +8,4 @@ COPY . .
 RUN npm run build
 EXPOSE 8080
 
-CMD [ "npm", "start", "/etc/share/config/express.json" ]
+CMD [ "npm", "start" ]

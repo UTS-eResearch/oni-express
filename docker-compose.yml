@@ -18,6 +18,7 @@ services:
       - "./ocfl/:/etc/share/ocfl"
       - "./config/:/etc/share/config"
       - "./logs/:/etc/share/logs"
+    command: npm start /etc/share/config/express.json
 
   solr:
     image: solr:8.6.3
