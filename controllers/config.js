@@ -12,8 +12,8 @@ const logger = winston.createLogger({
 });
 
 async function getVersion() {
-  const package = await utils.readConf(logger,'./package.json');
-  return package.version;
+  const packageFile = await utils.readConf(logger,'./package.json');
+  return {version: packageFile.version};
 }
 
 // Script which takes the facet configuration for oni-indexer and uses it to build the facets

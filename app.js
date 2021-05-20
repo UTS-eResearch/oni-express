@@ -153,24 +153,30 @@ app.get('/config/index/run', verifyToken, async (req, res) => {
 app.get('/config/status', async (req, res) => {
   try {
     let error = false;
-    const version = await getVersion();
-    const checkSolr = await indexer.solrStatus(config);
-    if (checkSolr.error) {
+    const status = {}
+    status.config = {
+      express: configFile,
+      portal: config.portal,
+      indexer: config.indexer,
+    }
+    status.version = await getVersion();
+    const solrStatus = await indexer.solrStatus(config);
+    if (solrStatus.error) {
       error = true;
     }
-    const status = {
-      version: version,
+    status.solrStatus = solrStatus;
+    const solrCheck = await indexer.checkSolr({indexer: config['indexer']}, 1);
+    status.solrCheck = solrCheck;
+    if(solrCheck.error){
+      status.error = true;
     }
     if (error) {
-      status.error = error;
-      status.solr = checkSolr;
       res.status(500).json(status);
     } else {
-      status.error = error;
-      status.solr = checkSolr;
       res.status(200).json(status);
     }
   } catch (e) {
+    logger.error(e);
     res.status(500).json({error: e});
   }
 })

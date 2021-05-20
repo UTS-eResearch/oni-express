@@ -34,7 +34,7 @@ services:
       - "./solr/:/var/solr/data"
     command: solr-precreate ocfl
     logging:
-        driver: none
+      driver: none
 
   memcached:
     image: memcached

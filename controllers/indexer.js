@@ -38,7 +38,22 @@ async function solrStatus(config) {
   } catch (e) {
     logger.error('solrStatus');
     logger.error(e);
-    throw new Error(e);
+    return {error: e};
+  }
+}
+
+async function checkSolr(argv, retries) {
+  try {
+    let cf = await utils.readConf(logger, argv.indexer);
+    const solrUp = await SolrService.checkSolr(logger, cf['solrBase'] + '/admin/ping', retries || cf['retries'], cf['retryInterval']);
+    if (solrUp) {
+      return {solr: 'live', error: null};
+    } else {
+      return {solr: 'down', error: 'Error communicating with solr'}
+    }
+  } catch (e) {
+    logger.error(e);
+    return {solr: 'error', error: e}
   }
 }
 
@@ -369,4 +384,4 @@ async function makePortalFacets(cf, facets) {
 }
 
 
-module.exports = {buildSchema, index, solrStatus};
+module.exports = {buildSchema, index, solrStatus, checkSolr};

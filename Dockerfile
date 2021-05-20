@@ -1,6 +1,6 @@
-FROM node:10
+FROM node:12
 
-VOLUME [ "/etc/share" ]
+VOLUME /etc/share
 
 WORKDIR /usr/src/app
 COPY . .

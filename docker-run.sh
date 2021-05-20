@@ -3,7 +3,7 @@
 ## Run commands to make deploy similar to cloud in
 ## stand-alone containers
 
-DCK_PRE=sf #DCK_PRE or docker prefix to identify docker group
+DCK_PRE=oni #DCK_PRE or docker prefix to identify docker group
 VOL_BASE="$(pwd)"
 VOL_OCFL="$VOL_BASE/ocfl/"
 VOL_CONFIG="$VOL_BASE/config/"
@@ -42,6 +42,7 @@ docker run --rm -p 127.0.0.1:${PORT}:${PORT} \
 --name ${DCK_PRE}-oni-express \
 --network ${NETWORK} \
 -d \
-oni-express
+oni-express \
+npm start /etc/share/config/express.json
 
 echo "open http://localhost:${PORT}"
