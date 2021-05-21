@@ -170,6 +170,8 @@ app.get('/config/status', async (req, res) => {
     if(solrCheck.error){
       status.error = true;
     }
+    const ts = new Date();
+    status.serverTime = ts.toLocaleString();
     if (error) {
       res.status(500).json(status);
     } else {

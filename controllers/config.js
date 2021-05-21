@@ -92,16 +92,6 @@ async function makePortalConfig(indexfile, cf, facets) {
         portalbase = "portal base config "+ portal['base'];
     }
 
-    const ts = new Date();
-
-    portalcf['meta'] = {
-        'timestamp': ts
-    };
-
-    if( portalcf['pages'] && portalcf['pages']['about'] ) {
-        portalcf['pages']['about']['comments'] = `<p>Built from ${indexfile} and ${portalbase} at ${ts.toLocaleString()}</p>`;
-    }
-
     for( let oldFacet in portalcf['facets'] ) {
         if( ! newFacets[oldFacet] ) {
             logger.info(`Removing facet ${oldFacet}`);
