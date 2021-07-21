@@ -1,5 +1,7 @@
 #!/usr/bin/env node
 
+// utility to 
+
 const path = require('path');
 const fs = require('fs-extra');
 const ocfl = require('ocfl');
@@ -9,15 +11,27 @@ const REPODIR = './ocfl';
 const RO_CRATE_METADATA = 'ro-crate-metadata.json';
 
 const argv = require('yargs')
-    .usage('Useage: $0 --dir ./dir')
-    .describe('d', 'a directory containing subdirectories with RO-Crates')
-    .alias('d', 'dir')
-    .string('d')
-    .help('h')
-    .alias('h', 'help')
-    .demandCommand()
-    .recommendCommands()
+    .usage(`
+This script will take a directory whose subdirectories are RO-Crates
+and check the contents into an ocfl repository at ${REPODIR}.
+
+If the ocfl repository has already been initialised, it will update
+it if anything has changed in the source directory.
+
+It will throw an error if any of the subdirectories don't have an
+${RO_CRATE_METADATA} file in them.
+
+(TODO: the script could create the RO-Crates if they don't already
+exist, by scanning the file contents and building a list.)
+
+Usage: $0 --dir ./dir`)
+    .option('dir', {
+      alias: 'r',
+      describe: 'a directory containing RO-Crates'
+    })
+    .demandOption(['dir'])
     .strict()
+    .help()
     .argv;
 
 
