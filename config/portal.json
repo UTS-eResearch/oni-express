@@ -4,19 +4,17 @@
     "solr": "/solr/ocfl"
   },
   "header": {
-    "title": "Library of Successful Grants",
+    "title": "Estuary Salinity",
     "URL": "/",
     "logo": "images/logo.svg",
     "menu": [
       "help",
-      "privacy",
       "about"
     ]
   },
   "footer": {
     "text": "2021 University of Technology Sydney"
   },
-  "splash": "privacy",
   "search": {
     "error": "Search Error",
     "invalidSearch": "Invalid Search",
@@ -42,7 +40,7 @@
   "results": {
     "sort": [
       {
-        "field": "dateCreated",
+        "field": "datePublished",
         "order": "desc"
       }
     ],
@@ -54,36 +52,36 @@
       "Dataset": {
         "summaryFields": [
           {
-            "label": "Lead investigator",
-            "field": "lead"
+            "label": "Date",
+            "field": "temporalCoverage"
           },
-          {
-            "label": "Funder",
-            "field": "funder"
-          },
-          {
-            "label": "keywords",
-            "field": "keywords"
-          },
-          {
-            "label": "FOR",
-            "field": "FOR"
-          },
-          {
-            "label": "DateCreated",
-            "field": "dateCreated"
-          }
+	  {
+	    "label": "Date",
+	    "field": "temporal"
+	  },
+	  {
+	    "label": "Name",
+	    "field": "name"
+	  }
         ],
         "viewFields": [
           {
-            "display": "SubDocIframe",
-            "field": "html",
-            "fieldName": "",
-            "width": "800",
-            "height": "1130"
-          }
+            "field": "description"
+   	  },
+	  {
+	    "label": "Bacteria Found",
+	    "field": "Bacteria"
+	  },
+	  {
+	    "label": "Depth (mm)",
+	    "field": "Depth"
+	  },
+	  {
+	    "label": "License",
+	    "field": "license"
+	  }
         ],
-        "viewLinks": false
+        "viewLinks": true
       }
     }
   }

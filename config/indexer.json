@@ -1,14 +1,14 @@
 {
   "ocfl": "/etc/share/ocfl",
-  "identifierNamespace": "SuccessfulGrantsRepository",
+  "identifierNamespace": "seafood",
   "uriIds": "identifiers",
   "retries": 10,
   "retryInterval": 10,
   "purge": true,
   "updateSchema": true,
   "dryRun": false,
-  "catalogFilename": "ro-crate-metadata.jsonld",
-  "solrBase": "http://solr:8983/solr/ocfl",
+  "catalogFilename": "ro-crate-metadata.json",
+  "solrBase": "http://docker.for.lin.host.internal:8983/solr/ocfl",
   "hashAlgorithm": "md5",
   "waitPeriod": 0,
   "schemaBase": "/etc/share/config/schema_base.json",
@@ -27,25 +27,10 @@
     }
   },
   "fields": {
-    "_plugins":[
-      {
-        "name":"person-sectorName",
-        "destination": "sectorName",
-        "json": true,
-        "multi": true,
-        "facet": true
-      }
-    ],
     "main_search": [
       "name",
       "description",
-      "id",
-      "lead",
-      "dateCreated",
-      "FOR",
-      "keywords",
-      "funder",
-      "full_text"
+      "id"
     ],
     "map_all": {
       "@id": [
@@ -58,13 +43,13 @@
       ]
     },
     "licenses": {
-      "__default__": "UTS Confidential"
+      "__default__": "public"
     },
-    "store_subgraph": true,
+    "store_subgraph": false,
     "types": {
       "Dataset": {
         "@id": {
-          "name": "SuccessfulGrantsRepository",
+          "name": "seafood",
           "filter": {
             "is_root": true
           }
@@ -72,79 +57,46 @@
         "@reverse": {
           "skip": true
         },
-        "hasPart": [
-          {
-            "index_as": "html",
-            "match": {
-              "@id": {
-                "re": "\\.html"
-              }
-            }
-          },
-          {
-            "index_as": "full_text",
-            "match": {
-              "@id": {
-                "re": "\\.txt$"
-              }
-            },
-            "load_file": true
-          }
-        ],
+        "hasPart": {
+	  "skip": false
+	},
         "hasFile": {
-          "skip": true
+          "skip": false
         },
         "temporalCoverage": {
-          "skip": true
+          "skip": false
         },
-        "license": {
+	"temporal": {
+	  "skip":false
+	},
+        "contentLocation": {
           "multi": true,
-          "facet": true
+          "facet": true,
+	  "resolve": {
+	    "search": "@id",
+	    "display": "name"
+	},
+	"month": {
+	  "multi": true,
+	  "facet": true
         },
-        "licenseOriginal": {
-          "multi": true
-        },
-        "author": {
-          "index_as": "lead",
-          "facet": true
-        },
-        "affiliation": {
-          "facet": true
-        },
-        "keywords": {
-          "multi": true,
-          "facet": {
-            "tokenize": {
-              "delim": "[,;]\\s*"
-            }
-          }
-        },
-        "description": {
-          "link_rebase": "ocfl"
-        },
-        "about": [
-          {
-            "match": {
-              "@id": {
-                "re": "anzsrc-for"
-              }
-            },
-            "index_as": "FOR",
-            "multi": true,
-            "resolve": {
-              "search": "@id",
-              "display": "name"
-            },
-            "facet": true
-          }
-        ],
-        "funder": {
-          "facet": true
-        },
-        "dateCreated": {
-          "facet": true
-        }
+	"Bacteria": {
+	  "skip": false,
+	  "multi": true,
+	  "facet": true
+	},
+	"Depth": {
+	  "facet": true,
+	  "resolve":{
+	    "display": "value",
+	    "search": "depthReading"
+	  }
+	}
+
+
+
       }
     }
   }
+}
 }
