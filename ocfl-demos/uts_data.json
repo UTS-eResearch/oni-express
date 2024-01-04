@@ -1,0 +1,14 @@
+[
+    {
+        "id": "abc", 
+        "doi": "http://doi/1", 
+        "dir": "/Users/124411/working/ro-crate-examples/src/UTS/luckett", 
+        "url": "existing repo URL"
+    },
+    {
+        "id": "abd", 
+        "doi": "http://doi/2", 
+        "dir": "/Users/124411/working/ro-crate-examples/src/samples/sample", 
+        "url": "existing repo URL"
+    }
+]
