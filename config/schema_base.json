@@ -37,7 +37,7 @@
             "type": "string",
             "stored": true,
             "multiValued": true
-        },
+        },    
         {
             "name": "affiliation_id",
             "type": "text_en",

@@ -11,17 +11,16 @@ services:
     ports:
       - "8080:8080"
     expose:
-      - "80"
+      - "8080"
     networks:
       - main
     volumes:
-      - "./ocfl/:/etc/share/ocfl"
-      - "./config/:/etc/share/config"
+      - "/repo/ocfl/grants_ocfl:/etc/share/ocfl"
+      - "./config:/etc/share/config"
 
-# Oni-Indexer currently using a build branch matching oni-express
-# place it under ../oni-indexer
+  # Oni-Indexer currently using a build branch matching oni-express
+  # place it under ../oni-indexer
   oni-indexer:
-    image: oni-indexer:latest
     build: ../oni-indexer
     ports:
       - "8090:8090"
@@ -30,14 +29,12 @@ services:
     networks:
       - main
     volumes:
-      - "./ocfl/:/etc/share/ocfl"
+      - "/repo/ocfl/grants_ocfl:/etc/share/ocfl"
       - "./config/:/etc/share/config"
       - "./logs/:/etc/share/logs"
 
   solr:
     image: solr:8.6.3
-    environment:
-      - SOLR_HEAP=1024m
     ports:
       - "8983:8983"
     expose:
@@ -45,10 +42,14 @@ services:
     networks:
       - main
     volumes:
-      - "./solr/:/var/solr/data"
+      - "/solrcore/solrdata/data:/var/solr/data"
+      - "/solrcore/solrdata/log4j2.xml:/var/solr/log4j2.xml"
+    environment:
+      - LOG4J_FORMAT_MSG_NO_LOOKUPS=true
+      - SOLR_HEAP=1G
     command: solr-precreate ocfl
     logging:
-        driver: none
+      driver: "json-file"
 
   memcached:
     image: memcached

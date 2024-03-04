@@ -97,7 +97,7 @@ function checkSession(req, res, next) {
 			if( ok ) {
 				next();
 			} else {
-				req.status(403).send("Forbidden (this is from checkSession)");
+				res.status(403).send("Forbidden (this is from checkSession)");
 			}
 		}
 	}

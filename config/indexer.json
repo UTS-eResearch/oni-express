@@ -103,11 +103,7 @@
         },
         "keywords": {
           "multi": true,
-          "facet": {
-            "tokenize": {
-              "delim": "[,;]\\s*"
-            }
-          }
+          "facet": true
         },
         "description": {
           "link_rebase": "ocfl"

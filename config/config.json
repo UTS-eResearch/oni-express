@@ -1,0 +1,35 @@
+{
+  "development": {
+    "host": "0.0.0.0",
+    "port": "8080",
+    "auth": {
+      "azuread": {
+        "identityMetadata": "https://login.microsoftonline.com/e8911c26-cf9f-4a9c-878e-527807be8791/v2.0/.well-known/openid-configuration",
+        "clientID": "8382d7a0-f3c6-44ea-906b-9e8679fb7d39",
+        "clientSecret": "8382d7a0-f3c6-44ea-906b-9e8679fb7d39",
+        "redirectUrl": "https://grants-uat.research.uts.edu.au/auth/",
+        "issuer": "https://grants-uat.research.uts.edu.au",
+        "responseType": "id_token"
+      }
+    },
+    "session": {
+      "secret": "52a8b03b-4b09-47bb-bc4b-d41c7c15a387",
+      "name": "session",
+      "expiry": 24,
+      "server": "memcached:11211"
+    },
+    "solr": "http://solr:8983",
+    "ocfl": {
+      "grants": {
+        "repository": "/etc/share/ocfl/ocfl/grants_ocfl",
+        "allow": "\\.html",
+        "autoindex": true,
+        "versions": true,
+        "page_size": 20,
+        "solr": "http://solr:8983/solr/grants",
+        "resolver": "solr",
+        "referrer": "https://grants-uat.research.uts.edu.au/"
+      }
+    }
+  }
+}

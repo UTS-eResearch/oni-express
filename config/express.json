@@ -1,60 +1,59 @@
 {
-	"development": {
-		"session": {
-			"secret": "change me to a real secret",
-			"name": "session",
-			"expiry": 24,
-			"server": "memcached:11211"
-		},
-		"auth": {
-			"sessionSecret": "xxx",
-			"jwtSecret": "xxxx",
-			"authURL": "https://rapid.test.aaf.edu.au/jwt/authnrequest/research/XXX",
-			"iss": "https://rapid.test.aaf.edu.au",
-			"aud": "http://localhost:8080",
-			"attributes": "https://aaf.edu.au/attributes",
-			"allow": {
-				"uid": "uts.edu.au",
-				"affiliation": "^staff@uts.edu.au$"
-			},
-			"UNSAFE_MODE": true
-		},
-		"cors": true,
-		"solr": "http://solr:8983",
-		"clientBlock": [ "isIE", "isBot" ],
-		"solr_fl": [
-			"record_type_s",
-			"uri_id",
-			"id",
-			"description",
-			"name",
-			"Dataset_license_facetmulti",
-			"Dataset_lead_facet",
-			"Dataset_keywords_facetmulti",
-			"Dataset_FOR_facetmulti",
-			"Dataset_funder_facet",
-			"Dataset_dateCreated_facet",
-			"Dataset_affiliation_facet",
-			"lead",
-			"funder",
-			"keywords",
-			"FOR",
-			"dateCreated",
-			"html"
-		],
-		"ocfl": {
-			"url_path": "ocfl",
-			"repository": "/etc/share/ocfl",
-			"allow": "\\.html",
-			"autoindex": false,
-			"index_file": "ro-crate-preview.html",
-			"versions": false,
-			"page_size": 20,
-			"solr": "http://solr:8983/solr/ocfl",
-			"resolver": "solr",
-			"referrer": "http://localhost:8080/"
-		},
-		"portal": "/etc/share/config/portal.json",
-		"indexer": "/etc/share/config/indexer.json"
-	}
+  "development": {
+    "session": {
+      "secret": "change me to a real secret",
+      "name": "session",
+      "expiry": 24,
+      "server": "memcached:11211"
+    },
+    "auth": {
+      "sessionSecret": "52a8b03b-4b09-47bb-bc4b-d41c7c15a387",
+      "jwtSecret": "8aef5b3b-b676-46fe-a801-17d8269e7504",
+      "authURL": "https://rapid.test.aaf.edu.au/jwt/authnrequest/research/ZH-7ds-zWVz9jOlnppEjUQ",
+      "iss": "https://rapid.test.aaf.edu.au",
+      "aud": "https://grants-uat.research.uts.edu.au",
+      "attributes": "https://aaf.edu.au/attributes",
+      "allow": {
+        "uid": "uts.edu.au",
+        "affiliation": "staff@uts.edu.au"
+      }
+    },
+    "cors": true,
+    "solr": "http://solr:8983",
+    "clientBlock": [ "isIE", "isBot" ],
+    "solr_fl": [
+      "record_type_s",
+      "uri_id",
+      "id",
+      "description",
+      "name",
+      "Dataset_license_facetmulti",
+      "Dataset_lead_facet",
+      "Dataset_keywords_facetmulti",
+      "Dataset_FOR_facetmulti",
+      "Dataset_funder_facet",
+      "Dataset_dateCreated_facet",
+      "Dataset_affiliation_facet",
+      "lead",
+      "funder",
+      "keywords",
+      "FOR",
+      "dateCreated",
+      "html"
+    ],
+    "ocfl": {
+      "url_path": "ocfl",
+      "repository": "/etc/share/ocfl",
+      "allow": "\\.html",
+      "autoindex": false,
+      "index_file": "ro-crate-preview.html",
+      "versions": false,
+      "page_size": 20,
+      "solr": "http://solr:8983/solr/ocfl",
+      "resolver": "solr",
+      "referrer": "https://grants-uat.research.uts.edu.au/"
+    },
+    "portal": "/etc/share/config/portal.json",
+    "indexer": "/etc/share/config/indexer.json"
+  }
 }
